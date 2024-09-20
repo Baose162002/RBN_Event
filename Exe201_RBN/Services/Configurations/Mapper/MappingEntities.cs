@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace RBN_Api.Configurations.Mapper
+namespace Services.Configurations.Mapper
 {
     public class MappingEntities : Profile
     {
