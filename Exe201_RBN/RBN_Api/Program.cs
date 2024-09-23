@@ -15,13 +15,7 @@ public class Program
 
         builder.Services.Register();
 
-<<<<<<< HEAD
-        builder.Services.AddDbContext<IApplicationDbContext, ApplicationDBContext>();
 
-        builder.Services.AddAutoMapper(typeof(MappingEntities));
-=======
-
->>>>>>> a27f7777a74770acc597d4937507af42cd6bb39b
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
