@@ -24,7 +24,7 @@ namespace Services.Service
             var user = await _userRepo.Get().Where(x => x.Email.ToLower().Contains(email.ToLower())).FirstOrDefaultAsync();
             if (user == null) throw new Exception("Not Found");
 
-            var from = new MailboxAddress(name: "", address: "RBNEvent@gmail.com");
+            var from = new MailboxAddress(name: "", address: "tivip1216vn@gmail.com");
             var to = new MailboxAddress(name: "", address: user.Email.ToLower());
 
 
@@ -44,12 +44,12 @@ namespace Services.Service
             var client = new MailKit.Net.Smtp.SmtpClient();
 
             client.Connect(host: "smtp.gmail.com",
-                           port: 465,
-                           options: MailKit.Security.SecureSocketOptions.SslOnConnect);
+                           port: 587,
+                           options: MailKit.Security.SecureSocketOptions.StartTls);
 
 
 
-            client.Authenticate("RBNEvent@gmail.com", "12345");
+            client.Authenticate("tivip1216vn@gmail.com", "nwlkhxscvhmanubs");
 
             client.Send(msj);
 
