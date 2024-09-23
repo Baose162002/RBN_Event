@@ -1,6 +1,6 @@
-﻿using Repositories.Data;
-using Repositories.Data.Dto.RequestDto;
-using Repositories.Data.Dto.ResponseDto;
+﻿
+using BusinessObject.Dto.RequestDto;
+using BusinessObject.Dto.ResponseDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;

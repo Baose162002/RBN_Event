@@ -1,5 +1,4 @@
-﻿using Repositories.Data.Dto.ResponseDto;
-using Repositories.Data;
+﻿
 using Repositories.IRepositories;
 using Repositories.Repositories;
 using Repositories.Repositories.IRepositories;
@@ -25,11 +24,12 @@ namespace RBN_Api.Extensions
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             // Register repositories here
+            
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-            services.AddScoped<IEventRepositories, EventRepository>();
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
 
             // Register services here
-            services.AddScoped<IEventService, EventService>();
+            services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ISendMailService, SendMailService>();
 

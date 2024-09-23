@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BusinessObject;
+using Microsoft.EntityFrameworkCore;
 using MimeKit;
 using MimeKit.Text;
-using Repositories.Data;
 using Repositories.Repositories.IRepositories;
 using Services.IService;
 using System;

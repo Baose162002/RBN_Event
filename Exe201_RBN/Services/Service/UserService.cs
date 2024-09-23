@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Repositories.Data;
-using Repositories.Data.Dto.RequestDto;
-using Repositories.Data.Dto.ResponseDto;
+using BusinessObject;
+using BusinessObject.Dto.RequestDto;
+using BusinessObject.Dto.ResponseDto;
 using Repositories.Repositories;
 using Repositories.Repositories.IRepositories;
 using Services.IService;

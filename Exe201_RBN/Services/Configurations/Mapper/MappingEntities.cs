@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Repositories.Data.Dto.ResponseDto;
-using Repositories.Data;
-using Repositories.Data.Dto.RequestDto;
+using BusinessObject;
+using BusinessObject.Dto.RequestDto;
+using BusinessObject.Dto.ResponseDto;
 
 namespace Services.Configurations.Mapper
 {
