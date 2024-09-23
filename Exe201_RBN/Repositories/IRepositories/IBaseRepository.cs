@@ -11,6 +11,7 @@ namespace Repositories.Repositories.IRepositories
     public interface IBaseRepository<T> where T : class
     {
         EntityState GetEntityState(T entity);
+        IQueryable<T> Get();
         Task<T> GetByIdAsync(Guid code);
         void PrepareCreate(T entity);
         void PrepareUpdate(T entity);

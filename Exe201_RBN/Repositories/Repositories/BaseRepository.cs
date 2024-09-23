@@ -71,10 +71,13 @@ namespace Repositories.Repositories
                 return await _context.SaveChangesAsync();
             }
 
-            #endregion Separating asign entity and save operators
+        #endregion Separating asign entity and save operators
 
-
-            public List<T> GetAll()
+        public IQueryable<T> Get()
+        {
+            return _dbSet.AsQueryable();
+        }
+        public List<T> GetAll()
             {
                 return _context.Set<T>().ToList();
             }

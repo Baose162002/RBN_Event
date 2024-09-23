@@ -1,4 +1,6 @@
-﻿using Repositories.IRepositories;
+﻿using Repositories.Data.Dto.ResponseDto;
+using Repositories.Data;
+using Repositories.IRepositories;
 using Repositories.Repositories;
 using Repositories.Repositories.IRepositories;
 using Services.IService;
@@ -28,6 +30,8 @@ namespace RBN_Api.Extensions
 
             // Register services here
             services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ISendMailService, SendMailService>();
 
             return services;
         }

@@ -2,6 +2,7 @@ using RBN_Api.Extensions;
 using Repositories.Data;
 using Repositories.IRepositories;
 using Repositories.Repositories;
+using Services.Configurations.Mapper;
 using Services.IService;
 using Services.Service;
 
@@ -17,7 +18,7 @@ public class Program
 
         builder.Services.AddDbContext<IApplicationDbContext, ApplicationDBContext>();
 
-
+        builder.Services.AddAutoMapper(typeof(MappingEntities));
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
