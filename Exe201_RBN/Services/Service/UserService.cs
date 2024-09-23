@@ -16,11 +16,13 @@ namespace Services.Service
     public class UserService : IUserService
     {
         private readonly IBaseRepository<User> _userRepo;
+        private readonly ISendMailService _sendMail;
         private readonly IMapper _mapper;
-        public UserService(IBaseRepository<User> userRepo, IMapper mapper)
+        public UserService(IBaseRepository<User> userRepo, IMapper mapper, ISendMailService sendMail)
         {
             _userRepo = userRepo;
             _mapper = mapper;
+            _sendMail = sendMail;
         }
         public async Task<List<UserResponseDto>> getAllUser()
         {
@@ -105,6 +107,8 @@ namespace Services.Service
                 };
 
                 await _userRepo.CreateAsync(createdUser);
+
+                await _sendMail.SendMailToGeneratedUser(createdUser.Email);
 
                 return _mapper.Map<UserResponseDto>(createdUser);
             }
