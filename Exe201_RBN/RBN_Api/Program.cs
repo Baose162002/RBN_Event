@@ -1,5 +1,4 @@
 using RBN_Api.Extensions;
-using Repositories.Data;
 using Repositories.IRepositories;
 using Repositories.Repositories;
 using Services.IService;
@@ -14,8 +13,6 @@ public class Program
         // Add services to the container.
 
         builder.Services.Register();
-
-        builder.Services.AddDbContext<IApplicationDbContext, ApplicationDBContext>();
 
 
         builder.Services.AddSwaggerGen();

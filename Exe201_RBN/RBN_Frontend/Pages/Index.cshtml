@@ -1,0 +1,45 @@
+﻿@page
+@model IndexModel
+@inject HttpClient Http
+@{
+    ViewData["Title"] = "Events";
+}
+
+<h2>Event List</h2>
+
+@if (Model.Events != null && Model.Events.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Price</th>
+                <th>Capacity</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Company ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var evt in Model.Events)
+            {
+                <tr>
+                    <td>@evt.Title</td>
+                    <td>@evt.Name</td>
+                    <td>@evt.EventType</td>
+                    <td>@evt.Price</td>
+                    <td>@evt.Capacity</td>
+                    <td>@evt.Description</td>
+                    <td>@evt.Status</td>
+                    <td>@evt.CompanyId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No events available.</p>
+}
