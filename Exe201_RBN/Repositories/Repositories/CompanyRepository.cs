@@ -45,7 +45,6 @@ namespace Repositories.Repositories
                     Phone = company.Phone,
                     Avatar = company.Avatar,
                     TaxCode = company.TaxCode,
-                    Status = company.Status,
                     UserId = company.UserId
                 };
                 await _context.AddAsync(newCompany);
@@ -69,8 +68,7 @@ namespace Repositories.Repositories
                     existing.Address = company.Address;
                     existing.Phone = company.Phone;
                     existing.Avatar = company.Avatar;
-                    existing.TaxCode = company.TaxCode;
-                    existing.Status = company.Status;
+                    existing.TaxCode = company.TaxCode;                 
                 }
                 _context.Companies.Update(existing);
                 await _context.SaveChangesAsync();

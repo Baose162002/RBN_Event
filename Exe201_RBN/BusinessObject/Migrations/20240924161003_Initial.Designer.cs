@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessObject.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240924154732_Initial")]
+    [Migration("20240924161003_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -160,9 +160,6 @@ namespace BusinessObject.Migrations
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.Property<string>("TaxCode")
                         .IsRequired()
@@ -438,6 +435,9 @@ namespace BusinessObject.Migrations
 
                     b.Property<int?>("RoleId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

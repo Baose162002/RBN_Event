@@ -19,7 +19,6 @@ namespace BusinessObject
         public string Phone { get; set; }
         public string Avatar { get; set; }
         public string TaxCode { get; set; }
-        public int Status { get; set; }
         public int UserId { get; set; }
 
         // Navigation Properties
