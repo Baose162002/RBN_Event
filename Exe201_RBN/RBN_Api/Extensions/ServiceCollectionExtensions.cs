@@ -1,4 +1,5 @@
-﻿using Repositories.IRepositories;
+﻿
+using Repositories.IRepositories;
 using Repositories.Repositories;
 using Repositories.Repositories.IRepositories;
 using Services.IService;
@@ -31,6 +32,8 @@ namespace RBN_Api.Extensions
 
             // Register services here
             services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddTransient<ISendMailService, SendMailService>();
             services.AddScoped<IEventService, EventService>();
           
 

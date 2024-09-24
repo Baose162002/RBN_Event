@@ -2,6 +2,8 @@
 using BusinessObject;
 using BusinessObject.DTO;
 using System.Globalization;
+using BusinessObject.Dto.RequestDto;
+using BusinessObject.Dto.ResponseDto;
 
 namespace Services.Configurations.Mapper
 {
@@ -14,6 +16,8 @@ namespace Services.Configurations.Mapper
             .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTime.ParseExact(src.CreateAt, "dd/MM/yyyy", CultureInfo.InvariantCulture)))
             .ForMember(dest => dest.UpdateAt, opt => opt.MapFrom(src => DateTime.ParseExact(src.UpdateAt, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
 
+            CreateMap<User, UserResponseDto>();
+            CreateMap<CreateUserDto, User>();
         }
     }
 }

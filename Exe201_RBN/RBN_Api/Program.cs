@@ -1,6 +1,7 @@
 using RBN_Api.Extensions;
 using Repositories.IRepositories;
 using Repositories.Repositories;
+using Services.Configurations.Mapper;
 using Services.IService;
 using Services.Service;
 
