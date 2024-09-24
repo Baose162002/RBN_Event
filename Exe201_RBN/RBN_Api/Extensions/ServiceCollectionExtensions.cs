@@ -26,9 +26,13 @@ namespace RBN_Api.Extensions
             
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<IEventRepository, EventRepository>();
+            
 
             // Register services here
             services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<IEventService, EventService>();
+          
 
             return services;
         }

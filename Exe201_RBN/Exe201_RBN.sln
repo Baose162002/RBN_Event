@@ -9,9 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repositories", "Repositorie
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{F287AFC4-8775-4007-9FB8-8EFD541ACF35}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RBN_Frontend", "RBN_Frontend\RBN_Frontend.csproj", "{AA5845A7-59FE-40FE-8C4B-2138673B4627}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessObject", "BusinessObject\BusinessObject.csproj", "{3E02F88A-8871-4E8A-995A-DE7DAC0BADE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessObject", "BusinessObject\BusinessObject.csproj", "{3E02F88A-8871-4E8A-995A-DE7DAC0BADE4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +29,6 @@ Global
 		{F287AFC4-8775-4007-9FB8-8EFD541ACF35}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F287AFC4-8775-4007-9FB8-8EFD541ACF35}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F287AFC4-8775-4007-9FB8-8EFD541ACF35}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AA5845A7-59FE-40FE-8C4B-2138673B4627}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AA5845A7-59FE-40FE-8C4B-2138673B4627}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AA5845A7-59FE-40FE-8C4B-2138673B4627}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AA5845A7-59FE-40FE-8C4B-2138673B4627}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3E02F88A-8871-4E8A-995A-DE7DAC0BADE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3E02F88A-8871-4E8A-995A-DE7DAC0BADE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E02F88A-8871-4E8A-995A-DE7DAC0BADE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
