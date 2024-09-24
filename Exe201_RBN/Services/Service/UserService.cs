@@ -46,10 +46,7 @@ namespace Services.Service
             {
                 users = users.Where(x => x.Id == id.Value).ToList();
             }
-            if (!string.IsNullOrEmpty(username)) 
-            {
-                users = users.Where(x => x.UserName.ToLower().Contains(username.ToLower())).ToList();            
-            }
+          
             if (!string.IsNullOrEmpty(name)) 
             {
                 users = users.Where(x => x.Name.ToLower().Contains(name.ToLower())).ToList();
@@ -96,7 +93,7 @@ namespace Services.Service
                 }
                 var createdUser = new User
                 {
-                    UserName = createUserDto.UserName,
+                    
                     Name = createUserDto.Name,
                     Email = createUserDto.Email,
                     Phone = createUserDto.Phone,
