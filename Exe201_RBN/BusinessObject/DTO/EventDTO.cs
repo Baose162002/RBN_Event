@@ -13,7 +13,8 @@ namespace BusinessObject.DTO
         public string Name { get; set; }
         public string EventType { get; set; }
         public double Price { get; set; }
-        public int Capacity { get; set; }
+        public int MinCapacity { get; set; }  
+        public int MaxCapacity { get; set; }
         public string Description { get; set; }
         public int Status { get; set; }
         public int CompanyId { get; set; }

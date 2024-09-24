@@ -28,17 +28,23 @@ namespace Services.Service
         public async Task Create(EventDTO events)
         {
             if (events == null || string.IsNullOrEmpty(events.Title)
-              || string.IsNullOrEmpty(events.Name)
-              || string.IsNullOrEmpty(events.EventType)
-              || string.IsNullOrEmpty(events.Description)
-              || string.IsNullOrEmpty(events.CreateBy)
-              || string.IsNullOrEmpty(events.UpdateBy))
+               || string.IsNullOrEmpty(events.Name)
+               || string.IsNullOrEmpty(events.EventType)
+               || string.IsNullOrEmpty(events.Description)
+               || string.IsNullOrEmpty(events.CreateBy)
+               || string.IsNullOrEmpty(events.UpdateBy)
+               || events.MinCapacity == null || events.MaxCapacity == null || events.Price == null || events.Status == null || events.CreateBy == null || events.UpdateBy == null || events.CompanyId == null
+               || events.CreateAt == null || events.UpdateAt == null)
             {
                 throw new ArgumentException("All fieds must be filled");
             }
-            if (events.Capacity <= 0)
+            if (events.MinCapacity < 0)
             {
-                throw new ArgumentException("Capacity must be a positive number");
+                throw new ArgumentException("Capacity minimum must be a positive number");
+            }
+            if (events.MinCapacity < 0)
+            {
+                throw new ArgumentException("Capacity maximum must be a positive number");
             }
 
             string[] dateFormats = { "dd/MM/yyyy", "dd/M/yyyy", "d/MM/yyyy", "d/M/yyyy" };
@@ -57,7 +63,8 @@ namespace Services.Service
                 Name = events.Name,
                 EventType = events.EventType,
                 Price = events.Price,
-                Capacity = events.Capacity,
+                MinCapacity = events.MinCapacity,
+                MaxCapacity = events.MaxCapacity,
                 Description = events.Description,
                 Status = events.Status,
                 CompanyId = events.CompanyId,
@@ -102,14 +109,18 @@ namespace Services.Service
                 || string.IsNullOrEmpty(events.Description)
                 || string.IsNullOrEmpty(events.CreateBy)
                 || string.IsNullOrEmpty(events.UpdateBy)
-                || events.Capacity == null || events.Price == null ||  events.Status == null || events.CreateBy == null || events.UpdateBy == null || events.CompanyId == null
+                || events.MinCapacity == null || events.MaxCapacity == null || events.Price == null ||  events.Status == null || events.CreateBy == null || events.UpdateBy == null || events.CompanyId == null
                 || events.CreateAt == null || events.UpdateAt == null)
             {
                 throw new ArgumentException("All fieds must be filled");
             }
-            if (events.Capacity <= 0)
+            if (events.MinCapacity < 0)
             {
-                throw new ArgumentException("Capacity must be a positive number");
+                throw new ArgumentException("Capacity minimum must be a positive number");
+            }
+            if (events.MinCapacity < 0)
+            {
+                throw new ArgumentException("Capacity maximum must be a positive number");
             }
             if (events.Price <= 0)
             {
