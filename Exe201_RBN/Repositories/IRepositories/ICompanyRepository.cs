@@ -1,4 +1,5 @@
 ﻿using BusinessObject;
+using BusinessObject.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,9 @@ namespace Repositories.IRepositories
     public interface ICompanyRepository
     {
         Task<List<Company>> GetAllCompany();
+        Task<Company> GetCompanyById(int id);
+        Task Create(Company company);
+        Task Delete(int id);
+        Task Update(Company updatecompany, int id);
     }
 }

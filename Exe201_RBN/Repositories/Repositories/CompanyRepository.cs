@@ -1,4 +1,5 @@
 ﻿using BusinessObject;
+using BusinessObject.DTO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using Microsoft.VisualBasic;
@@ -34,9 +35,19 @@ namespace Repositories.Repositories
                 var existing = await GetCompanyById(company.Id);
                 if(existing != null)
                 {
-                    throw new Exception("Company already exist");
+                    throw new ArgumentException("Company already exist");
                 }
-                _context.Companies.Add(existing);
+                var newCompany = new Company
+                {
+                    Name = company.Name,
+                    Description = company.Description,
+                    Address = company.Address,
+                    Phone = company.Phone,
+                    Avatar = company.Avatar,
+                    TaxCode = company.TaxCode,
+                    UserId = company.UserId
+                };
+                await _context.AddAsync(newCompany);
                 await _context.SaveChangesAsync();
             }catch (Exception e)
             {
@@ -44,27 +55,30 @@ namespace Repositories.Repositories
             }
         }
 
-        public async Task Update(Company company)
+        public async Task Update(Company company, int id)
         {
             try
             {
                 var _context = new ApplicationDBContext();
-                var existing = await GetCompanyById(company.Id);
-                if(existing == null)
+                var existing = await GetCompanyById(id);
+                if (existing != null)
                 {
-                    throw new Exception("Not company found");
+                    existing.Name = company.Name;
+                    existing.Description = company.Description;
+                    existing.Address = company.Address;
+                    existing.Phone = company.Phone;
+                    existing.Avatar = company.Avatar;
+                    existing.TaxCode = company.TaxCode;                 
                 }
-                existing.Id = company.Id;
-                existing.Name = company.Name;
-                existing.Phone = company.Phone;
-                existing.PromotionFees = company.PromotionFees;
-                existing.Status = company.Status;
+                _context.Companies.Update(existing);
                 await _context.SaveChangesAsync();
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
-                throw e;
+                throw e; 
             }
         }
+
 
         public async Task Delete(int id)
         {
