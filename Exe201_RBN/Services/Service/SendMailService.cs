@@ -35,13 +35,16 @@ namespace Services.Service
                 msj.Subject = "Xác nhận tài khoản của bạn với RBN Event";
                 msj.Body = new TextPart(TextFormat.Html)
                 {
-                    Text = $"<h1>Xin chào {user.Name}</h1>" +
-                           $"<h2>Chào mừng đến với RBN Event</h2>" +
+                    Text = $"<h1>Xin chào {user.Name},</h1>" +
+                           $"<h2>Chào mừng bạn đến với RBN Event</h2>" +
                            $"<p>Tài khoản của bạn: {email} <br>Mật khẩu: {user.Password}</p>"
                 };
 
                 using var client = new MailKit.Net.Smtp.SmtpClient();
-                client.Connect("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
+                client.Connect("smtp.gmail.com",
+                                            587,
+                                            MailKit.Security.SecureSocketOptions.StartTls);
+
                 client.Authenticate("tivip1216vn@gmail.com", "nwlkhxscvhmanubs");
 
                 await client.SendAsync(msj);
@@ -49,7 +52,7 @@ namespace Services.Service
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Không thể gửi email đến {email}: {ex.Message}");
+                Console.WriteLine($"Không thể gửi mail đến {email}: {ex.Message}");
                 throw;
             }
         }

@@ -35,6 +35,7 @@ namespace RBN_Api.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddTransient<ISendMailService, SendMailService>();
             services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IAuthService, AuthService>();
           
 
             return services;
