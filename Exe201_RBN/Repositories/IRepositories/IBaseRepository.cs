@@ -30,6 +30,11 @@ namespace Repositories.Repositories.IRepositories
         Task<T> GetByIdAsync(int id);
         T GetById(string code);
         Task<T> GetByIdAsync(string code);
+
+        Task BeginTransactionAsync();
+        Task CommitTransactionAsync();
+        Task RollbackTransactionAsync();
+
         IQueryable<T> Get(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IQueryable<T>> include = null, int? pageIndex = null, int? pageSize = null);
     }
 }

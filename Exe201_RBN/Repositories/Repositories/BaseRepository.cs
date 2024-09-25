@@ -1,5 +1,6 @@
 ﻿using BusinessObject;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Repositories.Repositories.IRepositories;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,9 @@ namespace Repositories.Repositories
 
             private readonly ApplicationDBContext _context;
             private readonly DbSet<T> _dbSet;
+            private IDbContextTransaction _transaction;
 
-            public BaseRepository()
+        public BaseRepository()
             {
                 _context ??= new ApplicationDBContext();
                 _dbSet ??= _context.Set<T>();
@@ -146,7 +148,31 @@ namespace Repositories.Repositories
                 return await _context.Set<T>().FindAsync(code);
             }
 
-            public IQueryable<T> Get(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IQueryable<T>> include = null, int? pageIndex = null, int? pageSize = null)
+                //transaction
+
+            public async Task BeginTransactionAsync()
+            {
+                _transaction = await _context.Database.BeginTransactionAsync();
+            }
+            public async Task CommitTransactionAsync()
+            {
+                if (_transaction != null)
+                    {
+                        _transaction.Commit();
+                        _transaction.Dispose();
+                        _transaction = null;
+                    }
+            }
+            public async Task RollbackTransactionAsync()
+            {
+                if (_transaction != null)
+                    {
+                        await _transaction.RollbackAsync();
+                        _transaction.Dispose();
+                        _transaction = null;
+                    }
+            }
+        public IQueryable<T> Get(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IQueryable<T>> include = null, int? pageIndex = null, int? pageSize = null)
             {
                 IQueryable<T> query = _dbSet;
 

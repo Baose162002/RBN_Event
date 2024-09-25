@@ -18,6 +18,7 @@ namespace Services.Configurations.Mapper
 
             CreateMap<User, UserResponseDto>();
             CreateMap<CreateUserDto, User>();
+            CreateMap<LoginUserRequest, User>();
         }
     }
 }
