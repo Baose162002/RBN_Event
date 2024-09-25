@@ -4,6 +4,7 @@ using BusinessObject.DTO;
 using System.Globalization;
 using BusinessObject.Dto.RequestDto;
 using BusinessObject.Dto.ResponseDto;
+using BusinessObject.Dto;
 
 namespace Services.Configurations.Mapper
 {
@@ -18,6 +19,7 @@ namespace Services.Configurations.Mapper
 
             CreateMap<User, UserResponseDto>();
             CreateMap<CreateUserDto, User>();
+            CreateMap<FeedbackDTO, FeedBack>();
         }
     }
 }
