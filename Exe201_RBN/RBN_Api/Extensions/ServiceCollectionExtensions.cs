@@ -40,6 +40,8 @@ namespace RBN_Api.Extensions
             services.AddScoped<IResponseRepository, ResponseRepository>();
 
 
+            services.AddScoped<IBookingRepository, BookingRepository>();
+
             // Register services here
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IUserService, UserService>();
@@ -50,6 +52,8 @@ namespace RBN_Api.Extensions
             services.AddScoped<IFeedbackService, FeedbackService>();
             services.AddScoped<IResponseService, ResponseService>();
           
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IBookingService, BookingService>();
 
             return services;
         }

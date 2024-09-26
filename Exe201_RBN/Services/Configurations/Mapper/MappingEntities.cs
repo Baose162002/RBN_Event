@@ -23,6 +23,7 @@ namespace Services.Configurations.Mapper
             CreateMap<FeedbackDTO, FeedBack>();
             CreateMap<ResponseDTO, Response>();
 
+            CreateMap<Booking, ViewDetailsBookingDto>();
         }
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessObject.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240926044805_Initial")]
+    [Migration("20240926120939_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -40,6 +40,10 @@ namespace BusinessObject.Migrations
                     b.Property<DateTime>("BookingDay")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
@@ -52,7 +56,7 @@ namespace BusinessObject.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -119,7 +123,7 @@ namespace BusinessObject.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -320,6 +324,38 @@ namespace BusinessObject.Migrations
                     b.ToTable("Message");
                 });
 
+            modelBuilder.Entity("BusinessObject.Promotion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("DurationInDays")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Promotion");
+                });
+
             modelBuilder.Entity("BusinessObject.PromotionFee", b =>
                 {
                     b.Property<int>("Id")
@@ -331,26 +367,17 @@ namespace BusinessObject.Migrations
                     b.Property<int?>("CompanyId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("EventId")
                         .HasColumnType("int");
 
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
-                    b.Property<string>("PromotionType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PromotionId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
@@ -363,6 +390,8 @@ namespace BusinessObject.Migrations
                     b.HasIndex("CompanyId");
 
                     b.HasIndex("EventId");
+
+                    b.HasIndex("PromotionId");
 
                     b.ToTable("PromotionFee");
                 });
@@ -564,9 +593,17 @@ namespace BusinessObject.Migrations
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.NoAction);
 
+                    b.HasOne("BusinessObject.Promotion", "Promotion")
+                        .WithMany("PromotionFees")
+                        .HasForeignKey("PromotionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Company");
 
                     b.Navigation("Event");
+
+                    b.Navigation("Promotion");
                 });
 
             modelBuilder.Entity("BusinessObject.Response", b =>
@@ -619,6 +656,11 @@ namespace BusinessObject.Migrations
             modelBuilder.Entity("BusinessObject.FeedBack", b =>
                 {
                     b.Navigation("Responses");
+                });
+
+            modelBuilder.Entity("BusinessObject.Promotion", b =>
+                {
+                    b.Navigation("PromotionFees");
                 });
 
             modelBuilder.Entity("BusinessObject.User", b =>

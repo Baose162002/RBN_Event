@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessObject
+namespace BusinessObject.Dto.ResponseDto
 {
-    [Table("Booking")]
-    public class Booking
+    public class ViewDetailsBookingDto
     {
-        [Key]
         public int Id { get; set; }
         public string Email { get; set; }
         public string FullName { get; set; }
@@ -24,10 +20,5 @@ namespace BusinessObject
         public int UserId { get; set; }
         public int EventId { get; set; }
 
-        // Navigation Properties
-        public User User { get; set; }
-        public Event Event { get; set; }
-        public ICollection<CommissionFee> CommissionFees { get; set; }
     }
-
 }

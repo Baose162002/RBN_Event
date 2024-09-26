@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
+using System.IO;
 
 namespace BusinessObject
 {
@@ -16,6 +15,7 @@ namespace BusinessObject
         public DbSet<FeedBack> FeedBacks { get; set; }
         public DbSet<EventImg> EventImgs { get; set; }
         public DbSet<PromotionFee> PromotionFees { get; set; }
+        public DbSet<Promotion> Promotions { get; set; }
         public DbSet<CommissionFee> CommissionFees { get; set; }
         public DbSet<Response> Responses { get; set; }
 
@@ -35,15 +35,10 @@ namespace BusinessObject
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
             IConfigurationRoot configuration = builder.Build();
             optionsBuilder.UseSqlServer(configuration.GetConnectionString("Local"));
-
-            // Set the command timeout to 4 minutes (240 seconds)
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("Local"),
-                options => options.CommandTimeout(240));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             // Configuring One-to-Many relationship for User and Company
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Companies)
@@ -127,12 +122,14 @@ namespace BusinessObject
                 .WithOne(cf => cf.Company)
                 .HasForeignKey(cf => cf.CompanyId)
                 .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Booking>()
+        .Property(b => b.Price) // Giả sử Price là thuộc tính kiểu decimal trong Booking
+        .HasColumnType("decimal(18, 2)"); // Sử dụng decimal(18,2) cho giá
 
-
-
-
-
-
+            // Specify the column type and precision for CommissionFee
+            modelBuilder.Entity<CommissionFee>()
+                .Property(cf => cf.Price) // Giả sử Price là thuộc tính kiểu decimal trong CommissionFee
+                .HasColumnType("decimal(18, 2)"); // Sử dụng decimal(18,2) cho giá
         }
     }
 }
