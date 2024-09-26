@@ -26,7 +26,6 @@ namespace RBN_Api.Extensions
             });
 		
 
-			services.AddScoped<IEventImgService, EventImgService>();
 			// Configure AutoMapper
 			services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -46,7 +45,8 @@ namespace RBN_Api.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddTransient<ISendMailService, SendMailService>();
             services.AddScoped<IEventService, EventService>();
-            services.AddScoped<IAuthService, AuthService>();
+			services.AddScoped<IEventImgService, EventImgService>();
+			services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IFeedbackService, FeedbackService>();
             services.AddScoped<IResponseService, ResponseService>();
           
