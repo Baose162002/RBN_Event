@@ -1,9 +1,10 @@
-﻿using AutoMapper;
+using AutoMapper;
 using BusinessObject;
 using BusinessObject.DTO;
 using System.Globalization;
 using BusinessObject.Dto.RequestDto;
 using BusinessObject.Dto.ResponseDto;
+using BusinessObject.Dto;
 
 namespace Services.Configurations.Mapper
 {
@@ -19,6 +20,9 @@ namespace Services.Configurations.Mapper
             CreateMap<User, UserResponseDto>();
             CreateMap<CreateUserDto, User>();
             CreateMap<LoginUserRequest, User>();
+            CreateMap<FeedbackDTO, FeedBack>();
+            CreateMap<ResponseDTO, Response>();
+
         }
     }
 }
