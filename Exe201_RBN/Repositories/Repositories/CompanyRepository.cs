@@ -37,17 +37,8 @@ namespace Repositories.Repositories
                 {
                     throw new ArgumentException("Company already exist");
                 }
-                var newCompany = new Company
-                {
-                    Name = company.Name,
-                    Description = company.Description,
-                    Address = company.Address,
-                    Phone = company.Phone,
-                    Avatar = company.Avatar,
-                    TaxCode = company.TaxCode,
-                    UserId = company.UserId
-                };
-                await _context.AddAsync(newCompany);
+                
+                await _context.AddAsync(existing);
                 await _context.SaveChangesAsync();
             }catch (Exception e)
             {

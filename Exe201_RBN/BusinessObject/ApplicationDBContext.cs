@@ -68,13 +68,6 @@ namespace BusinessObject
                 .HasForeignKey(b => b.EventId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            // Configuring One-to-Many relationship for Event and EventImg
-            modelBuilder.Entity<Event>()
-                .HasMany(e => e.EventImages)
-                .WithOne(img => img.Event)
-                .HasForeignKey(img => img.EventId)
-                .OnDelete(DeleteBehavior.NoAction);
-
             // Configuring One-to-Many relationship for Company and Event
             modelBuilder.Entity<Company>()
                 .HasMany(c => c.Events)
