@@ -29,6 +29,7 @@ namespace Services.Service
             _userService = userService;
             _companyService = companyService;
         }
+
         public async Task<List<FeedBack>> GetAllFeedback()
         {
             return await _feedbackRepository.GetAllFeedback();

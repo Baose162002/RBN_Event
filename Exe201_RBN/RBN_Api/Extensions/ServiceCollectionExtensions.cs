@@ -29,6 +29,7 @@ namespace RBN_Api.Extensions
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<IFeedbackRepository, FeedbackRepository>();
+            services.AddScoped<IResponseRepository, ResponseRepository>();
 
 
             // Register services here
@@ -37,6 +38,7 @@ namespace RBN_Api.Extensions
             services.AddTransient<ISendMailService, SendMailService>();
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IFeedbackService, FeedbackService>();
+            services.AddScoped<IResponseService, ResponseService>();
           
 
             return services;

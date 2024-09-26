@@ -20,6 +20,8 @@ namespace Services.Configurations.Mapper
             CreateMap<User, UserResponseDto>();
             CreateMap<CreateUserDto, User>();
             CreateMap<FeedbackDTO, FeedBack>();
+            CreateMap<ResponseDTO, Response>();
+
         }
     }
 }
