@@ -21,39 +21,41 @@ namespace Services.Service
         }
         public async Task SendMailToGeneratedUser(string email)
         {
-            var user = await _userRepo.Get().Where(x => x.Email.ToLower().Contains(email.ToLower())).FirstOrDefaultAsync();
-            if (user == null) throw new Exception("Not Found");
-
-            var from = new MailboxAddress(name: "", address: "tivip1216vn@gmail.com");
-            var to = new MailboxAddress(name: "", address: user.Email.ToLower());
-
-
-            var msj = new MimeMessage();
-            msj.From.Add(from);
-            msj.To.Add(to);
-            msj.Subject = "Confirm your account in RBN Event";
-            msj.Body = new TextPart(TextFormat.Html)
+            try
             {
+                var user = await _userRepo.Get().Where(x => x.Email.ToLower().Contains(email.ToLower())).FirstOrDefaultAsync();
+                if (user == null) throw new Exception("Không tìm thấy người dùng");
 
-                Text = $"<h1>Hi {user.Name}</h1>" +
-                $"<h2>Welcome to RBN Event</h2>" +
-                $"<p>We are glad for your joining into our system. We hope you will happy to use our website<br></br>Here is your account:</p>" +
-                $"<p>Your Account: {email} <br></br>Your Password: {user.Password}</p>"
-            };
+                var from = new MailboxAddress("", "tivip1216vn@gmail.com");
+                var to = new MailboxAddress("", user.Email.ToLower());
 
-            var client = new MailKit.Net.Smtp.SmtpClient();
+                var msj = new MimeMessage();
+                msj.From.Add(from);
+                msj.To.Add(to);
+                msj.Subject = "Xác nhận tài khoản của bạn với RBN Event";
+                msj.Body = new TextPart(TextFormat.Html)
+                {
+                    Text = $"<h1>Xin chào {user.Name},</h1>" +
+                           $"<h2>Chào mừng bạn đến với RBN Event</h2>" +
+                           $"<p>Tài khoản của bạn: {email} <br>Mật khẩu: {user.Password}</p>"
+                };
 
-            client.Connect(host: "smtp.gmail.com",
-                           port: 587,
-                           options: MailKit.Security.SecureSocketOptions.StartTls);
+                using var client = new MailKit.Net.Smtp.SmtpClient();
+                client.Connect("smtp.gmail.com",
+                                            587,
+                                            MailKit.Security.SecureSocketOptions.StartTls);
 
+                client.Authenticate("tivip1216vn@gmail.com", "nwlkhxscvhmanubs");
 
-
-            client.Authenticate("tivip1216vn@gmail.com", "nwlkhxscvhmanubs");
-
-            client.Send(msj);
-
-            client.Disconnect(true);
+                await client.SendAsync(msj);
+                client.Disconnect(true);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Không thể gửi mail đến {email}: {ex.Message}");
+                throw;
+            }
         }
+
     }
 }

@@ -37,13 +37,18 @@ namespace RBN_Api.Extensions
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<IEventImgRepository, EventImgRepository>();
             
+            services.AddScoped<IFeedbackRepository, FeedbackRepository>();
+            services.AddScoped<IResponseRepository, ResponseRepository>();
+
 
             // Register services here
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IUserService, UserService>();
             services.AddTransient<ISendMailService, SendMailService>();
             services.AddScoped<IEventService, EventService>();
-            services.AddScoped<IEventImgService, EventImgService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IFeedbackService, FeedbackService>();
+            services.AddScoped<IResponseService, ResponseService>();
           
 
             return services;

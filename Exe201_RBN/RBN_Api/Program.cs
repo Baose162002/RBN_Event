@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using RBN_Api.Extensions;
 using Repositories.IRepositories;
 using Repositories.Repositories;
+using Services.Configurations.JWT;
 using Services.Configurations.Mapper;
 using Services.IService;
 using Services.Service;
@@ -17,6 +18,7 @@ public class Program
         // Add services to the container.
 
         builder.Services.Register();
+        JWTConfiguration.ConfigureJwt(builder.Services, builder.Configuration);
 		var configuration = builder.Configuration;
 
 		// Configure CloudinarySettings and Cloudinary service

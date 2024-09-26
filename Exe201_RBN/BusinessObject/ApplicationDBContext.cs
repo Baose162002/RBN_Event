@@ -35,6 +35,10 @@ namespace BusinessObject
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
             IConfigurationRoot configuration = builder.Build();
             optionsBuilder.UseSqlServer(configuration.GetConnectionString("Local"));
+
+            // Set the command timeout to 4 minutes (240 seconds)
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("Local"),
+                options => options.CommandTimeout(240));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
