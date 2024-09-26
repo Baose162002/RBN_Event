@@ -42,6 +42,7 @@ namespace Services.Service
             {
                 var booking = new Booking
                 {
+                    Email = user.Email,
                     FullName = user.Name,
                     Address = user.Address,
                     Phone = user.Phone,

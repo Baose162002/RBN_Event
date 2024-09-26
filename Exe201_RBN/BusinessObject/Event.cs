@@ -28,11 +28,14 @@ namespace BusinessObject
         public DateTime? CreateAt { get; set; }
         public string UpdateBy { get; set; }
         public DateTime? UpdateAt { get; set; }
+        
+        public int EventImgId { get; set; }
 
         // Relationships
         public Company Company { get; set; }
+
+        public EventImg EventImg { get; set; }
         public ICollection<Booking> Bookings { get; set; }
-        public ICollection<EventImg> EventImages { get; set; }
         public ICollection<PromotionFee> PromotionFees { get; set; }
     }
 

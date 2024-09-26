@@ -9,7 +9,8 @@ namespace BusinessObject.Dto.RequestDto
 {
     public class CreateBookingDto
     {
-        [Required(ErrorMessage = "Yêu cầu nhập tên của bạn")]
+        [Required(ErrorMessage = "Yêu cầu nhập email của bạn")]
+        public string Email { get; set; }
         public string FullName { get; set; }
         [Required(ErrorMessage = "Yêu cầu nhập nơi ở của bạn")]
         public string Address { get; set; }

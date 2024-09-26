@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.IService;
+using Services.Service;
 
 namespace RBN_Api.Controllers
 {
@@ -10,10 +11,12 @@ namespace RBN_Api.Controllers
     public class EventController : ControllerBase
     {
         private readonly IEventService _eventService;
-        public EventController(IEventService eventService)
+		private readonly IEventImgService _eventImgService;
+		public EventController(IEventService eventService, IEventImgService eventImgService)
         {
             _eventService = eventService;
-        }
+			_eventImgService = eventImgService;
+		}
         [HttpGet]
         public async Task<IActionResult> GetAllEvent()
         {
@@ -73,5 +76,25 @@ namespace RBN_Api.Controllers
                 return Ok(events);
        
         }
-    }
+
+		[HttpPost("Upload")]
+		public async Task<IActionResult> UploadEventImage(IFormFile file)
+		{
+			if (file == null || file.Length == 0)
+			{
+				return BadRequest("Invalid file.");
+			}
+
+			try
+			{
+				await _eventImgService.UploadFile(file);
+				return Ok("Image uploaded successfully.");
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, $"Internal server error: {ex.Message}");
+			}
+		}
+
+	}
 }

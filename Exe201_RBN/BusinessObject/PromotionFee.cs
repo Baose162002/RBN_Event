@@ -12,20 +12,30 @@ namespace BusinessObject
     public class PromotionFee
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public decimal Price { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-        public string PromotionType { get; set; }
-        public string Description { get; set; }
-        public string PaymentMethod { get; set; }
-        public int Status { get; set; }
-        public int? EventId { get; set; }
-        public int? CompanyId { get; set; }
 
-        // Navigation Properties
+        [Required]
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal Price { get; set; }
+
+        [Required]
+        public DateTime StartTime { get; set; }
+
+        [Required]
+        public DateTime EndTime { get; set; }
+
+        [Required]
+        public int Status { get; set; }  // Trạng thái gói (0: Chưa thanh toán, 1: Đã thanh toán)
+
+        public int? EventId { get; set; }  
+
+        public int? CompanyId { get; set; }  
+
+        public int PromotionId { get; set; }  
+        public Promotion Promotion { get; set; }
+
         public Event Event { get; set; }
         public Company Company { get; set; }
     }
-
 }

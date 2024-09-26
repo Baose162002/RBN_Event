@@ -1,9 +1,10 @@
-﻿using AutoMapper;
+using AutoMapper;
 using BusinessObject;
 using BusinessObject.DTO;
 using System.Globalization;
 using BusinessObject.Dto.RequestDto;
 using BusinessObject.Dto.ResponseDto;
+using BusinessObject.Dto;
 
 namespace Services.Configurations.Mapper
 {
@@ -15,10 +16,13 @@ namespace Services.Configurations.Mapper
             CreateMap<EventDTO, Event>()
             .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTime.ParseExact(src.CreateAt, "dd/MM/yyyy", CultureInfo.InvariantCulture)))
             .ForMember(dest => dest.UpdateAt, opt => opt.MapFrom(src => DateTime.ParseExact(src.UpdateAt, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
-
+            CreateMap<Event, EventDTO>();
             CreateMap<User, UserResponseDto>();
             CreateMap<CreateUserDto, User>();
             CreateMap<LoginUserRequest, User>();
+            CreateMap<FeedbackDTO, FeedBack>();
+            CreateMap<ResponseDTO, Response>();
+
             CreateMap<Booking, ViewDetailsBookingDto>();
         }
     }

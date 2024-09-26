@@ -12,14 +12,45 @@ namespace BusinessObject.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "EventImg",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateUpLoad = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EventImg", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Promotion",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DurationInDays = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    IsAvailable = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Promotion", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
@@ -118,7 +149,8 @@ namespace BusinessObject.Migrations
                     CreateBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdateBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EventImgId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -128,6 +160,12 @@ namespace BusinessObject.Migrations
                         column: x => x.CompanyId,
                         principalTable: "Company",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Event_EventImg_EventImgId",
+                        column: x => x.EventImgId,
+                        principalTable: "EventImg",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -162,6 +200,7 @@ namespace BusinessObject.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -189,27 +228,6 @@ namespace BusinessObject.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EventImg",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EventId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EventImg", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EventImg_Event_EventId",
-                        column: x => x.EventId,
-                        principalTable: "Event",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PromotionFee",
                 columns: table => new
                 {
@@ -218,12 +236,10 @@ namespace BusinessObject.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PromotionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     EventId = table.Column<int>(type: "int", nullable: true),
-                    CompanyId = table.Column<int>(type: "int", nullable: true)
+                    CompanyId = table.Column<int>(type: "int", nullable: true),
+                    PromotionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -238,6 +254,12 @@ namespace BusinessObject.Migrations
                         column: x => x.EventId,
                         principalTable: "Event",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PromotionFee_Promotion_PromotionId",
+                        column: x => x.PromotionId,
+                        principalTable: "Promotion",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -332,9 +354,9 @@ namespace BusinessObject.Migrations
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EventImg_EventId",
-                table: "EventImg",
-                column: "EventId");
+                name: "IX_Event_EventImgId",
+                table: "Event",
+                column: "EventImgId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FeedBack_CompanyId",
@@ -367,6 +389,11 @@ namespace BusinessObject.Migrations
                 column: "EventId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PromotionFee_PromotionId",
+                table: "PromotionFee",
+                column: "PromotionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Responses_CompanyId",
                 table: "Responses",
                 column: "CompanyId");
@@ -384,9 +411,6 @@ namespace BusinessObject.Migrations
                 name: "Commission");
 
             migrationBuilder.DropTable(
-                name: "EventImg");
-
-            migrationBuilder.DropTable(
                 name: "Message");
 
             migrationBuilder.DropTable(
@@ -402,6 +426,9 @@ namespace BusinessObject.Migrations
                 name: "Chat");
 
             migrationBuilder.DropTable(
+                name: "Promotion");
+
+            migrationBuilder.DropTable(
                 name: "FeedBack");
 
             migrationBuilder.DropTable(
@@ -409,6 +436,9 @@ namespace BusinessObject.Migrations
 
             migrationBuilder.DropTable(
                 name: "Company");
+
+            migrationBuilder.DropTable(
+                name: "EventImg");
 
             migrationBuilder.DropTable(
                 name: "User");
