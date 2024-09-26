@@ -28,7 +28,7 @@ namespace RBN_Api.Extensions
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IEventRepository, EventRepository>();
-            
+            services.AddScoped<IBookingRepository, BookingRepository>();
 
             // Register services here
             services.AddScoped<ICompanyService, CompanyService>();
@@ -36,7 +36,7 @@ namespace RBN_Api.Extensions
             services.AddTransient<ISendMailService, SendMailService>();
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IAuthService, AuthService>();
-          
+            services.AddScoped<IBookingService, BookingService>();
 
             return services;
         }
