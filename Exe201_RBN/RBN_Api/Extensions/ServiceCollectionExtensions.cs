@@ -1,4 +1,8 @@
 ﻿
+using BusinessObject.DTO;
+using CloudinaryDotNet;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Repositories.IRepositories;
 using Repositories.Repositories;
 using Repositories.Repositories.IRepositories;
@@ -11,7 +15,8 @@ namespace RBN_Api.Extensions
 
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection Register(this IServiceCollection services)
+	
+		public static IServiceCollection Register(this IServiceCollection services)
         {
             services.AddControllers();
             services.AddEndpointsApiExplorer();
@@ -19,15 +24,19 @@ namespace RBN_Api.Extensions
             {
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
+		
 
-            // Configure AutoMapper
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+			services.AddScoped<IEventImgService, EventImgService>();
+			// Configure AutoMapper
+			services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             // Register repositories here
             
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<IEventImgRepository, EventImgRepository>();
+            
             services.AddScoped<IFeedbackRepository, FeedbackRepository>();
             services.AddScoped<IResponseRepository, ResponseRepository>();
 

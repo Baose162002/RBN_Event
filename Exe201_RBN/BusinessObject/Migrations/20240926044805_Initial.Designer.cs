@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessObject.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240924161003_Initial")]
+    [Migration("20240926044805_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -197,6 +197,9 @@ namespace BusinessObject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("EventImgId")
+                        .HasColumnType("int");
+
                     b.Property<string>("EventType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -232,6 +235,8 @@ namespace BusinessObject.Migrations
 
                     b.HasIndex("CompanyId");
 
+                    b.HasIndex("EventImgId");
+
                     b.ToTable("Event");
                 });
 
@@ -243,24 +248,14 @@ namespace BusinessObject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("DateUpLoad")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("EventId");
 
                     b.ToTable("EventImg");
                 });
@@ -512,18 +507,15 @@ namespace BusinessObject.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Company");
-                });
-
-            modelBuilder.Entity("BusinessObject.EventImg", b =>
-                {
-                    b.HasOne("BusinessObject.Event", "Event")
-                        .WithMany("EventImages")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                    b.HasOne("BusinessObject.EventImg", "EventImg")
+                        .WithMany()
+                        .HasForeignKey("EventImgId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Event");
+                    b.Navigation("Company");
+
+                    b.Navigation("EventImg");
                 });
 
             modelBuilder.Entity("BusinessObject.FeedBack", b =>
@@ -620,8 +612,6 @@ namespace BusinessObject.Migrations
             modelBuilder.Entity("BusinessObject.Event", b =>
                 {
                     b.Navigation("Bookings");
-
-                    b.Navigation("EventImages");
 
                     b.Navigation("PromotionFees");
                 });

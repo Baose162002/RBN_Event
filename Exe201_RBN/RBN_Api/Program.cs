@@ -1,3 +1,6 @@
+using BusinessObject.DTO;
+using CloudinaryDotNet;
+using Microsoft.Extensions.Options;
 using RBN_Api.Extensions;
 using Repositories.IRepositories;
 using Repositories.Repositories;
@@ -16,8 +19,18 @@ public class Program
 
         builder.Services.Register();
         JWTConfiguration.ConfigureJwt(builder.Services, builder.Configuration);
+		var configuration = builder.Configuration;
 
-        builder.Services.AddSwaggerGen();
+		// Configure CloudinarySettings and Cloudinary service
+		builder.Services.Configure<CloudinarySettings>(configuration.GetSection("Cloudinary"));
+		builder.Services.AddSingleton<Cloudinary>(sp =>
+		{
+			var config = sp.GetRequiredService<IOptions<CloudinarySettings>>().Value;
+			var account = new Account(config.CloudName, config.ApiKey, config.ApiSecret);
+			return new Cloudinary(account);
+		});
+
+		builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
 
