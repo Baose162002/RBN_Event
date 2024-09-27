@@ -3,46 +3,304 @@
 @{
     ViewData["Title"] = "Trang chủ";
 }
+<link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+<script src="https://unpkg.com/flowbite@1.4.0/dist/flowbite.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-<div class="container mt-4">
-    <h1 class="text-center mb-4">KHÁM PHÁ SỰ KIỆN</h1>
-    <p class="text-center text-muted mb-5">Khám phá các sự kiện mới, ẩm thực, văn hóa trên khắp thế giới và nhiều hơn nữa</p>
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Rise Church</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="font-sans flex flex-col min-h-screen">
 
-    @if (Model.Events != null && Model.Events.Any())
-    {
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            @foreach (var eventItem in Model.Events)
-            {
-                <div class="col">
-                    <div class="card h-100 shadow-sm">
-                        @if (!string.IsNullOrEmpty(eventItem.EventImg?.ImageUrl))
-                        {
-                            <img src="@eventItem.EventImg.ImageUrl" class="card-img-top" alt="@eventItem.Title" style="height: 200px; object-fit: cover;">
-                        }
-                        else
-                        {
-                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-                                <span class="text-muted">Không có hình ảnh</span>
-                            </div>
-                        }
-                        <div class="card-body">
-                            <h5 class="card-title">@eventItem.Title</h5>
-                            <p class="card-text">@eventItem.Name</p>
-                            <p class="card-text"><small class="text-muted">@eventItem.EventType</small></p>
-                        </div>
-                        <div class="card-footer d-flex justify-content-between align-items-center">
-                            <span class="text-primary font-weight-bold">@eventItem.Price.ToString("C")</span>
-                            <small class="text-muted">@eventItem.Company?.Name</small>
-                        </div>
+
+    <!-- background -->
+
+    <main class="flex-grow w-full">
+        <div class="relative h-full w-full">
+            <img src="/img/Background.png" alt="Family in field" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-white text-center px-4">
+                <h1 class="text-4xl md:text-6xl font-bold mb-4 leading-tight">
+                    Sự kiện dễ dàng -
+                    Kỷ niệm lâu dài
+                </h1>
+                <p class="text-xl md:text-2xl mb-8">
+                    Một nơi hoàn hảo để tổ chức sự kiện
+                </p>
+                <div class="btn">
+                    <!-- Contact Button -->
+                    <a class="group relative inline-flex items-center overflow-hidden bg-black rounded-3xl border px-8 py-3 text-[#1c2e45] focus:outline-none focus:ring active:text-indigo-500 hover:text-white"
+                       href="#contact">
+                        <span class="absolute -end-full transition-all group-hover:end-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="
+        fill: rgba(255, 255, 255, 1);
+        transform: ;
+        msfilter: ;
+      ">
+                                <path d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"></path>
+                            </svg>
+                        </span>
+                        <span data-aos="zoom-out-left" data-aos-easing="linear" data-aos-duration="800" class="text-sm font-medium text-slate-100 capitalize transition-all group-hover:me-4 aos-init aos-animate">
+                            Tìm ngay
+                        </span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+
+    <!-- Sự kiện nổi bật -->
+    <div class="bg-gray-100 py-12">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8">SỰ KIỆN NỔI BẬT</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-6xl mx-auto">
+                <div class="group relative flex h-80 rounded-xl shadow-xl ring-gray-900/5 overflow-hidden bg-white">
+                    <div class="z-10 h-full w-full overflow-hidden opacity-80 transition duration-300 ease-in-out group-hover:opacity-100">
+                        <img src="/img/gemcenter.jpg" class="animate-fade-in h-full w-full object-cover object-center transition duration-300 group-hover:scale-110" alt="Teabreak event" />
                     </div>
+                    <div class="absolute bottom-0 z-20 m-0 pb-4 ps-4 transition duration-300 ease-in-out group-hover:-translate-y-1 group-hover:translate-x-3 group-hover:scale-110">
+                        <h1 class="font-serif text-2xl font-bold text-white shadow-xl">Gem Center</h1>
+                    </div>
+                </div>
+
+                <div class="group relative flex h-80 rounded-xl shadow-xl ring-gray-900/5 overflow-hidden bg-white">
+                    <div class="z-10 h-full w-full overflow-hidden opacity-80 transition duration-300 ease-in-out group-hover:opacity-100">
+                        <img src="/img/CapellaparkView.jpg" class="animate-fade-in h-full w-full object-cover object-center transition duration-300 group-hover:scale-110" alt="Birthday event" />
+                    </div>
+                    <div class="absolute bottom-0 z-20 m-0 pb-4 ps-4 transition duration-300 ease-in-out group-hover:-translate-y-1 group-hover:translate-x-3 group-hover:scale-110">
+                        <h1 class="font-serif text-2xl font-bold text-white shadow-xl">Capellapark View</h1>
+                    </div>
+                </div>
+                <div class="group relative flex h-80 rounded-xl shadow-xl ring-gray-900/5 overflow-hidden bg-white">
+                    <div class="z-10 h-full w-full overflow-hidden opacity-80 transition duration-300 ease-in-out group-hover:opacity-100">
+                        <img src="/img/NovotelSaigonCentre.jpg" class="animate-fade-in h-full w-full object-cover object-center transition duration-300 group-hover:scale-110" alt="Birthday event" />
+                    </div>
+                    <div class="absolute bottom-0 z-20 m-0 pb-4 ps-4 transition duration-300 ease-in-out group-hover:-translate-y-1 group-hover:translate-x-3 group-hover:scale-110">
+                        <h1 class="font-serif text-2xl font-bold text-white shadow-xl">Novotel SaigonCentre</h1>
+                    </div>
+                </div>
+
+                <div class="group relative flex h-80 rounded-xl shadow-xl ring-gray-900/5 overflow-hidden bg-white">
+                    <div class="z-10 h-full w-full overflow-hidden opacity-80 transition duration-300 ease-in-out group-hover:opacity-100">
+                        <img src="/img/Intercontinental.jpg" class="animate-fade-in h-full w-full object-cover object-center transition duration-300 group-hover:scale-110" alt="Company event" />
+                    </div>
+                    <div class="absolute bottom-0 z-20 m-0 pb-4 ps-4 transition duration-300 ease-in-out group-hover:-translate-y-1 group-hover:translate-x-3 group-hover:scale-110">
+                        <h1 class="font-serif text-2xl font-bold text-white shadow-xl">Intercontinental Sai Gon</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- sk quan tam -->
+
+    <div class="w-full bg-gray-100 py-12">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8">Sự kiện được quan tâm</h2>
+            @if (Model.Events != null && Model.Events.Any())
+            {
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    @foreach (var eventItem in Model.Events)
+                    {
+                        <div class="col">
+                            <div class="card h-100 shadow-sm">
+                                @if (!string.IsNullOrEmpty(eventItem.EventImg?.ImageUrl))
+                                {
+                                    <img src="@eventItem.EventImg.ImageUrl" class="card-img-top" alt="@eventItem.Title" style="height: 200px; object-fit: cover;">
+                                }
+                                else
+                                {
+                                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                        <span class="text-muted">Không có hình ảnh</span>
+                                    </div>
+                                }
+                                <div class="card-body">
+                                    <h5 class="card-title">@eventItem.Title</h5>
+                                    <p class="card-text">@eventItem.Name</p>
+                                    <p class="card-text"><small class="text-muted">@eventItem.EventType</small></p>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                    <span class="text-primary font-weight-bold">@eventItem.Price.ToString("C")</span>
+                                    <small class="text-muted">@eventItem.Company?.Name</small>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info text-center" role="alert">
+                    Không có sự kiện nào để hiển thị.
                 </div>
             }
         </div>
-    }
-    else
-    {
-        <div class="alert alert-info text-center" role="alert">
-            Không có sự kiện nào để hiển thị.
+    </div>
+
+
+    <!-- trải nghiệm khách -->
+    <div class="w-full mx-auto">
+
+        <div id="default-carousel" class="relative rounded-lg overflow-hidden shadow-lg w-full" data-carousel="static">
+            <!-- Carousel wrapper -->
+            <div class="relative h-80 md:h-96 w-full" data-carousel-inner>
+                <!-- Item 1 -->
+                <div class="hidden duration-700 ease-in-out w-full" data-carousel-item>
+                    <img src="https://img.pikbest.com/backgrounds/20190710/simple-solid-color-black-background-banner_2753863.jpg!bwr800"
+                         class="object-cover w-full h-full" alt="Slide 1">
+                    <span class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl font-semibold text-white md:text-2xl dark:text-gray-800 text-center">
+                        "Trang web này thật sự rất hữu ích cho việc tổ chức các sự kiện lớn nhỏ. 
+                        Từ khâu lên ý tưởng đến việc kết nối với các nhà cung cấp dịch vụ,
+                        tất cả đều rất dễ dàng và thuận tiện. Đội ngũ hỗ trợ luôn sẵn sàng 
+                        giúp đỡ mọi lúc, mọi nơi." <br> 
+                        <br>
+                        <p>- Nguyễn Văn A - Chủ tịch Công ty Sự kiện XYZ</p>
+                    </span>
+                </div>
+                <!-- Item 2 -->
+                <div class="hidden duration-700 ease-in-out w-full" data-carousel-item>
+                    <img src="https://img.pikbest.com/backgrounds/20190710/simple-solid-color-black-background-banner_2753863.jpg!bwr800"
+                         class="object-cover w-full h-full" alt="Slide 2">
+                    <span class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl font-semibold text-white md:text-2xl dark:text-gray-800 text-center">
+                        "Chúng tôi đã sử dụng nền tảng này cho một loạt các sự kiện 
+                        và cảm thấy rất hài lòng. Giao diện thân thiện, dễ sử dụng 
+                        và có rất nhiều tùy chọn để lựa chọn nhà cung cấp phù hợp. 
+                        Rất đáng để thử!" <br><br>
+                        <p>- Trần Thị B - Quản lý Dự án tại EventPro</p>
+                    </span>
+                </div>
+                <!-- Item 3 -->
+                <div class="hidden duration-700 ease-in-out w-full" data-carousel-item>
+                    <img src="https://img.pikbest.com/backgrounds/20190710/simple-solid-color-black-background-banner_2753863.jpg!bwr800"
+                         class="object-cover w-full h-full" alt="Slide 3">
+                    <span class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl font-semibold text-white md:text-2xl dark:text-gray-800 text-center">
+                        "Trang web giúp chúng tôi tiết kiệm rất nhiều thời gian 
+                        trong quá trình chuẩn bị sự kiện. Việc tìm kiếm đối tác,
+                        so sánh giá cả và đặt lịch rất nhanh chóng. Dịch vụ
+                        chăm sóc khách hàng cũng rất chuyên nghiệp và chu đáo." <br> <br>
+                        <p>- Phạm Văn C - Giám đốc Điều hành EventMaster</p>
+                    </span>
+                </div>
+            </div>
+            <!-- Slider indicators -->
+            <div class="flex absolute bottom-5 left-1/2 z-30 -translate-x-1/2 space-x-2" data-carousel-indicators>
+                <button type="button" class="w-3 h-3 rounded-full bg-gray-300 hover:bg-gray-400 focus:outline-none focus:bg-gray-400 transition"></button>
+                <button type="button" class="w-3 h-3 rounded-full bg-gray-300 hover:bg-gray-400 focus:outline-none focus:bg-gray-400 transition"></button>
+                <button type="button" class="w-3 h-3 rounded-full bg-gray-300 hover:bg-gray-400 focus:outline-none focus:bg-gray-400 transition"></button>
+            </div>
+            <!-- Slider controls -->
+            <button type="button"
+                    class="flex absolute top-1/2 left-3 z-40 items-center justify-center w-10 h-10 bg-gray-200/50 rounded-full hover:bg-gray-300 focus:outline-none transition"
+                    data-carousel-prev>
+                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+            <button type="button"
+                    class="flex absolute top-1/2 right-3 z-40 items-center justify-center w-10 h-10 bg-gray-200/50 rounded-full hover:bg-gray-300 focus:outline-none transition"
+                    data-carousel-next>
+                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
         </div>
-    }
-</div>
+        <script src="https://unpkg.com/flowbite@1.4.0/dist/flowbite.js"></script>
+
+    </div>
+
+
+    <!--  câu hỏi -->
+        <div class="container mb-20 mt-20">
+        <h2 class="mb-12 text-4xl font-bold leadi text-center sm:text-5xl">Câu hỏi thường gặp</h2>
+        <ul class="max-w-2xl mx-auto  divide-y  shadow shadow-blue-600 rounded-xl">
+            <li>
+                <details class="group">
+                    <summary class="flex items-center gap-3 px-4 py-3 font-medium marker:content-none hover:cursor-pointer">
+                        <svg class="w-5 h-5 text-gray-500 transition group-open:rotate-90" xmlns="http://www.w3.org/2000/svg"
+                             width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                  d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z">
+                            </path>
+                        </svg>
+                        <span>Làm thế nào để bắt đầu tổ chức một sự kiện?</span>
+                    </summary>
+
+                    <article class="px-4 pb-4">
+                        <p>
+                            Để bắt đầu tổ chức sự kiện, bạn cần xác định loại sự kiện mà bạn muốn tổ chức (hội thảo, tiệc, hội nghị...), sau đó đặt ra các mục tiêu chính. Tiếp theo, bạn lên danh sách khách mời, lựa chọn ngày giờ và địa điểm. Sau khi đã có thông tin cơ bản, hãy liên hệ với dịch vụ tổ chức sự kiện để nhận tư vấn chi tiết và giúp bạn lên kế hoạch cụ thể.
+                        </p>
+                    </article>
+                </details>
+            </li>
+            <li>
+                <details class="group">
+                    <summary class="flex items-center gap-3 px-4 py-3 font-medium marker:content-none hover:cursor-pointer">
+                        <svg class="w-5 h-5 text-gray-500 transition group-open:rotate-90" xmlns="http://www.w3.org/2000/svg"
+                             width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                  d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z">
+                            </path>
+                        </svg>
+                        <span>Các dịch vụ nào được cung cấp trong gói tổ chức sự kiện?</span>
+                    </summary>
+
+                    <article class="px-4 pb-4">
+                        <p>
+                            Chúng tôi cung cấp các dịch vụ từ A-Z bao gồm lên ý tưởng cho sự kiện, chọn địa điểm, thuê thiết bị âm thanh, ánh sáng, trang trí, quay phim chụp ảnh, quản lý nhân sự phục vụ sự kiện và nhiều dịch vụ khác. Gói dịch vụ có thể tùy chỉnh linh hoạt theo nhu cầu của khách hàng.
+                        </p>
+                    </article>
+                </details>
+            </li>
+            <li>
+                <details class="group">
+                    <summary class="flex items-center gap-3 px-4 py-3 font-medium marker:content-none hover:cursor-pointer">
+                        <svg class="w-5 h-5 text-gray-500 transition group-open:rotate-90" xmlns="http://www.w3.org/2000/svg"
+                             width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                  d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z">
+                            </path>
+                        </svg>
+                        <span>Tôi có thể thay đổi hoặc hủy bỏ sự kiện sau khi đã lên kế hoạch không?</span>
+                    </summary>
+
+                    <article class="px-4 pb-4">
+                        <p>
+                            Bạn hoàn toàn có thể thay đổi hoặc hủy bỏ sự kiện. Tuy nhiên, xin lưu ý rằng có thể sẽ có phí phát sinh tùy vào thời điểm bạn thay đổi hoặc hủy. Chúng tôi khuyến nghị bạn liên hệ với bộ phận hỗ trợ khách hàng để được tư vấn cụ thể và giải quyết mọi thắc mắc.
+                        </p>
+                    </article>
+                </details>
+            </li>
+            <li>
+                <details class="group">
+                    <summary class="flex items-center gap-3 px-4 py-3 font-medium marker:content-none hover:cursor-pointer">
+                        <svg class="w-5 h-5 text-gray-500 transition group-open:rotate-90" xmlns="http://www.w3.org/2000/svg"
+                             width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                  d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z">
+                            </path>
+                        </svg>
+                        <span>Làm thế nào để chọn địa điểm phù hợp cho sự kiện của tôi?</span>
+                    </summary>
+
+                    <article class="px-4 pb-4">
+                        <p>
+                            Việc chọn địa điểm phụ thuộc vào loại sự kiện, số lượng khách mời và ngân sách của bạn. Chúng tôi có một danh sách các địa điểm phong phú và đa dạng để bạn lựa chọn, từ các khách sạn sang trọng đến không gian ngoài trời hoặc các trung tâm hội nghị lớn. Bạn có thể cung cấp thông tin chi tiết về sự kiện của mình, và chúng tôi sẽ đề xuất địa điểm phù hợp nhất.
+                        </p>
+                    </article>
+                </details>
+            </li>
+        </ul>
+
+        </div>
+
+</body>
+</html>
