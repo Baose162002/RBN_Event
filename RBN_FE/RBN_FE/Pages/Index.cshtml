@@ -1,10 +1,48 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Trang chủ";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-4">
+    <h1 class="text-center mb-4">KHÁM PHÁ SỰ KIỆN</h1>
+    <p class="text-center text-muted mb-5">Khám phá các sự kiện mới, ẩm thực, văn hóa trên khắp thế giới và nhiều hơn nữa</p>
+
+    @if (Model.Events != null && Model.Events.Any())
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var eventItem in Model.Events)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        @if (!string.IsNullOrEmpty(eventItem.EventImg?.ImageUrl))
+                        {
+                            <img src="@eventItem.EventImg.ImageUrl" class="card-img-top" alt="@eventItem.Title" style="height: 200px; object-fit: cover;">
+                        }
+                        else
+                        {
+                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <span class="text-muted">Không có hình ảnh</span>
+                            </div>
+                        }
+                        <div class="card-body">
+                            <h5 class="card-title">@eventItem.Title</h5>
+                            <p class="card-text">@eventItem.Name</p>
+                            <p class="card-text"><small class="text-muted">@eventItem.EventType</small></p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between align-items-center">
+                            <span class="text-primary font-weight-bold">@eventItem.Price.ToString("C")</span>
+                            <small class="text-muted">@eventItem.Company?.Name</small>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center" role="alert">
+            Không có sự kiện nào để hiển thị.
+        </div>
+    }
 </div>

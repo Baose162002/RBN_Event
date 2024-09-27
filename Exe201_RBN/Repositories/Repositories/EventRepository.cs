@@ -14,9 +14,13 @@ namespace Repositories.Repositories
         public async Task<List<Event>> GetAllEvent()
         {
             var _context = new ApplicationDBContext();
-            var events = await _context.Events.ToListAsync();
-            return events;
-        }
+			var events = await _context.Events
+	           .Include(e => e.Company)   // Include related Company
+	           .Include(e => e.EventImg)  // Include related EventImg
+	           .ToListAsync();
+
+			return events;
+		}
 
         public async Task<Event> GetEventById(int id)
         {
