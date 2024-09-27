@@ -54,6 +54,7 @@ namespace RBN_Api.Extensions
           
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IBookingService, BookingService>();
+            services.AddScoped<IPromotionService, PromotionService>();
 
             return services;
         }

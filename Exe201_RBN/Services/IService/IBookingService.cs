@@ -16,5 +16,6 @@ namespace Services.IService
         Task CreateBooking(CreateBookingDto createBookingDto);
         Task UpdateBooking(CreateBookingDto updateBookingDto);
         Task DeleteBooking(int id);
+        Task<ViewDetailsBookingDto> ChangeStatusBooking(int id);
     }
 }
