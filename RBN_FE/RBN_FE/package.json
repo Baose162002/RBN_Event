@@ -1,0 +1,19 @@
+{
+  "name": "rbn_fe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "css:build": "tailwindcss build -i wwwroot/css/site.css -o wwwroot/css/styles.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.13"
+  }
+}
