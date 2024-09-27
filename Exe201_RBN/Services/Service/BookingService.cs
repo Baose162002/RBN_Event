@@ -82,5 +82,10 @@ namespace Services.Service
             await _bookingRepo.UpdateBooking(booking);
             return _mapper.Map<ViewDetailsBookingDto>(booking);
         }
+        //public async Task<ViewDetailsBookingDto> SearchBooking(int? id, string? email, string? fullname, string? address
+        //    , decimal? price, string? phone, DateTime bookingDate, int? status, int? eventId)
+        //{
+
+        //}
     }
 }
