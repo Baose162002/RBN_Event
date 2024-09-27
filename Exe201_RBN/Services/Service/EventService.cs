@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessObject;
 using BusinessObject.DTO;
+using BusinessObject.DTO.RequestDto;
 using Repositories.IRepositories;
 using Repositories.Repositories;
 using Services.IService;
@@ -25,7 +26,7 @@ namespace Services.Service
             _mapper = mapper;
         }
 
-        public async Task Create(EventDTO events)
+        public async Task Create(CreateEventDto events)
         {
             if (events == null || string.IsNullOrEmpty(events.Title)
                || string.IsNullOrEmpty(events.Name)
@@ -33,7 +34,7 @@ namespace Services.Service
                || string.IsNullOrEmpty(events.Description)
                || string.IsNullOrEmpty(events.CreateBy)
                || string.IsNullOrEmpty(events.UpdateBy)
-               || events.MinCapacity == null || events.MaxCapacity == null || events.Price == null || events.Status == null || events.CreateBy == null || events.UpdateBy == null || events.CompanyId == null
+               || events.MinCapacity == null || events.MaxCapacity == null || events.Price == null || events.CreateBy == null || events.UpdateBy == null || events.CompanyId == null
                || events.CreateAt == null || events.UpdateAt == null)
             {
                 throw new ArgumentException("All fieds must be filled");
@@ -66,12 +67,13 @@ namespace Services.Service
                 MinCapacity = events.MinCapacity,
                 MaxCapacity = events.MaxCapacity,
                 Description = events.Description,
-                Status = events.Status,
+                Status = 1,
                 CompanyId = events.CompanyId,
                 CreateBy = events.CreateBy,
                 CreateAt = startDate,
                 UpdateBy = events.UpdateBy,
-                UpdateAt = updateDate
+                UpdateAt = updateDate,
+                EventImgId = events.EventImgId
             };
             await _eventRepository.Create(_mapper.Map<Event>(eventDTO));
 
@@ -101,7 +103,7 @@ namespace Services.Service
             return response;
         }
 
-        public async Task Update(EventDTO events, int id)
+        public async Task Update(UpdateEventDto events, int id)
         {
             if(events == null || string.IsNullOrEmpty(events.Title)
                 || string.IsNullOrEmpty(events.Name)
@@ -110,7 +112,7 @@ namespace Services.Service
                 || string.IsNullOrEmpty(events.CreateBy)
                 || string.IsNullOrEmpty(events.UpdateBy)
                 || events.MinCapacity == null || events.MaxCapacity == null || events.Price == null ||  events.Status == null || events.CreateBy == null || events.UpdateBy == null || events.CompanyId == null
-                || events.CreateAt == null || events.UpdateAt == null)
+                || events.CreateAt == null || events.UpdateAt == null || events.EventImgId == null)
             {
                 throw new ArgumentException("All fieds must be filled");
             }
@@ -126,7 +128,14 @@ namespace Services.Service
             {
                 throw new ArgumentException("Price must be a positive number");
             }
-
+            if(events.Status < 0)
+            {
+                throw new ArgumentException("Status must be a positive number");
+            }
+            if(events.EventImgId < 0)
+            {
+                throw new ArgumentException("EventImg must be a positive number");
+            }
             string[] dateFormats = { "dd/MM/yyyy", "dd/M/yyyy", "d/MM/yyyy", "d/M/yyyy" };
             DateTime startDate, updateDate;
             if (!DateTime.TryParseExact(events.CreateAt, dateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out startDate))

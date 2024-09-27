@@ -1,5 +1,6 @@
 ﻿using BusinessObject;
 using BusinessObject.DTO;
+using BusinessObject.DTO.RequestDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,8 @@ namespace Services.IService
     public interface IEventService
     {
         Task Delete(int id);
-        Task Update(EventDTO events, int id);
-        Task Create(EventDTO events);
+        Task Update(UpdateEventDto events, int id);
+        Task Create(CreateEventDto events);
         Task<EventDTO> GetEventById(int id);
         Task<List<EventDTO>> GetAllEvent();
     }

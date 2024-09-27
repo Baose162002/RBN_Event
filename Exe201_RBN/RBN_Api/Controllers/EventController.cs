@@ -1,4 +1,5 @@
 ﻿using BusinessObject.DTO;
+using BusinessObject.DTO.RequestDto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.IService;
@@ -28,7 +29,7 @@ namespace RBN_Api.Controllers
             return Ok(events);
         }
         [HttpPost]
-        public async Task<IActionResult> CreateEvent(EventDTO eventDTO)
+        public async Task<IActionResult> CreateEvent(CreateEventDto eventDTO)
         {
             try
             {
@@ -40,7 +41,7 @@ namespace RBN_Api.Controllers
             }
         }
         [HttpPut("id")]
-        public async Task<IActionResult> UpdateEvent(EventDTO eventDTO, int id)
+        public async Task<IActionResult> UpdateEvent(UpdateEventDto eventDTO, int id)
         {
             try
             {
