@@ -1,0 +1,61 @@
+﻿@page "/CompanyIndex"
+@model RBN_FE.Pages.CompanyPages.CompanyIndexModel
+@{
+    ViewData["Title"] = "Danh sách các đơn vị hỗ trợ tổ chức sự kiện";
+}
+
+<h1>DANH SÁCH</h1>
+<h2>Các đơn vị hỗ trợ tổ chức sự kiện</h2>
+
+@if (Model.Companies != null && Model.Companies.Any())
+{
+    @foreach (var company in Model.Companies)
+    {
+        <div class="company-card">
+            <div class="company-image">
+                <img src="@company.Avatar" alt="@company.Name">
+            </div>
+            <div class="company-info">
+                <h3>@company.Name</h3>
+                <p>@company.Description</p>
+                <a asp-page="./CompanyDetails" asp-route-companyId="@company.Id">CHI TIẾT →</a>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p>Không có dữ liệu công ty nào được tìm thấy.</p>
+}
+
+<style>
+    .company-card {
+        display: flex;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        padding: 10px;
+    }
+
+    .company-image {
+        flex: 0 0 40%;
+        margin-right: 20px;
+    }
+
+        .company-image img {
+            width: 100%;
+            height: auto;
+        }
+
+    .company-info {
+        flex: 1;
+    }
+
+    h1, h2 {
+        text-align: center;
+    }
+
+    a {
+        text-decoration: none;
+        color: blue;
+    }
+</style>
