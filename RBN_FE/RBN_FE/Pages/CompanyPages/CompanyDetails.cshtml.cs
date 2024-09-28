@@ -2,36 +2,31 @@
 using BusinessObject.DTO.ResponseDto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Net.Http;
 using System.Text.Json;
 
 namespace RBN_FE.Pages.CompanyPages
 {
-    public class CompanyIndexModel : PageModel
+    public class CompanyDetailsModel : PageModel
     {
         private readonly HttpClient _httpClient;
 
-        public CompanyIndexModel(IHttpClientFactory httpClientFactory)
+        public CompanyDetailsModel(IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory.CreateClient();
         }
 
-        public List<ListCompanyDTO> Companies { get; set; }
+        public ListCompanyDTO Company { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(int companyId)
         {
             try
             {
-                var options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                };
 
-                Companies = await _httpClient.GetFromJsonAsync<List<ListCompanyDTO>>("http://localhost:5250/api/Company", options);
+                Company = await _httpClient.GetFromJsonAsync<ListCompanyDTO>($"http://localhost:5250/api/Company/companyid?companyid={companyId}");
 
-                if (Companies == null || Companies.Count == 0)
+                if (Company == null)
                 {
-                    Console.WriteLine("Không có công ty nào được trả về từ API.");
+                    Console.WriteLine("Không có thông tin công ty.");
                 }
             }
             catch (HttpRequestException e)
