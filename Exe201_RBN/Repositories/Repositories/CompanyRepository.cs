@@ -18,14 +18,14 @@ namespace Repositories.Repositories
         public async Task<List<Company>> GetAllCompany()
         {
             var _context = new ApplicationDBContext();
-            var companies = await _context.Companies.ToListAsync();
+            var companies = await _context.Companies.Include(e => e.Events).ToListAsync();
             return companies;
 
         }
         public async Task<Company> GetCompanyById(int id)
         {
             var _context = new ApplicationDBContext();
-            return await _context.Companies.FirstOrDefaultAsync(c => c.Id == id);
+            return await _context.Companies.Include(e => e.Events).FirstOrDefaultAsync(c => c.Id == id);
         }
         public async Task Create(Company company)
         {

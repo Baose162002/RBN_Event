@@ -1,0 +1,95 @@
+﻿@page
+@model RBN_FE.Pages.CompanyPages.CompanyIndexModel
+@{
+    ViewData["Title"] = "Company Events";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">Company Events</h1>
+    
+    <div id="companyList" class="row"></div>
+    
+    <div id="eventList" class="mt-4">
+        <h2 id="selectedCompanyName" class="mb-3"></h2>
+        <div id="eventCards" class="row"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            loadCompanies();
+
+            function loadCompanies() {
+                $.ajax({
+                    url: 'http://localhost:5250/api/Company',
+                    method: 'GET',
+                    success: function(companies) {
+                        var companyListHtml = '';
+                        companies.forEach(function(company) {
+                            companyListHtml += `
+                                <div class="col-md-4 mb-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${company.name}</h5>
+                                            <p class="card-text">${company.description}</p>
+                                            <p class="card-text">Address: ${company.address}</p>
+                                            <p class="card-text">Phone: ${company.phone}</p>
+                                            <button class="btn btn-primary view-events" data-company-id="${company.id}">View Events</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        $('#companyList').html(companyListHtml);
+
+                        $('.view-events').click(function() {
+                            var companyId = $(this).data('company-id');
+                            loadEvents(companyId);
+                        });
+                    },
+                    error: function() {
+                        $('#companyList').html('<p class="text-danger">Error loading companies. Please try again later.</p>');
+                    }
+                });
+            }
+
+            function loadEvents(companyId) {
+                $.ajax({
+                    url: `http://localhost:5250/api/Company/${companyId}`,
+                    method: 'GET',
+                    success: function(company) {
+                        $('#selectedCompanyName').text(`Events for ${company.name}`);
+                        var eventsHtml = '';
+                        if (company.events && company.events.length > 0) {
+                            company.events.forEach(function(event) {
+                                eventsHtml += `
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title">${event.title}</h5>
+                                                <h6 class="card-subtitle mb-2 text-muted">${event.name}</h6>
+                                                <p class="card-text">Type: ${event.eventType}</p>
+                                                <p class="card-text">Price: ${event.price.toLocaleString()} VND</p>
+                                                <p class="card-text">Capacity: ${event.minCapacity} - ${event.maxCapacity}</p>
+                                                <p class="card-text">${event.description}</p>
+                                                <p class="card-text"><small class="text-muted">Created: ${new Date(event.createAt).toLocaleDateString()}</small></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                        } else {
+                            eventsHtml = '<p>No events found for this company.</p>';
+                        }
+                        $('#eventCards').html(eventsHtml);
+                    },
+                    error: function() {
+                        $('#eventCards').html('<p class="text-danger">Error loading events. Please try again later.</p>');
+                    }
+                });
+            }
+        });
+    </script>
+}

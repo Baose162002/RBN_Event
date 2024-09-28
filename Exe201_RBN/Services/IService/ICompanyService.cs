@@ -1,5 +1,6 @@
 ﻿using BusinessObject;
 using BusinessObject.DTO;
+using BusinessObject.DTO.ResponseDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,10 @@ namespace Services.IService
 {
     public interface ICompanyService
     {
-        Task<List<Company>> GetAllCompany();
+        Task<List<ListCompanyDTO>> GetAllCompany();
         Task Create(CompanyDTO company);
         Task UpdateCompany(CompanyDTO company, int id);
         Task Delete(int id);
-        Task<Company> GetCompanyById(int id);
+        Task<ListCompanyDTO> GetCompanyById(int id);
     }
 }

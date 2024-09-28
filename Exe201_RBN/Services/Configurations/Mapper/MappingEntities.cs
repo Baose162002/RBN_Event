@@ -6,6 +6,7 @@ using BusinessObject.Dto.RequestDto;
 using BusinessObject.Dto.ResponseDto;
 using BusinessObject.Dto;
 using BusinessObject.DTO.RequestDto;
+using BusinessObject.DTO.ResponseDto;
 
 namespace Services.Configurations.Mapper
 {
@@ -30,8 +31,10 @@ namespace Services.Configurations.Mapper
 			
 
 			CreateMap<EventImg, EventImgDTO>();
-
-
+            CreateMap<Company, ListCompanyDTO>();
+            CreateMap<ListCompanyDTO, Company>();
+            CreateMap<Event, ViewEventDTO>();
+            CreateMap<ViewEventDTO, Event>();
 
 			CreateMap<User, UserResponseDto>();
             CreateMap<CreateUserDto, User>();

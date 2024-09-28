@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using BusinessObject;
 using BusinessObject.DTO;
+using BusinessObject.DTO.ResponseDto;
+using MailKit.Search;
 using Repositories.IRepositories;
+using Repositories.Repositories;
 using Services.IService;
 using System;
 using System.Collections.Generic;
@@ -24,9 +27,12 @@ namespace Services.Service
             _userService = userService;
             _mapper = mapper;
         }
-        public async Task<List<Company>> GetAllCompany()
+        public async Task<List<ListCompanyDTO>> GetAllCompany()
         {
-            return await _companyRepository.GetAllCompany();
+            var companies = await _companyRepository.GetAllCompany();
+            var response = _mapper.Map<List<ListCompanyDTO>>(companies);
+
+            return response;
         }
         public async Task Create(CompanyDTO company)
         {
@@ -94,9 +100,13 @@ namespace Services.Service
         {
             await _companyRepository.Delete(id);
         }
-        public async Task<Company> GetCompanyById(int id)
+        public async Task<ListCompanyDTO> GetCompanyById(int id)
         {
-            return await _companyRepository.GetCompanyById(id);
+            
+            var companies = await _companyRepository.GetCompanyById(id);
+            ListCompanyDTO response = _mapper.Map<ListCompanyDTO>(companies);
+
+            return response;
         }
 
 
