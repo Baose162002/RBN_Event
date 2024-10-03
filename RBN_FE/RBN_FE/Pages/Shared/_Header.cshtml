@@ -1,4 +1,6 @@
-﻿@* Remove the @page directive and the @model declaration *@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
 <header class="bg-white shadow-md w-full sticky top-0 z-50">
     <nav class="w-full px-4 py-3 flex justify-between items-center">
         <!-- logo -->
@@ -6,8 +8,6 @@
             <img src="/img/Logo.png" alt="RBN Logo" class="h-20 w-auto mr-3">
             <span class="text-xl font-light text-gray-800">RBN Event</span>
         </a>
-
-
         <!-- search and nav -->
         <div class="flex-grow flex justify-center items-center space-x-4">
             <!-- search -->
@@ -29,7 +29,6 @@
                            style="caret-color: rgb(107, 114, 128)" />
                 </div>
             </div>
-
             <!-- nav -->
             <div class="hidden md:flex space-x-4">
                 <a href="/" class="text-gray-800 hover:text-gray-600">Trang chủ</a>
@@ -39,11 +38,20 @@
                 <a href="#" class="text-gray-800 hover:text-gray-600">Liên Hệ</a>
             </div>
         </div>
-
         <!-- sign in/out -->
-        <div class="hidden md:flex space-x-4">
-            <a href="/Signup" class="text-gray-800 hover:text-gray-600">Đăng ký</a>
-            <a href="/Login" class="text-gray-800 hover:text-gray-600">Đăng nhập</a>
+        <div class="hidden md:flex space-x-4 items-center">
+            @if (HttpContextAccessor.HttpContext.Session.GetString("JWTToken") != null)
+            {
+                <span class="text-gray-800">Xin chào, @HttpContextAccessor.HttpContext.Session.GetString("UserName")!</span>
+                <form method="post" asp-page="/Login/Logout">
+                    <button type="submit" class="text-gray-800 hover:text-gray-600">Đăng xuất</button>
+                </form>
+            }
+            else
+            {
+                <a asp-page="/Login/Login" class="text-gray-800 hover:text-gray-600">Đăng nhập</a>
+                <a href="/Signup" class="text-gray-800 hover:text-gray-600">Đăng ký</a>
+            }
         </div>
     </nav>
 </header>
