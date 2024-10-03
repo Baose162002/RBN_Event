@@ -6,6 +6,8 @@ using Services.IService;
 
 namespace RBN_Api.Controllers
 {
+    [Route("api/[controller]")]
+[ApiController]
     public class AuthController : ControllerBase
     {
         IMapper _mapper;
@@ -15,8 +17,7 @@ namespace RBN_Api.Controllers
             _mapper = mapper;
             _authService = authService;
         }
-        [HttpPost]
-        [Route("login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserRequest login)
         {
             var user = _mapper.Map<LoginUserRequest, User>(login);

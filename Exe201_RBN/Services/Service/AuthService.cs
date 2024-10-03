@@ -54,7 +54,7 @@ namespace Services.Service
                 return new OkObjectResult(new
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
-                    role = role,
+                    Role = role,
                     expiration = token.ValidTo,
                 });
             }
