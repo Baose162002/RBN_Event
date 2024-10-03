@@ -4,93 +4,99 @@
     ViewData["Title"] = "Chi tiết công ty";
 }
 
-<div class="company-details">
-    <h1>Chi tiết công ty</h1>
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Rise Church</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+    <script src="https://unpkg.com/flowbite@1.4.0/dist/flowbite.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+    <partial name="_Header" />
 
-    @if (Model.Company != null)
-    {
-        <div class="company-info">
-            @if (!string.IsNullOrEmpty(Model.Company.Avatar))
-            {
-                <img src="@Model.Company.Avatar" alt="@Model.Company.Name" class="company-avatar">
-            }
-            <h2>@Model.Company.Name</h2>
-            <p><strong>Mô tả:</strong> @Model.Company.Description</p>
-            <p><strong>Địa chỉ:</strong> @Model.Company.Address</p>
-            <p><strong>Số điện thoại:</strong> @Model.Company.Phone</p>
-            <p><strong>Mã số thuế:</strong> @Model.Company.TaxCode</p>
+    <div class="w-full h-full ">
 
-            @if (Model.Company.Events != null && Model.Company.Events.Any())
-            {
-                <h3>Sự kiện đã tổ chức</h3>
-                <div class="event-list">
-                    @foreach (var evnt in Model.Company.Events)
-                    {
-                        <div class="event-item">
-                            <h4>@evnt.Name</h4>
-                            <p><strong>Loại sự kiện:</strong> @evnt.EventType</p>
-                            <p><strong>Giá:</strong> @evnt.Price</p>
-                            <p><strong>Mô tả:</strong> @evnt.Description</p>
-                        </div>
-                    }
-                </div>
-            }
+        <div class="w-full mx-auto py-10  ">
+
+
+            <!-- Company Name -->
+        <div class="w-[92%] mx-auto flex items-center justify-between py-8">
+            <a class="group relative inline-flex items-center overflow-hidden rounded border border-current px-8 py-3 text-indigo-600 focus:outline-none focus:ring active:text-indigo-500"
+               href="javascript:history.back()">
+                <span class="absolute -start-full transition-all group-hover:start-4">
+                    <svg class="size-5 rtl:rotate-180"
+                         xmlns="http://www.w3.org/2000/svg"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor">
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+                    </svg>
+                </span>
+
+                <span class="text-sm font-medium transition-all group-hover:ms-4"> Quay lại </span>
+            </a>
+            <h1 class="lg:text-4xl md:text-3xl xs:text-2xl text-center">
+                @(Model.Company?.Name ?? "Chi tiết công ty")
+            </h1>
+            <div class="w-[100px]"></div> <!-- This empty div helps balance the layout -->
         </div>
-    }
-    else
-    {
-        <p>Không tìm thấy thông tin công ty.</p>
-    }
 
-    <a href="javascript:history.back()" class="btn-back">Quay lại</a>
-</div>
+            <!-- Company Avatar -->
+            @if (!string.IsNullOrEmpty(Model.Company?.Avatar))
+            {
+                <img src="/img/CapellaparkView.jpg" alt="img" class="xl:w-[80%] xs:w-[96%] mx-auto lg:h-[560px] md:h-[480px] rounded-lg object-cover" />
+            }
 
-<style>
-    .company-details {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        font-family: Arial, sans-serif; /* Thay đổi font chữ */
-    }
+            <!-- Company Info -->
+            <div class="w-[90%] mx-auto flex md:gap-4 xs:gap-2 justify-center items-center pt-4">
+                <h3 class="text-sm font-semibold  ">Mã số thuế: @Model.Company?.TaxCode</h3>
+                <div class="">|</div>
+                <h4 class="text-sm font-semibold  ">Số điện thoại: @Model.Company?.Phone</h4>
+            <div class="">|</div>
 
-    .company-avatar {
-        max-width: 200px;
-        height: auto;
-        margin-bottom: 20px;
-        border-radius: 50%;
-        border: 2px solid #007bff; /* Thêm đường viền */
-    }
+            <h4 class="text-sm font-semibold  ">Địa chỉ: @Model.Company?.Address</h4>
+            </div>
 
-    .company-info {
-        background-color: #f9f9f9;
-        padding: 20px;
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ */
-    }
+            <!-- Company Details -->
+            <div class="py-6  ">
+                <div class="md:w-[80%] xs:w-[90%] mx-auto pt-4">
+                    @if (Model.Company != null)
+                    {
+                        <p class="mx-auto text-md  mb-4">
+                            <strong>Mô tả:</strong> @Model.Company.Description
+                        </p>
 
-    .event-list {
-        margin-top: 20px;
-    }
+                        @if (Model.Company.Events != null && Model.Company.Events.Any())
+                        {
+                            <h2 class="font-semibold text-lg mt-8 mb-4 -white">Sự kiện đã tổ chức</h2>
+                            @foreach (var evnt in Model.Company.Events)
+                            {
+                                <div class="mb-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                    <h3 class="font-semibold text-lg -white">@evnt.Name</h3>
+                                    <p class="mt-2 text-md "><strong>Loại sự kiện:</strong> @evnt.EventType</p>
+                                    <p class="mt-2 text-md "><strong>Giá:</strong> @evnt.Price</p>
+                                    <p class="mt-2 text-md "><strong>Mô tả:</strong> @evnt.Description</p>
+                                </div>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <p class="mx-auto text-md ">Không tìm thấy thông tin công ty.</p>
+                    }
 
-    .event-item {
-        background-color: #e9ecef; /* Màu nền cho mỗi sự kiện */
-        padding: 10px;
-        margin: 10px 0;
-        border-radius: 5px;
-    }
+                  
+                </div>
+            </div>
+        </div>
+    </div>
 
-    .btn-back {
-        display: inline-block;
-        margin-top: 20px;
-        padding: 10px 20px;
-        background-color: #007bff;
-        color: white;
-        text-decoration: none;
-        border-radius: 5px;
-        transition: background-color 0.3s;
-    }
+    <partial name="_Footer" />
 
-        .btn-back:hover {
-            background-color: #0056b3; /* Thay đổi màu khi hover */
-        }
-</style>
+</html>
