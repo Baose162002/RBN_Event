@@ -1,5 +1,6 @@
 ﻿using BusinessObject;
 using BusinessObject.DTO;
+using BusinessObject.DTO.RequestDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace Repositories.IRepositories
         Task Delete(int id);
         Task Create(Event events);
         Task<Event> GetEventById(int id);
-        Task<List<Event>> GetAllEvent();
+        Task<PagedResult<Event>> GetAllEvent(string? searchTerm, int pageNumber, int pageSize);
         Task Update(Event updateevent, int id);
     }
 }

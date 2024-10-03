@@ -1,6 +1,6 @@
 ﻿using BusinessObject.DTO;
+using BusinessObject.DTO.RequestDto;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Diagnostics;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.Json;
 
@@ -9,16 +9,26 @@ namespace RBN_FE.Pages
     public class IndexModel : PageModel
     {
         private readonly HttpClient _httpClient;
+        private readonly IConfiguration _configuration;
 
-        public IndexModel(IHttpClientFactory httpClientFactory)
+        public IndexModel(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
             _httpClient = httpClientFactory.CreateClient();
+            _configuration = configuration;
         }
 
         public List<EventDTO> Events { get; set; }
+        public string SearchTerm { get; set; } = string.Empty; // Property to hold searchTerm
+        public int PageNumber { get; set; } = 1; // Property for pageNumber
+        public int PageSize { get; set; } = 10; // Property for pageSize
+        public int TotalPages { get; set; } // Property for total pages
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(string searchTerm = "", int pageNumber = 1, int pageSize = 10)
         {
+            SearchTerm = searchTerm; // Assign value to property
+            PageNumber = pageNumber; // Assign value to property
+            PageSize = pageSize; // Assign value to property
+
             try
             {
                 var options = new JsonSerializerOptions
@@ -26,28 +36,35 @@ namespace RBN_FE.Pages
                     PropertyNameCaseInsensitive = true
                 };
 
-                Events = await _httpClient.GetFromJsonAsync<List<EventDTO>>("http://localhost:5250/api/Event", options);
+                // Create URL with search and pagination parameters
+                var requestUrl = $"{_configuration["ApiSettings:BaseUrl"]}/Event?searchTerm={Uri.EscapeDataString(searchTerm)}&pageNumber={pageNumber}&pageSize={pageSize}";
 
-                if (Events == null || Events.Count == 0)
+                // Fetch events from the API
+                var result = await _httpClient.GetFromJsonAsync<PagedResult<EventDTO>>(requestUrl, options);
+
+                // Assign results
+                if (result != null)
                 {
-                    Console.WriteLine("Không có sự kiện nào được trả về từ API.");
+                    Events = result.Data; // Assign event data
+                    TotalPages = result.TotalPages; // Assign total pages
                 }
                 else
                 {
-                    Console.WriteLine($"Số lượng sự kiện nhận được: {Events.Count}");
+                    Events = new List<EventDTO>(); // If no result, initialize to empty
+                    TotalPages = 0; // Set total pages to 0
                 }
             }
             catch (HttpRequestException e)
             {
-                Console.WriteLine($"Lỗi khi gọi API: {e.Message}");
+                Console.WriteLine($"Error calling API: {e.Message}");
             }
             catch (JsonException e)
             {
-                Console.WriteLine($"Lỗi khi parse JSON: {e.Message}");
+                Console.WriteLine($"Error parsing JSON: {e.Message}");
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Lỗi không xác định: {e.Message}");
+                Console.WriteLine($"Unexpected error: {e.Message}");
             }
         }
     }

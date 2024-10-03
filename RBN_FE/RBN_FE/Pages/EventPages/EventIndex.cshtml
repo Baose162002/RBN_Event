@@ -1,0 +1,79 @@
+﻿@page
+@model RBN_FE.Pages.EventPages.EventIndexModel
+@{
+    ViewData["Title"] = "Danh sách Sự kiện";
+}
+<partial name="_Header" />
+
+<h2>Chi tiết Sự kiện</h2>
+
+<div class="mb-4">
+    <a href="/EventPages/CreateEvent" class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600">Tạo Sự Kiện Mới</a>
+</div>
+
+<!-- Tìm kiếm -->
+<div class="mb-4 text-center">
+    <form method="get">
+        <input type="text" name="searchTerm" value="@Model.SearchTerm" placeholder="Tìm kiếm theo tiêu đề, tên hoặc loại sự kiện" class="form-control d-inline-block w-50" />
+        <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600">Tìm kiếm</button>
+    </form>
+</div>
+
+@if (Model.Events == null || !Model.Events.Any())
+{
+    <p>Không có sự kiện nào để hiển thị.</p>
+}
+else
+{
+    <table class="min-w-full bg-white border border-gray-300">
+        <thead>
+            <tr class="bg-gray-200">
+                <th class="py-2 px-4 border-b">Hình ảnh</th>
+                <th class="py-2 px-4 border-b">Tiêu đề</th>
+                <th class="py-2 px-4 border-b">Tên sự kiện</th>
+                <th class="py-2 px-4 border-b">Giá</th>
+                <th class="py-2 px-4 border-b">Trạng thái</th>
+                <th class="py-2 px-4 border-b">Ngày tạo</th>
+                <th class="py-2 px-4 border-b">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var eventItem in Model.Events)
+            {
+                <tr>
+                    <td>
+                        <img src="@eventItem.EventImg?.ImageUrl" alt="@eventItem.Title" class="w-full h-40 object-cover rounded-md" />
+                    </td>
+                    <td class="py-2 px-4 border-b">@eventItem.Title</td>
+                    <td class="py-2 px-4 border-b">@eventItem.Name</td>
+                    <td class="py-2 px-4 border-b">@eventItem.Price.ToString("N0") VND</td>
+                    <td class="py-2 px-4 border-b">@((eventItem.Status == 1) ? "Hoạt động" : "Không hoạt động")</td>
+                    <td class="py-2 px-4 border-b">@eventItem.CreateAt</td>
+                    <td class="py-2 px-4 border-b">
+                        <a href="/EventPages/EventDetail?id=@eventItem.Id" class="bg-blue-500 text-white font-bold py-1 px-3 rounded hover:bg-blue-600">Chi Tiết</a>
+                        <a href="/EventPages/UpdateEvent?id=@eventItem.Id" class="bg-yellow-500 text-white font-bold py-1 px-3 rounded hover:bg-yellow-600">Cập Nhật</a>
+                        <a href="/EventPages/DeleteEvent?id=@eventItem.Id" class="bg-red-500 text-white font-bold py-1 px-3 rounded hover:bg-red-600">Xóa</a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Phân trang -->
+    <div class="mt-4 d-flex justify-content-between">
+        <div>
+            @if (Model.PageNumber > 1)
+            {
+                <a class="bg-gray-500 text-white font-bold py-2 px-4 rounded hover:bg-gray-600" asp-page-handler="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-pageNumber="@(Model.PageNumber - 1)" asp-route-pageSize="@Model.PageSize">Trước đó</a>
+            }
+        </div>
+        <div>
+            @if (Model.TotalPages > Model.PageNumber) // Kiểm tra có trang tiếp theo không
+            {
+                <a class="bg-gray-500 text-white font-bold py-2 px-4 rounded hover:bg-gray-600" asp-page-handler="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-pageNumber="@(Model.PageNumber + 1)" asp-route-pageSize="@Model.PageSize">Tiếp theo</a>
+            }
+        </div>
+    </div>
+}
+<partial name="_Footer" />

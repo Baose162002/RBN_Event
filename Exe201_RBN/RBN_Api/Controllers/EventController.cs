@@ -19,15 +19,18 @@ namespace RBN_Api.Controllers
 			_eventImgService = eventImgService;
 		}
         [HttpGet]
-        public async Task<IActionResult> GetAllEvent()
+        public async Task<IActionResult> GetAllEvent(string? searchTerm, int pageNumber = 1, int pageSize = 10)
         {
-            var events = await _eventService.GetAllEvent();
-            if (events == null || !events.Any())
+            var result = await _eventService.GetAllEvent(searchTerm, pageNumber, pageSize);
+            if (result == null || !result.Data.Any())
             {
-                return NotFound("Event not found");
+                return NotFound("No events found.");
             }
-            return Ok(events);
+
+            return Ok(result);
         }
+
+
         [HttpPost]
         public async Task<IActionResult> CreateEvent(CreateEventDto eventDTO)
         {
@@ -40,7 +43,7 @@ namespace RBN_Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut("id")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateEvent(UpdateEventDto eventDTO, int id)
         {
             try
@@ -52,7 +55,7 @@ namespace RBN_Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             try
@@ -65,7 +68,7 @@ namespace RBN_Api.Controllers
             }
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetEventById(int id)
         {
             
@@ -78,24 +81,35 @@ namespace RBN_Api.Controllers
        
         }
 
-		[HttpPost("Upload")]
-		public async Task<IActionResult> UploadEventImage(IFormFile file)
-		{
-			if (file == null || file.Length == 0)
-			{
-				return BadRequest("Invalid file.");
-			}
+        [HttpPost("Upload")]
+        public async Task<IActionResult> UploadEventImage(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("Invalid file.");
+            }
 
-			try
-			{
-				await _eventImgService.UploadFile(file);
-				return Ok("Image uploaded successfully.");
-			}
-			catch (Exception ex)
-			{
-				return StatusCode(500, $"Internal server error: {ex.Message}");
-			}
-		}
+            try
+            {
+                // Upload file và lấy ID của ảnh đã upload
+                var imageId = await _eventImgService.UploadFile(file); // Giả sử phương thức này trả về ID của ảnh
 
-	}
+                // Tạo một đối tượng kết quả để trả về
+                var result = new UploadImageResponse
+                {
+                    Status = "success",
+                    Message = "Image uploaded successfully.",
+                    ImageId = imageId // Trả về ID của ảnh
+                };
+
+                return Ok(result); // Trả về đối tượng JSON
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+
+    }
 }

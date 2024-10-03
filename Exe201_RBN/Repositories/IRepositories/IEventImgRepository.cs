@@ -9,6 +9,7 @@ namespace Repositories.IRepositories
 {
 	public interface IEventImgRepository
 	{
-		Task UploadFile(EventImg eventImg);
-	}
+        Task<int> UploadFile(EventImg eventImg);
+
+    }
 }

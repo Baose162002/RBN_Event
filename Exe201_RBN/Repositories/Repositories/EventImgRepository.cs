@@ -11,11 +11,13 @@ namespace Repositories.Repositories
 {
 	public class EventImgRepository : IEventImgRepository
 	{
-		public async Task UploadFile(EventImg eventImg)
-		{
-			var _context = new ApplicationDBContext();
+        public async Task<int> UploadFile(EventImg eventImg)
+        {
+            var _context = new ApplicationDBContext();
 			_context.EventImgs.Add(eventImg);
 			await _context.SaveChangesAsync();
-		}
-	}
+            return eventImg.Id;
+
+        }
+    }
 }

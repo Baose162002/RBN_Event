@@ -9,6 +9,7 @@ namespace Services.IService
 {
 	public interface IEventImgService
 	{
-		Task UploadFile(IFormFile file);
-	}
+        Task<int> UploadFile(IFormFile file);
+
+    }
 }
