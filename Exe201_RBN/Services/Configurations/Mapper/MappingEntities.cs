@@ -15,8 +15,8 @@ namespace Services.Configurations.Mapper
         public MappingEntities()
         {
             CreateMap<CompanyDTO, Company>();
-			CreateMap<Company, CompanyDTO>();
-			CreateMap<EventDTO, Event>()
+            CreateMap<Company, CompanyDTO>();
+            CreateMap<EventDTO, Event>()
             .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTime.ParseExact(src.CreateAt, "dd/MM/yyyy", CultureInfo.InvariantCulture)))
             .ForMember(dest => dest.UpdateAt, opt => opt.MapFrom(src => DateTime.ParseExact(src.UpdateAt, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
             CreateMap<CreateEventDto, Event>()
@@ -27,23 +27,29 @@ namespace Services.Configurations.Mapper
              .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTime.ParseExact(src.CreateAt, "dd/MM/yyyy", CultureInfo.InvariantCulture)))
              .ForMember(dest => dest.UpdateAt, opt => opt.MapFrom(src => DateTime.ParseExact(src.UpdateAt, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
             CreateMap<Event, EventDTO>()
-		   .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
-		   .ForMember(dest => dest.EventImg, opt => opt.MapFrom(src => src.EventImg));
-			
+           .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
+           .ForMember(dest => dest.EventImg, opt => opt.MapFrom(src => src.EventImg));
 
-			CreateMap<EventImg, EventImgDTO>();
+
+            CreateMap<EventImg, EventImgDTO>();
             CreateMap<Company, ListCompanyDTO>();
             CreateMap<ListCompanyDTO, Company>();
             CreateMap<Event, ViewEventDTO>();
             CreateMap<ViewEventDTO, Event>();
 
-			CreateMap<User, UserResponseDto>();
+            CreateMap<User, UserResponseDto>();
             CreateMap<CreateUserDto, User>();
             CreateMap<LoginUserRequest, User>();
             CreateMap<FeedbackDTO, FeedBack>();
             CreateMap<ResponseDTO, Response>();
 
             CreateMap<Booking, ViewDetailsBookingDto>();
+
+            // Promotion
+            CreateMap<Promotion, ViewDetailsPromotionDto>();
+            CreateMap<CreatePromotionDto, Promotion>();
+            CreateMap<UpdatePromotionDto, Promotion>();
+            CreateMap<Promotion, UpdatePromotionDto>();
         }
     }
 }
