@@ -9,6 +9,7 @@ using Services.IService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Services.Service
@@ -98,14 +99,14 @@ namespace Services.Service
             }
 
             if (isAvailable.HasValue)
-            {
+        {
                 query = query.Where(p => p.IsAvailable == isAvailable.Value).ToList();
-            }
+        }
 
             if (durationInDays.HasValue)
-            {
+        {
                 query = query.Where(p => p.DurationInDays == durationInDays.Value).ToList();
-            }
+        }
 
             var promotions = query.ToList();
             return _mapper.Map<List<ViewDetailsPromotionDto>>(promotions);
