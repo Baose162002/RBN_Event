@@ -1,13 +1,11 @@
-﻿@using Microsoft.AspNetCore.Http
-@inject IHttpContextAccessor HttpContextAccessor
-
-<header class="bg-white shadow-md w-full sticky top-0 z-50">
+﻿<header class="bg-white shadow-md w-full sticky top-0 z-50">
     <nav class="w-full px-4 py-3 flex justify-between items-center">
         <!-- logo -->
         <a href="/" class="flex items-center">
             <img src="/img/Logo.png" alt="RBN Logo" class="h-20 w-auto mr-3">
             <span class="text-xl font-light text-gray-800">RBN Event</span>
         </a>
+
         <!-- search and nav -->
         <div class="flex-grow flex justify-center items-center space-x-4">
             <!-- search -->
@@ -18,17 +16,10 @@
                         </path>
                     </svg>
                     <input class="block w-full appearance-none bg-transparent text-base text-gray-700 placeholder:text-gray-400 focus:outline-none sm:text-sm sm:leading-6"
-                           placeholder="Find anything..."
-                           aria-label="Search components"
-                           id="headlessui-combobox-input-:r5n:"
-                           role="combobox"
-                           type="text"
-                           aria-expanded="false"
-                           aria-autocomplete="list"
-                           value=""
-                           style="caret-color: rgb(107, 114, 128)" />
+                           placeholder="Find anything..." aria-label="Search components" type="text" />
                 </div>
             </div>
+
             <!-- nav -->
             <div class="hidden md:flex space-x-4">
                 <a href="/" class="text-gray-800 hover:text-gray-600">Trang chủ</a>
@@ -36,8 +27,26 @@
                 <a href="/CompanyIndex" class="text-gray-800 hover:text-gray-600">Công ty</a>
                 <a href="#" class="text-gray-800 hover:text-gray-600">Sự Kiện</a>
                 <a href="#" class="text-gray-800 hover:text-gray-600">Liên Hệ</a>
+
+                <!-- Check for JWT Token and Role -->
+                @if (Context.Session.GetString("JWTToken") != null)
+                {
+                    var userRole = Context.Session.GetString("UserRole");
+
+                    if (userRole == "Admin" )
+                    {
+                        <!-- Display additional links for Admins and Staff -->
+                        <a href="/Admin" class="text-gray-800 hover:text-gray-600 font-bold">Quản trị viên</a>
+                    }
+                    else if (userRole == "Staff" )
+                    {
+                        <!-- Display additional links for Admins and Staff -->
+                        <a href="/Admin/UserManagement" class="text-gray-800 hover:text-gray-600 font-bold">Quản lý nhân viên</a>
+                    }
+                }
             </div>
         </div>
+
         <!-- sign in/out -->
         <div class="hidden md:flex space-x-4 items-center">
             @if (Context.Session.GetString("JWTToken") != null)

@@ -1,6 +1,7 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RBN_FE;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,14 +44,16 @@ if (!app.Environment.IsDevelopment())
 
 app.UseCors("AllowAllOrigins");
 
-// Uncomment the following line to enable HTTPS redirection
-// app.UseHttpsRedirection();
 
+
+// Middleware pipeline configuration
 app.UseStaticFiles();
 app.UseRouting();
 
-// Add session middleware
-app.UseSession();
+// Add session middleware before using session
+app.UseSession();  // Ensure this is before accessing session in middleware or Razor pages
+
+app.UseMiddleware<AdminRoleMiddleware>();
 
 app.UseAuthorization();
 

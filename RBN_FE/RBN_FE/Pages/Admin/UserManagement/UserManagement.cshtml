@@ -1,0 +1,101 @@
+﻿@page "/Admin/UserManagement"
+@model RBN_FE.Pages.Admin.UserManagementModel
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<div>
+    <partial name="_AdminHeader" />
+
+
+    <div class="flex overflow-hidden bg-white pt-16">
+        <!-- left nav (unchanged) -->
+        <partial name="_AdminNav" />
+        <!-- end left nav -->
+        <!-- main content area -->
+        <div id="main-content" class="h-full w-full bg-gray-50 relative overflow-y-auto lg:ml-64">
+            <main class="py-10 px-4">
+                <div class="w-full max-w-full mb-6 mx-auto">
+                    <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
+                        <div class="mb-4 flex items-center justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">User Management</h3>
+                                <span class="text-base font-normal text-gray-500">All users in the system</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col mt-8">
+                            <div class="overflow-x-auto rounded-lg">
+                                <div class="align-middle inline-block min-w-full">
+                                    <div class="shadow overflow-hidden sm:rounded-lg">
+                                        <table class="min-w-full divide-y divide-gray-200">
+                                            <thead class="bg-gray-50">
+                                                <tr>
+                                                    <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Name
+                                                    </th>
+                                                    <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Email
+                                                    </th>
+                                                    <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Phone
+                                                    </th>
+                                                    <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Status
+                                                    </th>
+                                                    <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Role
+                                                    </th>
+                                                    <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Actions
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="bg-white divide-y divide-gray-200">
+                                                @foreach (var user in Model.Users)
+                                                {
+                                                    <tr>
+                                                        <td class="p-4 whitespace-nowrap">
+                                                            <div class="flex items-center">
+                                                                <div class="flex-shrink-0 h-10 w-10">
+                                                                    <img class="h-10 w-10 rounded-full" src="/placeholder.svg?height=50&width=50" alt="@user.Name">
+                                                                </div>
+                                                                <div class="ml-4">
+                                                                    <div class="text-sm font-medium text-gray-900">@user.Name</div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="p-4 whitespace-nowrap">
+                                                            <div class="text-sm text-gray-900">@user.Email</div>
+                                                        </td>
+                                                        <td class="p-4 whitespace-nowrap">
+                                                            <div class="text-sm text-gray-900">@user.Phone</div>
+                                                        </td>
+                                                        <td class="p-4 whitespace-nowrap">
+                                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @(user.Status ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800")">
+                                                                @(user.Status ? "Active" : "Inactive")
+                                                            </span>
+                                                        </td>
+                                                        <td class="p-4 whitespace-nowrap text-sm text-gray-500">
+                                                            @(user.RoleId == 1 ? "Admin" : user.RoleId == 2 ? "Staff" : user.RoleId == 3 ? "User" : "Company")
+                                                        </td>
+                                                        <td class="p-4 whitespace-nowrap text-right text-sm font-medium">
+                                                            <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <!-- end main content area -->
+    </div>
+
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="https://demo.themesberg.com/windster/app.bundle.js"></script>
+</div>
