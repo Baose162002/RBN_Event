@@ -1,0 +1,48 @@
+﻿@page
+@model RBN_FE.Pages.EventPages.DeleteEventModel
+@{
+    ViewData["Title"] = "Xóa Sự Kiện";
+}
+
+<h2>Xóa Sự Kiện</h2>
+
+@if (Model.Event != null)
+{
+    <div>
+        <p>Bạn có chắc chắn muốn xóa sự kiện <strong>@Model.Event.Title</strong>?</p>
+
+        <div>
+            <strong>Tên sự kiện:</strong> @Model.Event.Name <br />
+            <strong>Giá:</strong> @Model.Event.Price.ToString("N0") VND <br />
+            <strong>Trạng thái:</strong> @((Model.Event.Status == 1) ? "Hoạt động" : "Không hoạt động") <br />
+            <strong>Ngày tạo:</strong> @Model.Event.CreateAt <br />
+            <strong>Mô tả:</strong> @Model.Event.Description <br />
+            <strong>Hình ảnh:</strong> <br />
+            <div style="width: 400px; height: 400px; overflow: hidden; position: relative;">
+                <img src="@Model.Event.EventImg?.ImageUrl" alt="@Model.Event.Title" class="object-cover w-full h-full" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" />
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <form method="post" onsubmit="return confirmDelete();">
+            <input type="hidden" name="id" value="@Model.EventId" />
+            <button type="submit" class="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600">Xóa</button>
+            <a asp-page="/EventPages/EventIndex" class="bg-gray-500 text-white font-bold py-2 px-4 rounded hover:bg-gray-600">Hủy</a>
+        </form>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        Không tìm thấy sự kiện nào để xóa.
+    </div>
+}
+
+@section Scripts {
+    <script>
+        function confirmDelete() {
+            return confirm("Bạn có chắc chắn muốn xóa sự kiện này?");
+        }
+    </script>
+}

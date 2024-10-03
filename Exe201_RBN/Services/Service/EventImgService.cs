@@ -24,36 +24,41 @@ namespace Services.Service
 			_cloudinary = cloudinary;
 		}
 
-		public async Task UploadFile(IFormFile file)
-		{
-			if (file.Length > 0)
-			{
-				// Convert the IFormFile into a stream to upload to Cloudinary
-				await using var stream = file.OpenReadStream();
-				var uploadParams = new ImageUploadParams()
-				{
-					File = new FileDescription(file.FileName, stream),
-					PublicId = $"event_imgs/{Path.GetFileNameWithoutExtension(file.FileName)}"
-				};
+        public async Task<int> UploadFile(IFormFile file)
+        {
+            if (file.Length > 0)
+            {
+                // Convert the IFormFile into a stream to upload to Cloudinary
+                await using var stream = file.OpenReadStream();
+                var uploadParams = new ImageUploadParams()
+                {
+                    File = new FileDescription(file.FileName, stream),
+                    PublicId = $"event_imgs/{Path.GetFileNameWithoutExtension(file.FileName)}"
+                };
 
-				var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+                var uploadResult = await _cloudinary.UploadAsync(uploadParams);
 
-				if (uploadResult.StatusCode == HttpStatusCode.OK)
-				{
-					// After uploading to Cloudinary, save the image URL in the database
-					var eventImg = new EventImg
-					{
-						ImageUrl = uploadResult.SecureUrl.ToString(),
-						DateUpLoad = DateTime.Now
-					};
-					await _eventImgRepository.UploadFile(eventImg);
-				}
-				else
-				{
-					throw new Exception("Failed to upload image to Cloudinary");
-				}
-			}
-		}
-	}
+                if (uploadResult.StatusCode == HttpStatusCode.OK)
+                {
+                    // After uploading to Cloudinary, save the image URL in the database
+                    var eventImg = new EventImg
+                    {
+                        ImageUrl = uploadResult.SecureUrl.ToString(),
+                        DateUpLoad = DateTime.Now
+                    };
+
+                    // Giả sử phương thức UploadFile của _eventImgRepository trả về ID của ảnh
+                    return await _eventImgRepository.UploadFile(eventImg); // Cập nhật để trả về ID
+                }
+                else
+                {
+                    throw new Exception("Failed to upload image to Cloudinary");
+                }
+            }
+
+            throw new ArgumentException("File length is zero");
+        }
+
+    }
 
 }

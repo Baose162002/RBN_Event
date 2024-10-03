@@ -1,0 +1,89 @@
+﻿@page
+@model RBN_FE.Pages.EventPages.CreateEventModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<partial name="_Header" />
+
+<h2>Tạo Event</h2>
+
+<form method="post" enctype="multipart/form-data" id="createEventForm">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label asp-for="Input.Title" class="control-label">Tiêu đề</label>
+        <input asp-for="Input.Title" class="form-control" />
+        <span asp-validation-for="Input.Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Input.Name" class="control-label">Tên Event</label>
+        <input asp-for="Input.Name" class="form-control" />
+        <span asp-validation-for="Input.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Input.EventType" class="control-label">Loại Event</label>
+        <input asp-for="Input.EventType" class="form-control" />
+        <span asp-validation-for="Input.EventType" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Input.Price" class="control-label">Giá</label>
+        <input asp-for="Input.Price" class="form-control" />
+        <span asp-validation-for="Input.Price" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Input.Description" class="control-label">Mô tả</label>
+        <textarea asp-for="Input.Description" class="form-control"></textarea>
+        <span asp-validation-for="Input.Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Input.MinCapacity" class="control-label">Số lượng người tối thiêu</label>
+        <input asp-for="Input.MinCapacity" class="form-control" />
+        <span asp-validation-for="Input.MinCapacity" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Input.MaxCapacity" class="control-label">Số lượng người tối đa</label>
+        <input asp-for="Input.MaxCapacity" class="form-control" />
+        <span asp-validation-for="Input.MaxCapacity" class="text-danger"></span>
+    </div>
+    <!-- Hidden fields for CreateBy, CreateAt, UpdateBy, UpdateAt -->
+    <input type="hidden" name="Input.CreateBy" value="@HttpContext.Session.GetString("UserName")" />
+    <input type="hidden" name="Input.CreateAt" value="@DateTime.UtcNow.ToString("dd/MM/yyyy")" />
+    <input type="hidden" name="Input.UpdateBy" value="@HttpContext.Session.GetString("UserName")" />
+    <input type="hidden" name="Input.UpdateAt" value="@DateTime.UtcNow.ToString("dd/MM/yyyy")" />
+
+    <!-- Image Upload -->
+    <div class="form-group">
+        <label asp-for="EventImage" class="control-label">Event Image</label>
+        <input type="file" asp-for="EventImage" class="form-control" />
+        <span asp-validation-for="EventImage" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+@if (!ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var modelState in ViewData.ModelState.Values)
+            {
+                foreach (var error in modelState.Errors)
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            }
+        </ul>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $('#createEventForm').on('submit', function () {
+                console.log('Form is being submitted');
+            });
+        });
+    </script>
+}
+<partial name="_Footer" />
