@@ -39,7 +39,7 @@ namespace Services.Service
             }
             else
             {
-                var role = (UserRole)checkUser.RoleId;
+                var role = (BusinessObject.Enum.Enum.UserRole)checkUser.RoleId;
                 // get token
                 var authClaims = new List<Claim>
                 {
@@ -59,7 +59,7 @@ namespace Services.Service
                 });
             }
         }
-        private JwtSecurityToken GenerateToken(IEnumerable<Claim> authClaims) 
+        private JwtSecurityToken GenerateToken(IEnumerable<Claim> authClaims)
         {
             // kí token với SecretKey
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));

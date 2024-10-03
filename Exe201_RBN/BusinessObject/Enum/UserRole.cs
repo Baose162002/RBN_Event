@@ -6,11 +6,19 @@ using System.Threading.Tasks;
 
 namespace BusinessObject.Enum
 {
-    public enum UserRole
+    public class Enum
     {
-        Admin = 1,
-        Staff = 2,
-        User = 3,
-        Company = 4,
+        public enum UserRole
+        {
+            Admin = 1,
+            Staff = 2,
+            User = 3,
+            Company = 4,
+        }
+        public enum BookingStatus
+        {
+            Unprocessed = 0,
+            Processed = 1,
+        }
     }
 }
