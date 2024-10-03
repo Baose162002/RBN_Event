@@ -59,7 +59,7 @@ namespace Services.Service
                 });
             }
         }
-        private JwtSecurityToken GenerateToken(IEnumerable<Claim> authClaims) 
+        private JwtSecurityToken GenerateToken(IEnumerable<Claim> authClaims)
         {
             // kí token với SecretKey
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));

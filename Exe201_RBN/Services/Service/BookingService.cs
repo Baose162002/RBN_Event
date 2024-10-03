@@ -38,7 +38,7 @@ namespace Services.Service
         public async Task CreateBooking(CreateBookingDto createBookingDto)
         {
             var user = await _userRepo.GetByIdAsync(createBookingDto.UserId);
-            if(user != null)
+            if (user != null)
             {
                 var booking = new Booking
                 {
@@ -71,21 +71,61 @@ namespace Services.Service
         public async Task<ViewDetailsBookingDto> ChangeStatusBooking(int id)
         {
             var booking = await _bookingRepo.GetBookingById(id);
-            if(booking == null)
+            if (booking == null)
             {
                 throw new KeyNotFoundException();
             }
-            if(booking.Status == 0)
+            if (booking.Status == 0)
             {
                 booking.Status = 1;
-            }else booking.Status = 0;
+            }
+            else booking.Status = 0;
             await _bookingRepo.UpdateBooking(booking);
             return _mapper.Map<ViewDetailsBookingDto>(booking);
         }
-        //public async Task<ViewDetailsBookingDto> SearchBooking(int? id, string? email, string? fullname, string? address
-        //    , decimal? price, string? phone, DateTime bookingDate, int? status, int? eventId)
-        //{
+        public async Task<List<ViewDetailsBookingDto>> SearchBooking(int? id, string? email, string? fullname, string? address
+            , decimal? price, string? phone, DateTime? bookingDay, int? status, int? eventId)
+        {
+            var bookings = await _bookingRepo.GetAllBooking();
+            if (bookings == null)
+            {
+                throw new Exception("No data");
+            }
+            if (id.HasValue)
+            {
+                bookings = bookings.Where(x => x.Id == id.Value).ToList();
+            }
+            if (!string.IsNullOrEmpty(email))
+            {
+                bookings = bookings.Where(x => x.Email.ToLower().Contains(email.ToLower())).ToList();
+            }
+            if (!string.IsNullOrEmpty(fullname))
+            {
+                bookings = bookings.Where(x => x.FullName.ToLower().Contains(fullname.ToLower())).ToList();
+            }
+            if (!string.IsNullOrEmpty(address))
+            {
+                bookings = bookings.Where(x => x.Address.ToLower().Contains(address.ToLower())).ToList();
+            }
+            if (price.HasValue)
+            {
+                bookings = bookings.Where(x => x.Price == price.Value).ToList();
+            }
+            if (!string.IsNullOrEmpty(phone))
+            {
+                bookings = bookings.Where(x => x.Phone.ToLower().Contains(phone.ToLower())).ToList();
+            }
+            if (bookingDay != null)
+            {
+                bookings = bookings.Where(x => x.BookingDay == bookingDay.Value).ToList();
+            }
+            var bookingList = bookings.ToList();
+            if (bookingList == null)
+            {
+                throw new Exception("No data");
+            }
 
-        //}
+            return _mapper.Map<List<ViewDetailsBookingDto>>(bookingList);
+        }
     }
 }
