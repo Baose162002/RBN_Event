@@ -15,6 +15,6 @@ namespace Services.IService
         Task Update(UpdateEventDto events, int id);
         Task Create(CreateEventDto events);
         Task<EventDTO> GetEventById(int id);
-        Task<List<EventDTO>> GetAllEvent();
+        Task<PagedResult<EventDTO>> GetAllEvent(string? searchTerm, int pageNumber, int pageSize);
     }
 }

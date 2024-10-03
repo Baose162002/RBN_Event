@@ -32,12 +32,14 @@ namespace Services.Service
                || string.IsNullOrEmpty(events.Name)
                || string.IsNullOrEmpty(events.EventType)
                || string.IsNullOrEmpty(events.Description)
-               || string.IsNullOrEmpty(events.CreateBy)
-               || string.IsNullOrEmpty(events.UpdateBy)
-               || events.MinCapacity == null || events.MaxCapacity == null || events.Price == null || events.CreateBy == null || events.UpdateBy == null || events.CompanyId == null
+               || events.MinCapacity == null || events.MaxCapacity == null || events.Price == null || events.CompanyId == null
                || events.CreateAt == null || events.UpdateAt == null)
             {
                 throw new ArgumentException("All fieds must be filled");
+            }
+            if (events.Price < 0)
+            {
+                throw new ArgumentException("Price must be a positive number");
             }
             if (events.MinCapacity < 0)
             {
@@ -83,17 +85,25 @@ namespace Services.Service
         {
              await _eventRepository.Delete(id);
         }
-
-        public async Task<List<EventDTO>> GetAllEvent()
+        public async Task<PagedResult<EventDTO>> GetAllEvent(string? searchTerm, int pageNumber, int pageSize)
         {
-            var events = await _eventRepository.GetAllEvent();
+            // Call the repository to get the paged result
+            var pagedEvents = await _eventRepository.GetAllEvent(searchTerm, pageNumber, pageSize);
 
-           
-            var eventDTOs = _mapper.Map<List<EventDTO>>(events);
+            // Map the PagedResult<Event> to PagedResult<EventDTO>
+            var mappedResult = new PagedResult<EventDTO>
+            {
+                Page = pagedEvents.Page,
+                PerPage = pagedEvents.PerPage,
+                Total = pagedEvents.Total,
+                TotalPages = pagedEvents.TotalPages,
+                Data = _mapper.Map<List<EventDTO>>(pagedEvents.Data) // Map the Data property
+            };
 
-            return eventDTOs;
-
+            return mappedResult;
         }
+
+
 
         public async Task<EventDTO> GetEventById(int id)
         {
@@ -109,30 +119,32 @@ namespace Services.Service
                 || string.IsNullOrEmpty(events.Name)
                 || string.IsNullOrEmpty(events.EventType)
                 || string.IsNullOrEmpty(events.Description)
-                || string.IsNullOrEmpty(events.CreateBy)
-                || string.IsNullOrEmpty(events.UpdateBy)
-                || events.MinCapacity == null || events.MaxCapacity == null || events.Price == null ||  events.Status == null || events.CreateBy == null || events.UpdateBy == null || events.CompanyId == null
-                || events.CreateAt == null || events.UpdateAt == null || events.EventImgId == null)
+                || events.MinCapacity == null || events.MaxCapacity == null || events.Price == null ||  events.Status == null)
             {
-                throw new ArgumentException("All fieds must be filled");
+                throw new ArgumentException("Không được để trống");
+            }
+            var existing = await _eventRepository.GetEventById(id);
+            if(existing == null)
+            {
+                throw new ArgumentException("Event này không tồn tại");
             }
             if (events.MinCapacity < 0)
             {
-                throw new ArgumentException("Capacity minimum must be a positive number");
+                throw new ArgumentException("Số lượng tối thiểu phải là số dương");
             }
             if (events.MinCapacity < 0)
             {
-                throw new ArgumentException("Capacity maximum must be a positive number");
+                throw new ArgumentException("Số lượng tối đa phải là số dương");
             }
             if (events.Price <= 0)
             {
-                throw new ArgumentException("Price must be a positive number");
+                throw new ArgumentException("Giá không được là số âm ");
             }
             if(events.Status < 0)
             {
                 throw new ArgumentException("Status must be a positive number");
             }
-            if(events.EventImgId < 0)
+            if (events.EventImgId < 0)
             {
                 throw new ArgumentException("EventImg must be a positive number");
             }

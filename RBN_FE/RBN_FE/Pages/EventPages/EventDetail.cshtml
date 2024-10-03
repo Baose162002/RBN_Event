@@ -1,0 +1,72 @@
+﻿@page
+@model RBN_FE.Pages.EventPages.EventDetailModel
+@{
+    ViewData["Title"] = "Event Details";
+}
+
+<h1>Event Details</h1>
+
+@if (Model.Input == null)
+{
+    <div class="alert alert-danger">
+        Unable to load event details. Please try again later.
+    </div>
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            <h2>@Model.Input.Title</h2>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Name</dt>
+                <dd class="col-sm-9">@Model.Input.Name</dd>
+
+                <dt class="col-sm-3">Event Type</dt>
+                <dd class="col-sm-9">@Model.Input.EventType</dd>
+
+                <dt class="col-sm-3">Price</dt>
+                <dd class="col-sm-9">$@Model.Input.Price</dd>
+
+                <dt class="col-sm-3">Capacity</dt>
+                <dd class="col-sm-9">@Model.Input.MinCapacity - @Model.Input.MaxCapacity</dd>
+
+                <dt class="col-sm-3">Description</dt>
+                <dd class="col-sm-9">@Model.Input.Description</dd>
+
+                <dt class="col-sm-3">Status</dt>
+                <dd class="col-sm-9">@((Model.Input.Status == 1) ? "Active" : "Inactive")</dd>
+
+                <dt class="col-sm-3">Company</dt>
+                <dd class="col-sm-9">@Model.Input.Company.Name</dd>
+
+                <dt class="col-sm-3">Create By</dt>
+                <dd class="col-sm-9">@Model.Input.CreateBy</dd>
+
+                <dt class="col-sm-3">Created At</dt>
+                <dd class="col-sm-9">@Model.Input.CreateAt</dd>
+
+                <dt class="col-sm-3">Update By</dt>
+                <dd class="col-sm-9">@Model.Input.UpdateBy</dd>
+
+                <dt class="col-sm-3">Updated At</dt>
+                <dd class="col-sm-9">@Model.Input.UpdateAt</dd>
+
+                <dt class="col-sm-3">Event Image</dt>
+                <dd class="col-sm-9">
+                    @if (!string.IsNullOrEmpty(Model.Input.EventImg?.ImageUrl))
+                    {
+                        <img src="@Model.Input.EventImg.ImageUrl" alt="Event Image" class="img-thumbnail" style="max-width: 300px;" />
+                    }
+                    else
+                    {
+                        <p>No image available</p>
+                    }
+                </dd>
+            </dl>
+        </div>
+    </div>
+
+    <a asp-page="/EventPages/EventIndex" class="btn btn-primary mt-3">Back to Events</a>
+}

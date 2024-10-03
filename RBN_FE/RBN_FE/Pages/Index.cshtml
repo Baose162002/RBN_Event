@@ -104,6 +104,15 @@
     <div class="w-full bg-gray-100 py-12">
         <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold text-center mb-8">Sự kiện được quan tâm</h2>
+
+            <!-- Tìm kiếm -->
+            <div class="mb-4 text-center">
+                <form method="get">
+                    <input type="text" name="searchTerm" value="@Model.SearchTerm" placeholder="Tìm kiếm theo tiêu đề, tên hoặc loại sự kiện" class="form-control d-inline-block w-50" />
+                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                </form>
+            </div>
+
             @if (Model.Events != null && Model.Events.Any())
             {
                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
@@ -113,7 +122,7 @@
                             <div class="card h-100 shadow-sm">
                                 @if (!string.IsNullOrEmpty(eventItem.EventImg?.ImageUrl))
                                 {
-                                    <img src="@eventItem.EventImg.ImageUrl" class="card-img-top" alt="@eventItem.Title" style="height: 200px; object-fit: cover;">
+                                    <img src="@eventItem.EventImg.ImageUrl" class="card-img-top" alt="@eventItem.Title" style="height: 200px; object-fit: cover;" loading="lazy">
                                 }
                                 else
                                 {
@@ -133,6 +142,27 @@
                             </div>
                         </div>
                     }
+                </div>
+
+                <!-- Phân trang -->
+                <div class="mt-4 d-flex justify-content-between align-items-center">
+                    <div>
+                        @if (Model.PageNumber > 1)
+                        {
+                            <a class="btn btn-outline-secondary" asp-page-handler="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-pageNumber="@(Model.PageNumber - 1)" asp-route-pageSize="@Model.PageSize">Trước đó</a>
+                        }
+                    </div>
+                    <div>
+                        @if (Model.Events.Count() == Model.PageSize) // Kiểm tra xem có còn trang tiếp theo không
+                        {
+                            <a class="btn btn-outline-secondary" asp-page-handler="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-pageNumber="@(Model.PageNumber + 1)" asp-route-pageSize="@Model.PageSize">Tiếp theo</a>
+                        }
+                    </div>
+                    <div>
+                        <span class="text-muted">Trang @Model.PageNumber</span>
+                        <!-- Optionally, show total pages if you have that information -->
+                        <!-- <span class="text-muted">/ @Model.TotalPages</span> -->
+                    </div>
                 </div>
             }
             else
