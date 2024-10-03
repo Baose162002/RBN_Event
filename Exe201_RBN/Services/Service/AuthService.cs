@@ -39,7 +39,7 @@ namespace Services.Service
             }
             else
             {
-                var role = (UserRole)checkUser.RoleId;
+                var role = (BusinessObject.Enum.Enum.UserRole)checkUser.RoleId;
                 // get token
                 var authClaims = new List<Claim>
                 {

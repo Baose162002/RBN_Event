@@ -68,5 +68,24 @@ namespace Services.Service
         {
             await _bookingRepo.DeleteBooking(id);
         }
+        public async Task<ViewDetailsBookingDto> ChangeStatusBooking(int id)
+        {
+            var booking = await _bookingRepo.GetBookingById(id);
+            if(booking == null)
+            {
+                throw new KeyNotFoundException();
+            }
+            if(booking.Status == 0)
+            {
+                booking.Status = 1;
+            }else booking.Status = 0;
+            await _bookingRepo.UpdateBooking(booking);
+            return _mapper.Map<ViewDetailsBookingDto>(booking);
+        }
+        //public async Task<ViewDetailsBookingDto> SearchBooking(int? id, string? email, string? fullname, string? address
+        //    , decimal? price, string? phone, DateTime bookingDate, int? status, int? eventId)
+        //{
+
+        //}
     }
 }

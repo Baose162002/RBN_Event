@@ -57,9 +57,15 @@ namespace RBN_Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBooking(int id)
         {
-            
+
             await _bookingService.DeleteBooking(id);
             return Ok(new { message = "Xóa đơn thành công" });
+        }
+        [HttpPut("change-status-booking/{id}")]
+        public async Task<ViewDetailsBookingDto> ChangeStatusBooking(int id)
+        {
+            var booking = await _bookingService.ChangeStatusBooking(id);
+            return booking;
         }
     }
 }
