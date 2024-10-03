@@ -7,7 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddHttpClient();
-builder.Services.AddHttpContextAccessor();
 // Add session support
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
@@ -16,6 +15,9 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+builder.Services.AddHttpContextAccessor();
+
 
 builder.Services.AddCors(options =>
 {
@@ -49,16 +51,6 @@ app.UseRouting();
 
 // Add session middleware
 app.UseSession();
-
-app.Use(async (context, next) =>
-{
-    var token = context.Session.GetString("JWTToken");
-    if (!string.IsNullOrEmpty(token))
-    {
-        context.Request.Headers.Add("Authorization", "Bearer " + token);
-    }
-    await next();
-});
 
 app.UseAuthorization();
 

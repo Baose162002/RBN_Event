@@ -40,17 +40,17 @@
         </div>
         <!-- sign in/out -->
         <div class="hidden md:flex space-x-4 items-center">
-            @if (HttpContextAccessor.HttpContext.Session.GetString("JWTToken") != null)
+            @if (Context.Session.GetString("JWTToken") != null)
             {
-                <span class="text-gray-800">Xin chào, @HttpContextAccessor.HttpContext.Session.GetString("UserName")!</span>
-                <form method="post" asp-page="/Login/Logout">
+                <span class="text-gray-800">Xin chào, @Context.Session.GetString("UserName")!</span>
+                <form method="post" asp-page="/LogIn&Out/Logout">
                     <button type="submit" class="text-gray-800 hover:text-gray-600">Đăng xuất</button>
                 </form>
             }
             else
             {
-                <a asp-page="/Login/Login" class="text-gray-800 hover:text-gray-600">Đăng nhập</a>
                 <a href="/Signup" class="text-gray-800 hover:text-gray-600">Đăng ký</a>
+                <a href="/Login" class="text-gray-800 hover:text-gray-600">Đăng nhập</a>
             }
         </div>
     </nav>

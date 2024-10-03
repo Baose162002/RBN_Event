@@ -9,8 +9,10 @@ namespace RBN_FE.Pages
         {
             // Clear all session data
             HttpContext.Session.Clear();
+
             // Explicitly delete the session cookie
             Response.Cookies.Delete(".AspNetCore.Session");
+
             // Redirect to the home page or login page
             return RedirectToPage("/Index");
         }
