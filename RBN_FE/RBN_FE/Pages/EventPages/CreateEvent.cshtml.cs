@@ -30,9 +30,24 @@ namespace RBN_FE.Pages.EventPages
         public CreateEventDto Input { get; set; }
         [BindProperty]
         public IFormFile EventImage { get; set; }
-        public void OnGet()
+        public List<CompanyDTO> Companies { get; set; } = new List<CompanyDTO>();
+
+        public async Task<IActionResult> OnGetAsync()
         {
             Input = new CreateEventDto();
+
+
+            var token = HttpContext.Session.GetString("JWTToken");
+            var role = HttpContext.Session.GetString("UserRole");
+
+
+            if (role == "Admin") // Assuming you store the role as a string
+            {
+                Companies = await GetCompaniesAsync(token); // Fetch companies
+            }
+
+            // Additional logic for loading the event details, if applicable
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -54,12 +69,47 @@ namespace RBN_FE.Pages.EventPages
                     return Page();
                 }
 
-                // Lấy CompanyId từ Role trong session
-                // Giả sử bạn có một phương thức để lấy CompanyId từ Role
-                int companyId = GetCompanyIdFromRole(HttpContext.Session.GetString("UserRole"));
+                var userRole = HttpContext.Session.GetString("UserRole");
 
-                Input.CompanyId = companyId; // Thay vì dùng UserRole
+                if (userRole == "Admin")
+                {
+                    // If the user is an admin, the CompanyId should be provided by the dropdown
+                    // Validate that the CompanyId was selected
+                    if (Input.CompanyId <= 0) // or check for null if nullable
+                    {
+                        ModelState.AddModelError(string.Empty, "Please select a valid company.");
+                        return Page();
+                    }
+                }
+                else if (userRole == "Company")
+                {
+                    // Logic for fetching CompanyId for Company role remains unchanged
+                    var userIdString = HttpContext.Session.GetString("UserId");
+                    if (string.IsNullOrEmpty(userIdString))
+                    {
+                        ModelState.AddModelError(string.Empty, "User ID not found in session.");
+                        return Page();
+                    }
 
+                    if (!int.TryParse(userIdString, out int userId))
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid User ID.");
+                        return Page();
+                    }
+
+                    var company = await GetCompanyByUserIdAsync(userIdString);
+                    if (company == null)
+                    {
+                        ModelState.AddModelError(string.Empty, "Company not found for the user.");
+                        return Page();
+                    }
+                    Input.CompanyId = company.Id; // Set the Company ID for Company role
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid user role.");
+                    return Page();
+                }
 
 
 
@@ -106,20 +156,7 @@ namespace RBN_FE.Pages.EventPages
                 return Page();
             }
         }
-        private int GetCompanyIdFromRole(string role)
-        {
-            if (role == "Admin")
-            {
-                return 1;
-            }
-            else if (role == "Company")
-            {
-                return 3;
-            }
-
-            _logger.LogError($"Invalid role: {role}");
-            throw new ArgumentException($"Invalid role: {role}");
-        }
+       
 
 
         public async Task<int?> UploadImageAsync(IFormFile image)
@@ -159,5 +196,54 @@ namespace RBN_FE.Pages.EventPages
 
             return null; // Trả về null nếu có lỗi
         }
+        private async Task<List<CompanyDTO>> GetCompaniesAsync(string token)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            var apiUrl = $"{_configuration["ApiSettings:BaseUrl"]}/company"; // Adjust API URL accordingly
+
+            var response = await _httpClient.GetAsync(apiUrl);
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<List<CompanyDTO>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            }
+
+            return new List<CompanyDTO>(); // Return empty list on failure
+        }
+
+        private async Task<CompanyDTO> GetCompanyByUserIdAsync(string userId)
+        {
+            var token = HttpContext.Session.GetString("JWTToken");
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new UnauthorizedAccessException("JWT Token is missing from session");
+            }
+
+            // Thiết lập Header Authorization với JWT Token
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            // Tạo URL cho API để lấy thông tin công ty
+            var apiUrl = $"{_configuration["ApiSettings:BaseUrl"]}/Company/user/{userId}";
+
+            // Gọi API để lấy thông tin công ty
+            var response = await _httpClient.GetAsync(apiUrl);
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var company = JsonSerializer.Deserialize<CompanyDTO>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                return company;
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                _logger.LogError($"Error fetching company information. Status code: {response.StatusCode}, Content: {errorContent}");
+                throw new Exception($"Error fetching company information. Status code: {response.StatusCode}");
+
+
+
+            }
+        }
+
     }
+
 }

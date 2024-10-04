@@ -109,6 +109,13 @@ namespace Services.Service
             return response;
         }
 
+        public async Task<ListCompanyDTO> GetCompanyByIdUser(int id)
+        {
 
+            var companies = await _companyRepository.GetCompanyByIdUser(id);
+            ListCompanyDTO response = _mapper.Map<ListCompanyDTO>(companies);
+
+            return response;
+        }
     }
 }
