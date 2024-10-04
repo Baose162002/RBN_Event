@@ -44,12 +44,6 @@ namespace RBN_FE.Pages.LogIn_Out
 
         public async Task<IActionResult> OnPostAsync()
         {
-            ModelState.Remove("CreateCompanyDto.Avatar");
-
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
 
             try
             {
@@ -58,27 +52,22 @@ namespace RBN_FE.Pages.LogIn_Out
                 if (AvatarFile != null && AvatarFile.Length > 0)
                 {
                     avatarUrl = await UploadAvatar();
-                    if (string.IsNullOrEmpty(avatarUrl))
-                    {
-                        ModelState.AddModelError(string.Empty, "Failed to upload avatar. Please try again.");
-                        return Page();
-                    }
                 }
 
                 // Create Company
                 var companyCreated = await CreateCompany(avatarUrl);
-                if (!companyCreated)
+                if (companyCreated)
                 {
-                    ModelState.AddModelError(string.Empty, "Failed to create company. Please try again.");
-                    return Page();
+                    return new JsonResult(new { success = true, message = "Đăng ký công ty thành công!" });
                 }
-
-                return RedirectToPage("/Index"); // Redirect to home page or a success page
+                else
+                {
+                    return new JsonResult(new { success = false, message = "Không thể tạo công ty. Vui lòng thử lại." });
+                }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, $"An error occurred: {ex.Message}");
-                return Page();
+                return new JsonResult(new { success = false, message = $"Đã xảy ra lỗi: {ex.Message}" });
             }
         }
 

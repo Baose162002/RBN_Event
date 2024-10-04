@@ -1,90 +1,126 @@
 ﻿@page "/CompanySignup"
 @model RBN_FE.Pages.LogIn_Out.CompanySignupModel
 @{
-    ViewData["Title"] = "Company Signup";
+    ViewData["Title"] = "Đăng ký Công ty";
 }
 
-<div class="container mt-5">
-    <h2 class="mb-4">Company Signup</h2>
+<partial name="_Header" />
 
-    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
-    {
-        <div class="alert alert-danger" role="alert">
-            @Model.ErrorMessage
+<div class="py-16">
+    <div class="flex bg-white rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl">
+        <div class="hidden lg:block lg:w-1/2 bg-cover"
+             style="background-image:url('https://haithuycatering.com/image/5c3421e551046d7e6c6b9eea/original.jpg')">
         </div>
-    }
-
-    <form method="post" enctype="multipart/form-data">
-        <div asp-validation-summary="All" class="text-danger"></div>
-
-        <h3>User Information</h3>
-        <div class="mb-3">
-            <label asp-for="CreateCompanyDto.Name" class="form-label">Name</label>
-            <input asp-for="CreateCompanyDto.Name" class="form-control" />
-            <span asp-validation-for="CreateCompanyDto.Name" class="text-danger"></span>
+        <div class="w-full p-8 lg:w-1/2">
+            <div class="flex justify-center">
+                <img src="/img/Logo.png" class="w-32" alt="Logo" />
+            </div>
+            <div class="mt-4 flex items-center justify-between">
+                <span class="border-b w-1/5 lg:w-1/4"></span>
+                <a href="/Login" class="text-xs text-center text-gray-500 uppercase">trở về Đăng nhập</a>
+                <span class="border-b w-1/5 lg:w-1/4"></span>
+            </div>
+            <div id="messageContainer" class="mt-4" style="display: none;"></div>
+            <form method="post" id="companySignupForm" class="mt-4" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <div class="mt-4">
+                    <label asp-for="CreateCompanyDto.Name" class="block text-gray-700 text-sm font-bold mb-2">Họ và tên</label>
+                    <input asp-for="CreateCompanyDto.Name" class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" required />
+                    <span asp-validation-for="CreateCompanyDto.Name" class="text-red-500 text-xs"></span>
+                </div>
+                <div class="mt-4">
+                    <label asp-for="CreateCompanyDto.Email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                    <input asp-for="CreateCompanyDto.Email" class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" required />
+                    <span asp-validation-for="CreateCompanyDto.Email" class="text-red-500 text-xs"></span>
+                </div>
+                <div class="mt-4">
+                    <label asp-for="CreateCompanyDto.Phone" class="block text-gray-700 text-sm font-bold mb-2">Số điện thoại</label>
+                    <input asp-for="CreateCompanyDto.Phone" class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" required />
+                    <span asp-validation-for="CreateCompanyDto.Phone" class="text-red-500 text-xs"></span>
+                </div>
+                <div class="mt-4">
+                    <label asp-for="CreateCompanyDto.Address" class="block text-gray-700 text-sm font-bold mb-2">Địa chỉ</label>
+                    <input asp-for="CreateCompanyDto.Address" class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" required />
+                    <span asp-validation-for="CreateCompanyDto.Address" class="text-red-500 text-xs"></span>
+                </div>
+                <div class="mt-4">
+                    <label asp-for="CreateCompanyDto.CompanyName" class="block text-gray-700 text-sm font-bold mb-2">Tên công ty</label>
+                    <input asp-for="CreateCompanyDto.CompanyName" class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" required />
+                    <span asp-validation-for="CreateCompanyDto.CompanyName" class="text-red-500 text-xs"></span>
+                </div>
+                <div class="mt-4">
+                    <label asp-for="CreateCompanyDto.CompanyDescription" class="block text-gray-700 text-sm font-bold mb-2">Mô tả công ty</label>
+                    <textarea asp-for="CreateCompanyDto.CompanyDescription" class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" required></textarea>
+                    <span asp-validation-for="CreateCompanyDto.CompanyDescription" class="text-red-500 text-xs"></span>
+                </div>
+                <div class="mt-4">
+                    <label asp-for="CreateCompanyDto.CompanyAddress" class="block text-gray-700 text-sm font-bold mb-2">Địa chỉ công ty</label>
+                    <input asp-for="CreateCompanyDto.CompanyAddress" class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" required />
+                    <span asp-validation-for="CreateCompanyDto.CompanyAddress" class="text-red-500 text-xs"></span>
+                </div>
+                <div class="mt-4">
+                    <label asp-for="CreateCompanyDto.CompanyPhone" class="block text-gray-700 text-sm font-bold mb-2">Số điện thoại công ty</label>
+                    <input asp-for="CreateCompanyDto.CompanyPhone" class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" required />
+                    <span asp-validation-for="CreateCompanyDto.CompanyPhone" class="text-red-500 text-xs"></span>
+                </div>
+                <div class="mt-4">
+                    <label asp-for="CreateCompanyDto.TaxCode" class="block text-gray-700 text-sm font-bold mb-2">Mã số thuế</label>
+                    <input asp-for="CreateCompanyDto.TaxCode" class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" required />
+                    <span asp-validation-for="CreateCompanyDto.TaxCode" class="text-red-500 text-xs"></span>
+                </div>
+                <div class="mt-4">
+                    <label asp-for="AvatarFile" class="block text-gray-700 text-sm font-bold mb-2">Logo công ty</label>
+                    <input type="file" asp-for="AvatarFile" class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" accept="image/*" />
+                    <span asp-validation-for="AvatarFile" class="text-red-500 text-xs"></span>
+                </div>
+                <div class="mt-8">
+                    <button type="submit" id="submitButton" class="bg-gray-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600">Đăng ký</button>
+                </div>
+            </form>
         </div>
-
-        <div class="mb-3">
-            <label asp-for="CreateCompanyDto.Email" class="form-label">Email</label>
-            <input asp-for="CreateCompanyDto.Email" class="form-control" />
-            <span asp-validation-for="CreateCompanyDto.Email" class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="CreateCompanyDto.Phone" class="form-label">Phone</label>
-            <input asp-for="CreateCompanyDto.Phone" class="form-control" />
-            <span asp-validation-for="CreateCompanyDto.Phone" class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="CreateCompanyDto.Address" class="form-label">Address</label>
-            <input asp-for="CreateCompanyDto.Address" class="form-control" />
-            <span asp-validation-for="CreateCompanyDto.Address" class="text-danger"></span>
-        </div>
-
-        <h3>Company Information</h3>
-        <div class="mb-3">
-            <label asp-for="CreateCompanyDto.CompanyName" class="form-label">Company Name</label>
-            <input asp-for="CreateCompanyDto.CompanyName" class="form-control" />
-            <span asp-validation-for="CreateCompanyDto.CompanyName" class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="CreateCompanyDto.CompanyDescription" class="form-label">Company Description</label>
-            <textarea asp-for="CreateCompanyDto.CompanyDescription" class="form-control"></textarea>
-            <span asp-validation-for="CreateCompanyDto.CompanyDescription" class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="CreateCompanyDto.CompanyAddress" class="form-label">Company Address</label>
-            <input asp-for="CreateCompanyDto.CompanyAddress" class="form-control" />
-            <span asp-validation-for="CreateCompanyDto.CompanyAddress" class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="CreateCompanyDto.CompanyPhone" class="form-label">Company Phone</label>
-            <input asp-for="CreateCompanyDto.CompanyPhone" class="form-control" />
-            <span asp-validation-for="CreateCompanyDto.CompanyPhone" class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="CreateCompanyDto.TaxCode" class="form-label">Tax Code</label>
-            <input asp-for="CreateCompanyDto.TaxCode" class="form-control" />
-            <span asp-validation-for="CreateCompanyDto.TaxCode" class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="AvatarFile" class="form-label">Company Avatar</label>
-            <input type="file" asp-for="AvatarFile" class="form-control" accept="image/*" />
-            <span asp-validation-for="AvatarFile" class="text-danger"></span>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Sign Up</button>
-    </form>
+    </div>
 </div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+<partial name="_Footer" />
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('companySignupForm');
+        const submitButton = document.getElementById('submitButton');
+        const messageContainer = document.getElementById('messageContainer');
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            submitButton.disabled = true;
+            submitButton.textContent = 'Đang xử lý...';
+            messageContainer.style.display = 'none';
+
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('/CompanySignup', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    messageContainer.className = 'bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4';
+                    messageContainer.textContent = result.message || 'Đăng ký công ty thành công!';
+                    form.reset();
+                } else {
+                    messageContainer.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4';
+                    messageContainer.textContent = result.message || 'Đăng ký thất bại. Vui lòng thử lại.';
+                }
+            } catch (error) {
+                messageContainer.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4';
+                messageContainer.textContent = 'Đã xảy ra lỗi khi đăng ký. Vui lòng thử lại sau.';
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Đăng ký';
+                messageContainer.style.display = 'block';
+            }
+        });
+    });
+</script>
