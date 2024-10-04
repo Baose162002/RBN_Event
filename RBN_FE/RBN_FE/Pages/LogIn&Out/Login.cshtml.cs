@@ -64,6 +64,8 @@ namespace RBN_FE.Pages.LogIn_Out
                         HttpContext.Session.SetString("JWTToken", loginResult.Token);
                         HttpContext.Session.SetString("UserRole", loginResult.Role);
                         HttpContext.Session.SetString("TokenExpiration", loginResult.Expiration.ToString());
+                        HttpContext.Session.SetString("UserId", loginResult.Id.ToString());
+
 
                         // Extract user name from the token (this is just an example, adjust as needed)
                         var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
@@ -104,6 +106,7 @@ namespace RBN_FE.Pages.LogIn_Out
 
     public class LoginResponse
     {
+        public int Id { get; set; }
         public string Token { get; set; }
         public string Role { get; set; }
         public DateTime Expiration { get; set; }

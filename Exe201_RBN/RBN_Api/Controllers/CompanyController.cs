@@ -34,10 +34,10 @@ namespace RBN_Api.Controllers
             return Ok("Add company successfully");
         }
 
-        [HttpDelete("companyid")]
-        public async Task<IActionResult> DeletCompany(int companyid)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletCompany(int id)
         {
-            await _companyService.Delete(companyid);
+            await _companyService.Delete(id);
             return Ok("Delete successfully");
         }
 
@@ -54,10 +54,20 @@ namespace RBN_Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("companyid")]
-        public async Task<IActionResult> GetCompanyById(int companyid)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCompanyById(int id)
         {
-            var companies = await _companyService.GetCompanyById(companyid);
+            var companies = await _companyService.GetCompanyById(id);
+            if (companies == null)
+            {
+                return NotFound("No company found");
+            }
+            return Ok(companies);
+        }
+        [HttpGet("user/{id}")]
+        public async Task<IActionResult> GetCompanyByIdUser(int id)
+        {
+            var companies = await _companyService.GetCompanyByIdUser(id);
             if (companies == null)
             {
                 return NotFound("No company found");

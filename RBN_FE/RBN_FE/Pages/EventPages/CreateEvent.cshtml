@@ -57,6 +57,19 @@
         <input type="file" asp-for="EventImage" class="form-control" />
         <span asp-validation-for="EventImage" class="text-danger"></span>
     </div>
+    @if (Model.Companies != null && Model.Companies.Count > 0)
+    {
+        <div>
+            <label for="companyId">Chọn công ty:</label>
+            <select id="companyId" name="Input.CompanyId" asp-for="Input.CompanyId" class="form-select">
+                <option value="">-- Chọn công ty --</option>
+                @foreach (var company in Model.Companies)
+                {
+                    <option value="@company.Id">@company.Name</option>
+                }
+            </select>
+        </div>
+    }
 
     <button type="submit" class="btn btn-primary">Create</button>
 </form>

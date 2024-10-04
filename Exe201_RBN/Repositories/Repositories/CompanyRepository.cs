@@ -27,6 +27,12 @@ namespace Repositories.Repositories
             var _context = new ApplicationDBContext();
             return await _context.Companies.Include(e => e.Events).FirstOrDefaultAsync(c => c.Id == id);
         }
+
+        public async Task<Company> GetCompanyByIdUser(int id)
+        {
+            var _context = new ApplicationDBContext();
+            return await _context.Companies.FirstOrDefaultAsync(c => c.UserId == id);
+        }
         public async Task Create(Company company)
         {
             var _context = new ApplicationDBContext();
