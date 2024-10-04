@@ -1,33 +1,42 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessObject.Dto.RequestDto
 {
     public class CreateCompanyDto
     {
         public int Id { get; set; }
-        [Required(ErrorMessage = "Yêu cầu nhập tên của bạn")]
-        public string Name { get; set; }
-        [Required(ErrorMessage = "Yêu cầu nhập của bạn"), EmailAddress(ErrorMessage = "Email không đúng định dạng")]
-        public string Email { get; set; }
-        [Required(ErrorMessage = "Yêu cầu nhập số điện thoại của bạn"), Phone(ErrorMessage = "Số điện thoại không đúng định dạng")]
-        public string Phone { get; set; }
-        [Required(ErrorMessage = "Yêu cầu nhập nơi ở của bạn")]
-        public string Address { get; set; }
-        public DateTime CreatedAt { get; set; }
 
-        //company fields
+        [Required(ErrorMessage = "Name is required")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid email format")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Phone is required")]
+        [Phone(ErrorMessage = "Invalid phone number format")]
+        public string Phone { get; set; }
+
+        [Required(ErrorMessage = "Address is required")]
+        public string Address { get; set; }
+
+        [Required(ErrorMessage = "Company Name is required")]
         public string CompanyName { get; set; }
-        [Required(ErrorMessage = "Mô tả một chút về công ty của bạn. Ví dụ: ABC là 1 công ty chuyên tổ chức sự kiện Teabreak")]
+
+        [Required(ErrorMessage = "Company Description is required")]
         public string CompanyDescription { get; set; }
+
+        [Required(ErrorMessage = "Company Address is required")]
         public string CompanyAddress { get; set; }
+
+        [Required(ErrorMessage = "Company Phone is required")]
+        [Phone(ErrorMessage = "Invalid company phone number format")]
         public string CompanyPhone { get; set; }
-        [Required(ErrorMessage = "Yêu cầu cung cấp 1 hình dại diện cho công ty bạn")]
+
         public string Avatar { get; set; }
+
+        [Required(ErrorMessage = "Tax Code is required")]
         public string TaxCode { get; set; }
     }
 }

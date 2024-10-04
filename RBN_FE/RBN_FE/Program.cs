@@ -1,13 +1,19 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
+using CloudinaryDotNet;
 using RBN_FE;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
+{
+    options.Conventions.AddPageRoute("/LogIn_Out/CompanySignup", "/CompanySignup");
+});
 builder.Services.AddHttpClient();
+
 // Add session support
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
@@ -19,6 +25,14 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddHttpContextAccessor();
 
+// Configure Cloudinary
+var cloudinarySettings = builder.Configuration.GetSection("Cloudinary");
+Account cloudinaryAccount = new Account(
+    cloudinarySettings["CloudName"],
+    cloudinarySettings["ApiKey"],
+    cloudinarySettings["ApiSecret"]);
+Cloudinary cloudinary = new Cloudinary(cloudinaryAccount);
+builder.Services.AddSingleton(cloudinary);
 
 builder.Services.AddCors(options =>
 {
@@ -30,7 +44,6 @@ builder.Services.AddCors(options =>
                   .AllowAnyMethod();
         });
 });
-
 
 var app = builder.Build();
 
@@ -44,16 +57,11 @@ if (!app.Environment.IsDevelopment())
 
 app.UseCors("AllowAllOrigins");
 
-
-
 // Middleware pipeline configuration
 app.UseStaticFiles();
 app.UseRouting();
 
-// Add session middleware before using session
-app.UseSession();  // Ensure this is before accessing session in middleware or Razor pages
-
-app.UseMiddleware<AdminRoleMiddleware>();
+app.UseSession();
 
 app.UseAuthorization();
 

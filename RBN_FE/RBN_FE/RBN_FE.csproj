@@ -19,6 +19,10 @@
 		<UpToDateCheckBuilt Include="tailwind.config.js" Set="Css" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <PackageReference Include="CloudinaryDotNet" Version="1.26.2" />
+	</ItemGroup>
+
 	<Target Name="Tailwind" BeforeTargets="Build">
 		
 	</Target>

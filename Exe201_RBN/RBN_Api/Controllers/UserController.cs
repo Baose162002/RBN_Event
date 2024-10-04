@@ -38,6 +38,40 @@ namespace RBN_Api.Controllers
             return Ok(new {message = "Tạo tài khoản thành công, vui lòng kiểm tra email để lấy mật khẩu!"});
         }
 
+        [HttpPost("create-userFE")]
+        public async Task<IActionResult> CreateUserFE(CreateUserDto createUserDto)
+        {
+            try
+            {
+                UserResponseDto createdUser = await _userService.CreateUserForCompanyAsync(createUserDto);
+                return Ok(createdUser);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+
+        [HttpPost("create-companyFE")]
+        public async Task<IActionResult> CreateCompanyFE(CreateCompanyDto createCompanyDto)
+        {
+            try
+            {
+                var result = await _userService.CreateCompanyRoleFE(createCompanyDto);
+                return Ok(new
+                {
+                    Status = "success",
+                    Message = "Company created successfully",
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+
         [HttpGet("search")]
         public async Task<List<UserResponseDto>> SearchUser(int? id, string? name, string? mail, string? phone,
                                                     string? address, int? roleId, DateTime? createAt)
@@ -85,6 +119,6 @@ namespace RBN_Api.Controllers
         {
             await _userService.CreateCompanyRole(createCompanyDto);
             return Ok(new { message = "Tạo công ty thành công" });
-        }
+        }    
     }
 }

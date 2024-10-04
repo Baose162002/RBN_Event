@@ -1,21 +1,12 @@
 ﻿@page "/Signup"
-@model RBN_FE.Pages.LogIn_Out.LoginModel
+@model RBN_FE.Pages.LogIn_Out.SignupModel
+@{
+    ViewData["Title"] = "Đăng ký";
+}
 
-
-<!DOCTYPE html>
-<html lang="en" class="h-full">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="font-sans bg-gray-100">
     <partial name="_Header" />
 
     <div class="py-16">
-
         <div class="flex bg-white rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl">
             <div class="hidden lg:block lg:w-1/2 bg-cover"
                  style="background-image:url('https://haithuycatering.com/image/5c3421e551046d7e6c6b9eea/original.jpg')">
@@ -28,33 +19,80 @@
                     <span class="border-b w-1/5 lg:w-1/4"></span>
                     <a href="/Login" class="text-xs text-center text-gray-500 uppercase">trở về Đăng nhập</a>
                     <span class="border-b w-1/5 lg:w-1/4"></span>
+                <span class="border-b w-1/5 lg:w-1/4"></span>
+                <a href="/CompanySignup" class="text-xs text-center text-gray-500 uppercase">Đăng ký Công Ty</a>
+                <span class="border-b w-1/5 lg:w-1/4"></span>
                 </div>
-                <div class="mt-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Họ và tên</label>
-                    <input class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" type="UserName" />
-                </div>
-                <div class="mt-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Email</label>
-                    <input class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" type="Email" />
-                </div>
-               
-
-                <div class="mt-4">
-                    <div class="flex justify-between">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Mật khẩu</label>
+                <div id="messageContainer" class="mt-4" style="display: none;"></div>
+                <form method="post" id="signupForm" class="mt-4">
+                    @Html.AntiForgeryToken()
+                    <div class="mt-4">
+                        <label asp-for="Input.Name" class="block text-gray-700 text-sm font-bold mb-2">Họ và tên</label>
+                        <input asp-for="Input.Name" class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" required />
+                        <span asp-validation-for="Input.Name" class="text-red-500 text-xs"></span>
                     </div>
-                    <input class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" type="Password" />
-                </div>
-                <div class="mt-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Số điện thoại</label>
-                    <input class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" type="Phone" />
-                </div>
-                <div class="mt-8">
-                    <button class="bg-gray-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600">Đăng ký</button>
-                </div>
+                    <div class="mt-4">
+                        <label asp-for="Input.Email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                        <input asp-for="Input.Email" class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" required />
+                        <span asp-validation-for="Input.Email" class="text-red-500 text-xs"></span>
+                    </div>
+                    <div class="mt-4">
+                        <label asp-for="Input.Phone" class="block text-gray-700 text-sm font-bold mb-2">Số điện thoại</label>
+                        <input asp-for="Input.Phone" class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" required />
+                        <span asp-validation-for="Input.Phone" class="text-red-500 text-xs"></span>
+                    </div>
+                    <div class="mt-4">
+                        <label asp-for="Input.Address" class="block text-gray-700 text-sm font-bold mb-2">Địa chỉ</label>
+                        <input asp-for="Input.Address" class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" required />
+                        <span asp-validation-for="Input.Address" class="text-red-500 text-xs"></span>
+                    </div>
+                    <div class="mt-8">
+                        <button type="submit" id="submitButton" class="bg-gray-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600">Đăng ký</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
     <partial name="_Footer" />
-</body>
-</html>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('signupForm');
+            const submitButton = document.getElementById('submitButton');
+            const messageContainer = document.getElementById('messageContainer');
+
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                submitButton.disabled = true;
+                submitButton.textContent = 'Đang xử lý...';
+                messageContainer.style.display = 'none';
+
+                const formData = new FormData(form);
+
+                try {
+                    const response = await fetch('/Signup', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        messageContainer.className = 'bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4';
+                        messageContainer.textContent = result.message;
+                        form.reset();
+                    } else {
+                        messageContainer.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4';
+                        messageContainer.textContent = result.message || 'Đăng ký thất bại. Vui lòng thử lại.';
+                    }
+                } catch (error) {
+                    messageContainer.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4';
+                    messageContainer.textContent = 'Đã xảy ra lỗi khi đăng ký. Vui lòng thử lại sau.';
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Đăng ký';
+                    messageContainer.style.display = 'block';
+                }
+            });
+        });
+    </script>

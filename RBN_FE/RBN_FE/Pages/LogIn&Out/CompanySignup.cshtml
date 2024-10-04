@@ -1,0 +1,90 @@
+﻿@page "/CompanySignup"
+@model RBN_FE.Pages.LogIn_Out.CompanySignupModel
+@{
+    ViewData["Title"] = "Company Signup";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4">Company Signup</h2>
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger" role="alert">
+            @Model.ErrorMessage
+        </div>
+    }
+
+    <form method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <h3>User Information</h3>
+        <div class="mb-3">
+            <label asp-for="CreateCompanyDto.Name" class="form-label">Name</label>
+            <input asp-for="CreateCompanyDto.Name" class="form-control" />
+            <span asp-validation-for="CreateCompanyDto.Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CreateCompanyDto.Email" class="form-label">Email</label>
+            <input asp-for="CreateCompanyDto.Email" class="form-control" />
+            <span asp-validation-for="CreateCompanyDto.Email" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CreateCompanyDto.Phone" class="form-label">Phone</label>
+            <input asp-for="CreateCompanyDto.Phone" class="form-control" />
+            <span asp-validation-for="CreateCompanyDto.Phone" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CreateCompanyDto.Address" class="form-label">Address</label>
+            <input asp-for="CreateCompanyDto.Address" class="form-control" />
+            <span asp-validation-for="CreateCompanyDto.Address" class="text-danger"></span>
+        </div>
+
+        <h3>Company Information</h3>
+        <div class="mb-3">
+            <label asp-for="CreateCompanyDto.CompanyName" class="form-label">Company Name</label>
+            <input asp-for="CreateCompanyDto.CompanyName" class="form-control" />
+            <span asp-validation-for="CreateCompanyDto.CompanyName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CreateCompanyDto.CompanyDescription" class="form-label">Company Description</label>
+            <textarea asp-for="CreateCompanyDto.CompanyDescription" class="form-control"></textarea>
+            <span asp-validation-for="CreateCompanyDto.CompanyDescription" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CreateCompanyDto.CompanyAddress" class="form-label">Company Address</label>
+            <input asp-for="CreateCompanyDto.CompanyAddress" class="form-control" />
+            <span asp-validation-for="CreateCompanyDto.CompanyAddress" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CreateCompanyDto.CompanyPhone" class="form-label">Company Phone</label>
+            <input asp-for="CreateCompanyDto.CompanyPhone" class="form-control" />
+            <span asp-validation-for="CreateCompanyDto.CompanyPhone" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CreateCompanyDto.TaxCode" class="form-label">Tax Code</label>
+            <input asp-for="CreateCompanyDto.TaxCode" class="form-control" />
+            <span asp-validation-for="CreateCompanyDto.TaxCode" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="AvatarFile" class="form-label">Company Avatar</label>
+            <input type="file" asp-for="AvatarFile" class="form-control" accept="image/*" />
+            <span asp-validation-for="AvatarFile" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

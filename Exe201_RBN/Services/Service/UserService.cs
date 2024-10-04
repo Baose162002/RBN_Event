@@ -118,6 +118,7 @@ namespace Services.Service
                 throw new Exception(ex.Message);
             }
         }
+
         public async Task CreateCompanyRole(CreateCompanyDto createCompanyDto)
         {
             try
@@ -199,6 +200,92 @@ namespace Services.Service
                 await _userRepo.RollbackTransactionAsync();
                 Console.WriteLine(ex.InnerException?.Message);
                 throw new Exception("An error occurred while creating the company role.", ex);
+            }
+        }
+
+        public async Task<int> CreateCompanyRoleFE(CreateCompanyDto createCompanyDto)
+        {
+            try
+            {
+                // Kiểm tra email và số điện thoại tồn tại
+                if (CheckEmailExist(createCompanyDto.Email))
+                {
+                    throw new Exception("Email đã tồn tại.");
+                }
+                if (CheckPhoneExist(createCompanyDto.Phone))
+                {
+                    throw new Exception("Số điện thoại đã tồn tại.");
+                }
+
+                var createdUser = new User
+                {
+                    Name = createCompanyDto.Name,
+                    Email = createCompanyDto.Email,
+                    Phone = createCompanyDto.Phone,
+                    Address = createCompanyDto.Address,
+                    Status = false,
+                    RoleId = 4,
+                    CreatedAt = DateTime.Now,
+                    Password = "12345" // Cân nhắc sử dụng một phương thức tạo mật khẩu ngẫu nhiên
+                };
+                await _userRepo.CreateAsync(createdUser);
+
+                var company = new Company
+                {
+                    UserId = createdUser.Id,
+                    Name = createCompanyDto.CompanyName,
+                    Description = createCompanyDto.CompanyDescription,
+                    Address = createCompanyDto.CompanyAddress,
+                    Phone = createCompanyDto.CompanyPhone,
+                    Avatar = createCompanyDto.Avatar, // Có thể là null
+                    TaxCode = createCompanyDto.TaxCode,
+                };
+                await _companyRepo.CreateAsync(company);
+                createdUser.Status = true;
+                await _userRepo.UpdateAsync(createdUser);
+                await _sendMail.SendMailToGeneratedUser(createCompanyDto.Email);
+
+                return createdUser.Id;
+            }
+            catch (Exception ex)
+            {
+                await _userRepo.RollbackTransactionAsync();
+                Console.WriteLine(ex.InnerException?.Message);
+                throw new Exception("An error occurred while creating the company role.", ex);
+            }
+        }
+
+        public async Task<UserResponseDto> CreateUserForCompanyAsync(CreateUserDto createUserDto)
+        {
+            try
+            {
+                if (CheckEmailExist(createUserDto.Email))
+                {
+                    throw new Exception("Email đã tồn tại.");
+                }
+                if (CheckPhoneExist(createUserDto.Phone))
+                {
+                    throw new Exception("Số điện thoại đã tồn tại.");
+                }
+                var createdUser = new User
+                {
+                    Name = createUserDto.Name,
+                    Email = createUserDto.Email,
+                    Phone = createUserDto.Phone,
+                    Address = createUserDto.Address,
+                    Status = false,
+                    RoleId = 4, // Assuming 4 is the role ID for company users
+                    CreatedAt = DateTime.Now,
+                    Password = "12345" // Consider generating a random password here
+                };
+                await _userRepo.CreateAsync(createdUser);
+
+                // Map the created User to UserResponseDto and return it
+                return _mapper.Map<UserResponseDto>(createdUser);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
