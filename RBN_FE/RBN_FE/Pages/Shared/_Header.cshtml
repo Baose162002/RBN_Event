@@ -26,21 +26,22 @@
                 <a href="#" class="text-gray-800 hover:text-gray-600">Về chúng tôi</a>
                 <a href="/CompanyIndex" class="text-gray-800 hover:text-gray-600">Công ty</a>
                 <a href="#" class="text-gray-800 hover:text-gray-600">Liên Hệ</a>
-                <a href="/EventIndex" class="text-gray-800 hover:text-gray-600">Tạo Sự Kiện</a>
-
+                @{
+                    var userRole = Context.Session.GetString("UserRole");
+                    if (!string.IsNullOrEmpty(userRole) && userRole != "User")
+                    {
+                        <a href="/EventIndex" class="text-gray-800 hover:text-gray-600">Tạo Sự Kiện</a>
+                    }
+                }
                 <!-- Check for JWT Token and Role -->
                 @if (Context.Session.GetString("JWTToken") != null)
                 {
-                    var userRole = Context.Session.GetString("UserRole");
-
-                    if (userRole == "Admin" )
+                    if (userRole == "Admin")
                     {
-                        <!-- Display additional links for Admins and Staff -->
                         <a href="/Admin" class="text-gray-800 hover:text-gray-600 font-bold">Quản trị viên</a>
                     }
-                    else if (userRole == "Staff" )
+                    else if (userRole == "Staff")
                     {
-                        <!-- Display additional links for Admins and Staff -->
                         <a href="/Admin/UserManagement" class="text-gray-800 hover:text-gray-600 font-bold">Quản lý nhân viên</a>
                     }
                 }

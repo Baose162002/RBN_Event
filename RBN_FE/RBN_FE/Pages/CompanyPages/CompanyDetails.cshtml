@@ -50,7 +50,7 @@
             <!-- Company Avatar -->
             @if (!string.IsNullOrEmpty(Model.Company?.Avatar))
             {
-                <img src="/img/CapellaparkView.jpg" alt="img" class="xl:w-[80%] xs:w-[96%] mx-auto lg:h-[560px] md:h-[480px] rounded-lg object-cover" />
+                <img src="@Model.Company.Avatar" alt="img" class="xl:w-[80%] xs:w-[96%] mx-auto lg:h-[560px] md:h-[480px] rounded-lg object-cover" />
             }
 
             <!-- Company Info -->
