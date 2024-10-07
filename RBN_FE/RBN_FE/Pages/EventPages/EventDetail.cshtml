@@ -3,70 +3,101 @@
 @{
     ViewData["Title"] = "Event Details";
 }
+<partial name="_Header" />
 
-<h1>Event Details</h1>
-
-@if (Model.Input == null)
-{
-    <div class="alert alert-danger">
-        Unable to load event details. Please try again later.
+<div class="max-w-screen-lg mx-auto p-5 sm:p-10 md:p-16">
+    <div class="mb-10 rounded overflow-hidden flex flex-col mx-auto">
+        @if (Model.Input == null)
+        {
+            <div class="alert alert-danger">
+                Unable to load event details. Please try again later.
+            </div>
+        }
+        else
+        {
+            <a href="#" class="text-xl sm:text-4xl font-semibold inline-block hover:text-indigo-600 transition duration-500 ease-in-out inline-block mb-2">
+                @Model.Input.Title
+            </a>
+            <div class="relative">
+                @if (!string.IsNullOrEmpty(Model.Input.EventImg?.ImageUrl))
+                {
+                    <a href="#">
+                        <img class="w-full" src="@Model.Input.EventImg.ImageUrl" alt="Event Image">
+                    </a>
+                }
+                else
+                {
+                    <img class="w-full" src="https://images.pexels.com/photos/5120892/pexels-photo-5120892.jpeg?auto=compress&amp;cs=tinysrgb&amp;fit=crop&amp;h=625.0&amp;sharp=10&amp;w=1500" alt="Default Event Image">
+                }
+                <a href="#!" class="hidden absolute z-10 text-xs absolute bottom-0 left-0 bg-indigo-600 px-6 m-2 py-2 text-white hover:bg-white hover:text-indigo-600 transition duration-500 ease-in-out sm:flex items-center">
+                    <span class="text-lg">|</span>&nbsp;&nbsp;<span>@Model.Input.EventType</span>
+                </a>
+                <a href="#!" class="hidden absolute z-10 text-xs absolute bottom-0 right-0 bg-indigo-600 px-6 m-2 py-2 text-white hover:bg-white hover:text-indigo-600 transition duration-500 ease-in-out sm:flex items-center">
+                    <span class="text-lg">|</span>&nbsp;&nbsp;<span>Read more</span>
+                </a>
+            </div>
+            <p class="text-gray-700 py-5 text-base leading-8">
+                @Model.Input.Description
+            </p>
+            <div class="py-5 text-sm font-regular text-gray-900 flex">
+                <span class="mr-3 flex flex-row items-center">
+                    <svg class="text-indigo-600" fill="currentColor" height="13px" width="13px" version="1.1" id="Layer_1"
+                         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                         viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                    <g>
+                    <g>
+                    <path d="M256,0C114.837,0,0,114.837,0,256s114.837,256,256,256s256-114.837,256-256S397.163,0,256,0z M277.333,256
+                c0,11.797-9.536,21.333-21.333,21.333h-85.333c-11.797,0-21.333-9.536-21.333-21.333s9.536-21.333,21.333-21.333h64v-128
+                c0-11.797,9.536-21.333,21.333-21.333s21.333,9.536,21.333,21.333V256z"></path>
+                                </g>
+                            </g>
+                        </svg>
+                    <span class="ml-1">Created @Model.Input.CreateAt</span>
+                </span>
+                <a href="#" class="flex flex-row items-center hover:text-indigo-600">
+                    <svg class="text-indigo-600" fill="currentColor" height="16px" aria-hidden="true" role="img"
+                         focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="currentColor"
+                              d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z">
+                        </path>
+                        <path d="M0 0h24v24H0z" fill="none"></path>
+                    </svg>
+                    <span class="ml-1">@Model.Input.CreateBy</span>
+                </a>
+            </div>
+            <hr>
+            <div class="mt-4">
+                <h3 class="text-xl font-semibold mb-2">Event Details</h3>
+                <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Name</dt>
+                        <dd class="mt-1 text-sm text-gray-900">@Model.Input.Name</dd>
+                    </div>
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Price</dt>
+                        <dd class="mt-1 text-sm text-gray-900">$@Model.Input.Price</dd>
+                    </div>
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Capacity</dt>
+                        <dd class="mt-1 text-sm text-gray-900">@Model.Input.MinCapacity - @Model.Input.MaxCapacity</dd>
+                    </div>
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Status</dt>
+                        <dd class="mt-1 text-sm text-gray-900">@((Model.Input.Status == 1) ? "Active" : "Inactive")</dd>
+                    </div>
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Company</dt>
+                        <dd class="mt-1 text-sm text-gray-900">@Model.Input.Company.Name</dd>
+                    </div>
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Last Updated</dt>
+                        <dd class="mt-1 text-sm text-gray-900">@Model.Input.UpdateAt by @Model.Input.UpdateBy</dd>
+                    </div>
+                </dl>
+            </div>
+        }
     </div>
-}
-else
-{
-    <div class="card">
-        <div class="card-header">
-            <h2>@Model.Input.Title</h2>
-        </div>
-        <div class="card-body">
-            <dl class="row">
-                <dt class="col-sm-3">Name</dt>
-                <dd class="col-sm-9">@Model.Input.Name</dd>
+    <a asp-page="/EventPages/EventIndex" class="inline-block bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700 transition duration-300">Back to Events</a>
+</div>
 
-                <dt class="col-sm-3">Event Type</dt>
-                <dd class="col-sm-9">@Model.Input.EventType</dd>
-
-                <dt class="col-sm-3">Price</dt>
-                <dd class="col-sm-9">$@Model.Input.Price</dd>
-
-                <dt class="col-sm-3">Capacity</dt>
-                <dd class="col-sm-9">@Model.Input.MinCapacity - @Model.Input.MaxCapacity</dd>
-
-                <dt class="col-sm-3">Description</dt>
-                <dd class="col-sm-9">@Model.Input.Description</dd>
-
-                <dt class="col-sm-3">Status</dt>
-                <dd class="col-sm-9">@((Model.Input.Status == 1) ? "Active" : "Inactive")</dd>
-
-                <dt class="col-sm-3">Company</dt>
-                <dd class="col-sm-9">@Model.Input.Company.Name</dd>
-
-                <dt class="col-sm-3">Create By</dt>
-                <dd class="col-sm-9">@Model.Input.CreateBy</dd>
-
-                <dt class="col-sm-3">Created At</dt>
-                <dd class="col-sm-9">@Model.Input.CreateAt</dd>
-
-                <dt class="col-sm-3">Update By</dt>
-                <dd class="col-sm-9">@Model.Input.UpdateBy</dd>
-
-                <dt class="col-sm-3">Updated At</dt>
-                <dd class="col-sm-9">@Model.Input.UpdateAt</dd>
-
-                <dt class="col-sm-3">Event Image</dt>
-                <dd class="col-sm-9">
-                    @if (!string.IsNullOrEmpty(Model.Input.EventImg?.ImageUrl))
-                    {
-                        <img src="@Model.Input.EventImg.ImageUrl" alt="Event Image" class="img-thumbnail" style="max-width: 300px;" />
-                    }
-                    else
-                    {
-                        <p>No image available</p>
-                    }
-                </dd>
-            </dl>
-        </div>
-    </div>
-
-    <a asp-page="/EventPages/EventIndex" class="btn btn-primary mt-3">Back to Events</a>
-}
+<partial name="_Footer" />
