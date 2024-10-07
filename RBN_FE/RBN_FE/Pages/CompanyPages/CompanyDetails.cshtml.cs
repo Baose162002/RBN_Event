@@ -1,4 +1,5 @@
 ﻿using BusinessObject;
+using BusinessObject.Dto;
 using BusinessObject.DTO;
 using BusinessObject.DTO.ResponseDto;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,8 @@ namespace RBN_FE.Pages.CompanyPages
         }
 
         public ListCompanyDTO Company { get; set; }
-        public List<FeedBack> FeedBack { get; set; }
+        public List<FeedbackDTO> FeedBack { get; set; }
+        public List<ResponseDTO> Response { get; set; }
         public string ErrorMessage { get; set; } // Thêm thuộc tính để hiển thị lỗi
 
         public async Task OnGetAsync(int companyId)
@@ -25,7 +27,8 @@ namespace RBN_FE.Pages.CompanyPages
             try
             {
                 Company = await _httpClient.GetFromJsonAsync<ListCompanyDTO>($"http://localhost:5250/api/Company/{companyId}");
-                FeedBack = await _httpClient.GetFromJsonAsync<List<FeedBack>>($"http://localhost:5250/api/Feedback");
+                FeedBack = await _httpClient.GetFromJsonAsync<List<FeedbackDTO>>($"http://localhost:5250/api/Feedback");
+                Response = await _httpClient.GetFromJsonAsync<List<ResponseDTO>>($"http://localhost:5250/api/Response");
 
                 if (Company == null)
                 {

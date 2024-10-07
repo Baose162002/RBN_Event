@@ -11,6 +11,15 @@ namespace Repositories.Repositories
 {
     public class ResponseRepository : IResponseRepository
     {
+        public async Task<List<Response>> GetResponseByFeedbackId(int id)
+        {
+            var _context = new ApplicationDBContext();
+            var response = await _context.Responses
+                .Include(x=> x.FeedBack)
+                .Include(x=>x.Company)
+                .Where(x=>x.FeedBack.Id == id).ToListAsync();
+            return response;
+        }
         public async Task<List<Response>> GetAllResponse()
         {
             var _context = new ApplicationDBContext();

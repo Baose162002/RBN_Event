@@ -6,6 +6,8 @@ using Services.IService;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Repositories.Repositories;
+using System.ComponentModel.Design;
 
 namespace Services.Service
 {
@@ -23,7 +25,10 @@ namespace Services.Service
             _companyService = companyService ?? throw new ArgumentNullException(nameof(companyService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
-
+        public async Task<List<ResponseDTO>> GetResponseByFeedbackId(int id)
+        {
+            var feedback = await _feedbackRepository.GetFeedbackById(id);
+        }
         public async Task<List<Response>> GetAllResponse()
         {
             return await _responseRepository.GetAllResponse();

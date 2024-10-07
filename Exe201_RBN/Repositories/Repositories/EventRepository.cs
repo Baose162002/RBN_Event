@@ -40,13 +40,13 @@ namespace Repositories.Repositories
         public async Task<List<Event>> GetEventsByCompanyIdAsync(int companyId)
         {
             using var _context = new ApplicationDBContext();
-            var bookings = await _context.Events
+            var events = await _context.Events
                 .Include(b => b.EventImg)
                 .Include(e => e.Company)
                 .Where(b => b.Company.Id == companyId)
                 .ToListAsync();
 
-            return bookings;
+            return events;
         }
         public async Task<PagedResult<Event>> GetAllEvent(string? searchTerm, int pageNumber, int pageSize)
         {
