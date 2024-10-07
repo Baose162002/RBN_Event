@@ -37,7 +37,9 @@ namespace RBN_FE.Pages
                 };
 
                 // Create URL with search and pagination parameters
-                var requestUrl = $"{_configuration["ApiSettings:BaseUrl"]}/Event?searchTerm={Uri.EscapeDataString(searchTerm)}&pageNumber={pageNumber}&pageSize={pageSize}";
+                var searchTermValue = searchTerm ?? string.Empty; // If searchTerm is null, use an empty string
+
+                var requestUrl = $"{_configuration["ApiSettings:BaseUrl"]}/Event?searchTerm={Uri.EscapeDataString(searchTermValue)}&pageNumber={pageNumber}&pageSize={pageSize}";
 
                 // Fetch events from the API
                 var result = await _httpClient.GetFromJsonAsync<PagedResult<EventDTO>>(requestUrl, options);
