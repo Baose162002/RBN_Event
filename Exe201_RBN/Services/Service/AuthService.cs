@@ -49,7 +49,8 @@ namespace Services.Service
 
                     new Claim(ClaimTypes.Name, checkUser.Name),
                     new Claim(ClaimTypes.Email, checkUser.Email),
-                    new Claim(ClaimTypes.Role, role.ToString())
+                    new Claim(ClaimTypes.Role, role.ToString()),
+                    new Claim(ClaimTypes.NameIdentifier, checkUser.Id.ToString())
                 };
                 //Tạo token
                 var token = GenerateToken(authClaims);

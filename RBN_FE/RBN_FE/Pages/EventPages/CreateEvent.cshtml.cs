@@ -237,7 +237,7 @@ namespace RBN_FE.Pages.EventPages
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
                 _logger.LogError($"Error fetching company information. Status code: {response.StatusCode}, Content: {errorContent}");
-                throw new Exception($"Error fetching company information. Status code: {response.StatusCode}");
+                return null;
 
 
 
