@@ -3,7 +3,10 @@
 @{
     ViewData["Title"] = "Xóa Sự Kiện";
 }
-
+}
+<partial name="_AdminHeader" />
+<div class="flex overflow-hidden bg-white pt-40">
+    <partial name="_AdminNav" />
 <h2 class="text-2xl font-semibold mb-4">Xóa Sự Kiện</h2>
 
 @if (Model.Event != null)
@@ -60,7 +63,7 @@
             </form>
             <a asp-page="/EventPages/EventIndex" class="bg-gray-500 text-white font-bold py-2 px-4 rounded hover:bg-gray-600">Hủy</a>
         </div>
-    </div>
+    </div> 
 }
 else
 {
@@ -68,7 +71,7 @@ else
         Không tìm thấy sự kiện nào để xóa.
     </div>
 }
-
+</div>
 @section Scripts {
     <script>
         function confirmDelete() {

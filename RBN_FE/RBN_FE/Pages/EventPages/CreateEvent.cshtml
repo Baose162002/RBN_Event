@@ -1,8 +1,10 @@
 ﻿@page
 @model RBN_FE.Pages.EventPages.CreateEventModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-<partial name="_Header" />
-
+}
+<partial name="_AdminHeader" />
+<div class="flex overflow-hidden bg-white pt-16">
+    <partial name="_AdminNav" />
 <div class="bg-white border rounded-lg px-8 py-6 mx-auto my-8 max-w-2xl">
     <h2 class="text-2xl font-medium mb-4">Tạo Event</h2>
 
@@ -91,6 +93,7 @@
         </div>
     }
 </div>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
@@ -103,4 +106,3 @@
     </script>
 }
 
-<partial name="_Footer" />

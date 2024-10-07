@@ -8,34 +8,30 @@
 
 <partial name="_Header" />
 
-<div class="relative h-[400px] bg-gradient-to-tr from-indigo-600 via-indigo-700 to-violet-800">
-    <div class="flex flex-col gap-4 justify-center items-center w-full h-full px-3 md:px-0">
+<main class="flex-grow w-full">
+    <div class="relative w-full" style="height: 90vh;">
+        <!-- Changed from h-full to a fixed height of 66.67% of the viewport height -->
+        <img src="/img/congtybanner.jpg" alt="Family in field" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-center px-4">
+            <div class="flex flex-col gap-4 justify-center items-center w-full h-full px-3 md:px-0">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white">
+                    CÔNG TY TỔ CHỨC SỰ KIỆN
+                </h1>
 
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white">
-            CÔNG TY TỔ CHỨC SỰ KIỆN
-        </h1>
-        <p class="text-gray-300">
-            For Students, From Students
-        </p>
-
-
-        <div class="relative p-3 border border-gray-200 rounded-lg w-full max-w-lg">
-            <input type="text" class="rounded-md w-full p-3 " placeholder="Search MCQ | Topic | Course">
-
-
-            <button type="submit" class="absolute right-6 top-6">
-
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                     stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                </svg>
-            </button>
-
+                <div class="relative p-3 border border-gray-200 rounded-lg w-full max-w-lg">
+                    <input type="text" id="searchInput" class="rounded-md w-full p-3" placeholder="Tìm kiếm công ty">
+                    <button type="button" id="searchButton" class="absolute right-6 top-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
-
-</div>
+</main>
 <section class="text-gray-600 body-font">
     <div class="container mx-auto max-w-7x8">
         <div class="mb-10 mt-10">
@@ -72,4 +68,48 @@
         }
     </div>
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const companies = document.querySelectorAll('.flex.flex-col.lg\\:flex-row.mb-20.items-center');
+
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase();
+            companies.forEach(company => {
+                const companyName = company.querySelector('.text-gray-900.text-4xl').textContent.toLowerCase();
+                const companyDescription = company.querySelector('.leading-relaxed.text-lg').textContent.toLowerCase();
+                if (companyName.includes(searchTerm) || companyDescription.includes(searchTerm)) {
+                    company.style.display = '';
+                } else {
+                    company.style.display = 'none';
+                }
+            });
+
+            // Hiển thị thông báo nếu không có kết quả
+            const visibleCompanies = document.querySelectorAll('.flex.flex-col.lg\\:flex-row.mb-20.items-center:not([style*="display: none"])');
+            const noResultsMessage = document.getElementById('noResultsMessage');
+            if (visibleCompanies.length === 0) {
+                if (!noResultsMessage) {
+                    const message = document.createElement('div');
+                    message.id = 'noResultsMessage';
+                    message.className = 'text-center text-gray-600 my-8';
+                    message.textContent = 'Không tìm thấy công ty nào phù hợp.';
+                    companies[0].parentNode.insertBefore(message, companies[0]);
+                }
+            } else if (noResultsMessage) {
+                noResultsMessage.remove();
+            }
+        }
+
+        searchButton.addEventListener('click', performSearch);
+        searchInput.addEventListener('keyup', function (event) {
+            if (event.key === 'Enter') {
+                performSearch();
+            }
+        });
+    });
+</script>
+
 <partial name="_Footer" />

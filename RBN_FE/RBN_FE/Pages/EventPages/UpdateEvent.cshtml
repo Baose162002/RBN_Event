@@ -3,7 +3,9 @@
 @{
     ViewData["Title"] = "Update Event";
 }
-<partial name="_Header" />
+<partial name="_AdminHeader" />
+<div class="flex overflow-hidden bg-white pt-16">
+    <partial name="_AdminNav" />
 
 <div class="max-w-screen-lg mx-auto p-5 sm:p-10 md:p-16">
     <div class="mb-10 rounded overflow-hidden flex flex-col mx-auto">
@@ -85,9 +87,8 @@
             </div>
         </form>
     </div>
-</div>
+</div></div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-<partial name="_Footer" />
