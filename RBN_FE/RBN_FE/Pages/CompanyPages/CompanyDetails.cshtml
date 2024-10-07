@@ -72,30 +72,115 @@
                             <strong>Mô tả:</strong> @Model.Company.Description
                         </p>
 
-                        @if (Model.Company.Events != null && Model.Company.Events.Any())
+                    @if (Model.Company?.Events != null && Model.Company.Events.Any())
+                    {
+                        <h2 class="font-semibold text-lg mt-8 mb-4 -white">Sự kiện đã tổ chức</h2>
+                        @foreach (var evnt in Model.Company.Events)
                         {
-                            <h2 class="font-semibold text-lg mt-8 mb-4 -white">Sự kiện đã tổ chức</h2>
-                            @foreach (var evnt in Model.Company.Events)
-                            {
-                                <div class="mb-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
-                                    <h3 class="font-semibold text-lg -white">@evnt.Name</h3>
-                                    <p class="mt-2 text-md "><strong>Loại sự kiện:</strong> @evnt.EventType</p>
-                                    <p class="mt-2 text-md "><strong>Giá:</strong> @evnt.Price</p>
-                                    <p class="mt-2 text-md "><strong>Mô tả:</strong> @evnt.Description</p>
-                                </div>
-                            }
+                            <div class="mb-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                <h3 class="font-semibold text-lg -white">@evnt.Name</h3>
+                                <p class="mt-2 text-md "><strong>Loại sự kiện:</strong> @evnt.EventType</p>
+                                <p class="mt-2 text-md "><strong>Giá:</strong> @evnt.Price</p>
+                                <p class="mt-2 text-md "><strong>Mô tả:</strong> @evnt.Description</p>
+                            </div>
                         }
+                    }
+
                     }
                     else
                     {
                         <p class="mx-auto text-md ">Không tìm thấy thông tin công ty.</p>
                     }
 
-                  
+                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                {
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <span class="block sm:inline">@Model.ErrorMessage</span>
+                    </div>
+                }
+
                 </div>
             </div>
         </div>
     </div>
+<!-- Comment Section -->
+<h2 class="text-lg font-semibold mb-4">
+    Đánh giá của bạn sau khi sử dụng dịch vụ của @Model.Company?.Name
+</h2>
+
+    <!-- Comment List -->
+    <div class="space-y-6">
+        <!-- Comment -->
+        <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0">
+                <img class="h-8 w-8 rounded-full" src="/img/customerAvatar.png" alt="Avatar" />
+            </div>
+            <div class="flex-1">
+                <div class="text-sm">
+                    <p class="font-medium text-gray-900">Quốc Bảo</p>
+                    <p class="text-gray-500">6 giờ trước</p>
+                </div>
+                <div class="mt-1 text-sm text-gray-700">
+                    Tôi sẽ tiếp tục ủng hộ Mega House trong các sự kiện tới.
+                </div>
+
+                <!-- Reply Button -->
+                <button onclick="toggleReply(this)" class="mt-2 text-indigo-600 text-sm hover:underline">Phản hồi</button>
+
+                <!-- Reply Input (Hidden by Default) -->
+                <div class="hidden mt-2 space-y-2">
+                    <textarea rows="2" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Nhập phản hồi của bạn..."></textarea>
+                    <button class="bg-indigo-600 text-white py-1 px-4 rounded hover:bg-indigo-700">Gửi phản hồi</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Another Comment -->
+        <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0">
+                <img class="h-8 w-8 rounded-full" src="/img/user-avatar.jpg" alt="Avatar" />
+            </div>
+            <div class="flex-1">
+                <div class="text-sm">
+                    <p class="font-medium text-gray-900">Minh Mạnh</p>
+                    <p class="text-gray-500">5 ngày trước</p>
+                </div>
+                <div class="mt-1 text-sm text-gray-700">
+                    Mega House quá tuyệt, phục vụ chuyên nghiệp.
+                </div>
+
+                <!-- Reply Button -->
+                <button onclick="toggleReply(this)" class="mt-2 text-indigo-600 text-sm hover:underline">Phản hồi</button>
+
+                <!-- Reply Input (Hidden by Default) -->
+                <div class="hidden mt-2 space-y-2">
+                    <textarea rows="2" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Nhập phản hồi của bạn..."></textarea>
+                    <button class="bg-indigo-600 text-white py-1 px-4 rounded hover:bg-indigo-700">Gửi phản hồi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Comment Form -->
+    <form class="mt-8 space-y-4">
+        <div>
+            <textarea rows="4" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Đánh giá của bạn..."></textarea>
+        </div>
+        <div class="flex justify-end">
+            <button type="submit" class="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700">Gửi đánh giá</button>
+        </div>
+    </form>
+</div>
+
+<!-- JavaScript for Toggling Reply Input -->
+<script>
+    function toggleReply(button) {
+        const replyInput = button.nextElementSibling;
+        replyInput.classList.toggle('hidden');
+    }
+</script>
 
     <partial name="_Footer" />
 

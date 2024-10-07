@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Repositories.IRepositories;
+using BusinessObject.Dto.ResponseDto;
 
 namespace Repositories.Repositories
 {
@@ -18,6 +19,32 @@ namespace Repositories.Repositories
         {
             _context ??= new ApplicationDBContext();
         }
+        public async Task<List<ViewDetailsBookingDto>> GetBookingsByCompanyIdAsync(int companyId)
+        {
+            var bookings = await _context.Bookings
+                .Include(b => b.Event)
+                .ThenInclude(e => e.Company)
+                .Where(b => b.Event.CompanyId == companyId)
+                .Select(b => new ViewDetailsBookingDto
+                {
+                    Id = b.Id,
+                    Email = b.User.Email,
+                    FullName = b.User.Name,
+                    Price = (decimal)b.Event.Price,
+                    Phone = b.User.Phone,
+                    Address = b.User.Address,
+                    BookingDay = b.BookingDay,
+                    UserNote = b.UserNote,
+                    Status = b.Status,
+                    UserId = b.UserId,
+                    EventName = b.Event.Name,
+                    CompanyName = b.Event.Company.Name
+                })
+                .ToListAsync();
+
+            return bookings;
+        }
+
         public async Task<List<Booking>> GetAllBooking()
         {
             return await _context.Bookings.Include(u => u.User).Include(e => e.Event).ToListAsync();

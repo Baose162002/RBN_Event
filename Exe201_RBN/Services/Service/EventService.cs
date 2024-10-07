@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessObject;
+using BusinessObject.Dto.ResponseDto;
 using BusinessObject.DTO;
 using BusinessObject.DTO.RequestDto;
 using Repositories.IRepositories;
@@ -19,13 +20,27 @@ namespace Services.Service
     public class EventService : IEventService
     {
         private readonly IEventRepository _eventRepository;
+        private readonly ICompanyRepository _companyRepository;
         private readonly IMapper _mapper;
-        public EventService(IEventRepository eventRepository, IMapper mapper)
+        public EventService(IEventRepository eventRepository, ICompanyRepository companyRepository, IMapper mapper)
         {
             _eventRepository = eventRepository;
+            _companyRepository = companyRepository;
             _mapper = mapper;
         }
-
+        public async Task<List<EventDTO>> GetEventsByCompanyIdAsync(int companyId)
+        {
+            var company = await _companyRepository.GetCompanyById(companyId);
+            if (company == null)
+            {
+                throw new Exception("Not found company");
+            }
+            else
+            {
+                var bookings = await _eventRepository.GetEventsByCompanyIdAsync(company.Id);
+                return _mapper.Map<List<EventDTO>>(bookings);
+            }
+        }
         public async Task Create(CreateEventDto events)
         {
             if (events == null || string.IsNullOrEmpty(events.Title)
