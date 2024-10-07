@@ -43,6 +43,11 @@
                         <!-- Display additional links for Admins and Staff -->
                         <a href="/Admin/UserManagement" class="text-gray-800 hover:text-gray-600 font-bold">Quản lý nhân viên</a>
                     }
+                    else if (userRole == "Company")
+                    {
+                        <!-- Display additional links for Admins and Staff -->
+                        <a href="/CompanyRole/CompanyManageBooking" id="@Model.Company.Id" class="text-gray-800 hover:text-gray-600 font-bold">Quản lý công ty</a>
+                    }
                 }
             </div>
         </div>

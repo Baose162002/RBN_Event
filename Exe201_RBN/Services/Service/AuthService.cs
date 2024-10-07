@@ -15,6 +15,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Services.Service
 {
@@ -43,6 +44,9 @@ namespace Services.Service
                 // get token
                 var authClaims = new List<Claim>
                 {
+                    new Claim("CompanyId", checkUser.Id.ToString()),
+
+
                     new Claim(ClaimTypes.Name, checkUser.Name),
                     new Claim(ClaimTypes.Email, checkUser.Email),
                     new Claim(ClaimTypes.Role, role.ToString())

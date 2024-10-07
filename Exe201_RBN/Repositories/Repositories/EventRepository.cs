@@ -1,4 +1,6 @@
 ﻿using BusinessObject;
+using BusinessObject.Dto.ResponseDto;
+using BusinessObject.DTO;
 using BusinessObject.DTO.RequestDto;
 using Microsoft.EntityFrameworkCore;
 using Repositories.IRepositories;
@@ -34,6 +36,17 @@ namespace Repositories.Repositories
             }
 
             return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
+        }
+        public async Task<List<Event>> GetEventsByCompanyIdAsync(int companyId)
+        {
+            using var _context = new ApplicationDBContext();
+            var bookings = await _context.Events
+                .Include(b => b.EventImg)
+                .Include(e => e.Company)
+                .Where(b => b.Company.Id == companyId)
+                .ToListAsync();
+
+            return bookings;
         }
         public async Task<PagedResult<Event>> GetAllEvent(string? searchTerm, int pageNumber, int pageSize)
         {

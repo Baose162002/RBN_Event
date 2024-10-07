@@ -1,4 +1,5 @@
 ﻿using BusinessObject;
+using BusinessObject.Dto.ResponseDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace Repositories.IRepositories
 {
     public interface IBookingRepository
     {
+        Task<List<ViewDetailsBookingDto>> GetBookingsByCompanyIdAsync(int companyId);
         Task<List<Booking>> GetAllBooking();
         Task<Booking> GetBookingById(int id);
         Task CreateBooking(Booking booking);
