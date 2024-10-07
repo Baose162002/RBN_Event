@@ -1,0 +1,89 @@
+﻿@page
+@model RBN_FE.Pages.HomeEvent.HomeEventDetailModel
+@{
+}
+<partial name="_Header" />
+
+<div class="container mt-4">
+    @if (Model.EventDetail != null)
+    {
+        <h2>@Model.EventDetail.Title</h2>
+        <img src="@Model.EventDetail.EventImg?.ImageUrl" alt="@Model.EventDetail.Title" class="img-fluid mb-3" style="max-height: 300px; object-fit: cover;" />
+        <p>@Model.EventDetail.Description</p>
+        <p><strong>Type:</strong> @Model.EventDetail.EventType</p>
+        <p><strong>Price:</strong> @Model.EventDetail.Price.ToString("C")</p>
+        <p><strong>Company:</strong> @Model.EventDetail.Company?.Name</p>
+    }
+    else
+    {
+        <h2>Event not found.</h2>
+    }
+
+    <h3>Booking Form</h3>
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="Booking.FullName"></label>
+            <input asp-for="Booking.FullName" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label asp-for="Booking.Email"></label>
+            <input asp-for="Booking.Email" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label asp-for="Booking.Address"></label>
+            <input asp-for="Booking.Address" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label asp-for="Booking.Phone"></label>
+            <input asp-for="Booking.Phone" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label asp-for="Booking.UserNote"></label>
+            <textarea asp-for="Booking.UserNote" class="form-control"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Book Now</button>
+    </form>
+
+
+    <h3>Related Events</h3>
+    @if (Model.RelatedEvents != null && Model.RelatedEvents.Count > 0)
+    {
+        <div class="row">
+            @foreach (var relatedEvent in Model.RelatedEvents)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-3">
+                        <img src="@relatedEvent.EventImg?.ImageUrl" class="card-img-top" alt="@relatedEvent.Title" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">@relatedEvent.Title</h5>
+                            <p class="card-text">@relatedEvent.Description</p>
+                            <p class="card-text"><small class="text-muted">@relatedEvent.EventType</small></p>
+                            <a asp-page="/HomeEvent/HomeEventDetail" asp-route-id="@relatedEvent.Id" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No related events found.</p>
+    }
+</div>
+
+<partial name="_Footer" />
+<style>
+    /* Add this CSS to your site's stylesheet */
+    .scrollable-container {
+        overflow-x: auto; /* Enable horizontal scrolling */
+        white-space: nowrap; /* Prevent line breaks */
+        padding: 15px 0; /* Add padding */
+    }
+
+    .scrollable-card {
+        display: inline-block; /* Keep cards in one line */
+        width: 18rem; /* Card width */
+        margin-right: 15px; /* Space between cards */
+    }
+
+</style>
