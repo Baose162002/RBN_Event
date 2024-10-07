@@ -10,9 +10,19 @@
     <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <style>
+        body {
+            overflow: hidden;
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+        }
 
+            body::-webkit-scrollbar {
+                display: none; /* Chrome, Safari and Opera */
+            }
+    </style>
 </head>
-<body class="font-sans flex flex-col min-h-screen">
+<body class="font-sans flex flex-col min-h-screen ">
 
     <main class="flex-grow">
         @RenderBody()
@@ -26,4 +36,15 @@
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        document.body.style.overflow = 'hidden';
+        window.addEventListener('wheel', (e) => {
+            window.scrollBy({
+                top: e.deltaY,
+                behavior: 'smooth'
+            });
+        });
+    });
+</script>
 </html>

@@ -23,6 +23,6 @@ namespace Services.IService
         Task ForgotPassword(string email, string phone);
         Task CreateCompanyRole(CreateCompanyDto createCompanyDto);
         Task<int> CreateCompanyRoleFE(CreateCompanyDto createCompanyDto);
-        Task<UserResponseDto> CreateUserForCompanyAsync(CreateUserDto createUserDto);
-    }
+/*        Task<UserResponseDto> CreateUserForCompanyAsync(CreateUserDto createUserDto);
+*/    }
 }

@@ -3,6 +3,7 @@ module.exports = {
         './Pages/**/*.cshtml',
         './Views/**/*.cshtml'
     ],
+    darkMode: 'class',
     theme: {
         extend: {},
     },

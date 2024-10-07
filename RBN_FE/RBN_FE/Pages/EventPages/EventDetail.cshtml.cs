@@ -31,7 +31,7 @@ namespace RBN_FE.Pages.EventPages
             {
                 _logger.LogWarning("JWT Token is missing from session");
                 ModelState.AddModelError(string.Empty, "You are not authenticated. Please log in.");
-                return RedirectToPage("/Account/Login");
+                return RedirectToPage("/LogIn&Out/Login");
             }
 
             try
