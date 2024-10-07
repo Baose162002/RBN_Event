@@ -135,7 +135,23 @@ namespace Services.Service
 
             return mappedResult;
         }
+        public async Task<PagedResult<EventDTO>> GetEventsByTypeAsync(string? searchTerm, int pageNumber, int pageSize)
+        {
+            // Call the repository to get the paged result
+            var pagedEvents = await _eventRepository.GetAllEvent(searchTerm, pageNumber, pageSize);
 
+            // Map the PagedResult<Event> to PagedResult<EventDTO>
+            var mappedResult = new PagedResult<EventDTO>
+            {
+                Page = pagedEvents.Page,
+                PerPage = pagedEvents.PerPage,
+                Total = pagedEvents.Total,
+                TotalPages = pagedEvents.TotalPages,
+                Data = _mapper.Map<List<EventDTO>>(pagedEvents.Data) // Map the Data property
+            };
+
+            return mappedResult;
+        }
         public async Task<EventDTO> GetEventById(int id)
         {
             var events = await _eventRepository.GetEventById(id);

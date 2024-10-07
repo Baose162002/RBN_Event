@@ -48,6 +48,19 @@ namespace RBN_Api.Controllers
             return Ok(result);
         }
 
+
+        [HttpGet("eventype")]
+        public async Task<IActionResult> GetAllEventsByCompanyId(string? searchTerm, int pageNumber = 1, int pageSize = 10)
+        {
+            var result = await _eventService.GetEventsByTypeAsync(searchTerm, pageNumber, pageSize);
+            if (result == null || !result.Data.Any())
+            {
+                return NotFound("No events found.");
+            }
+
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateEvent(CreateEventDto eventDTO)
         {

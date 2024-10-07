@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Repositories.Repositories;
 using System.ComponentModel.Design;
+using BusinessObject.DTO;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Services.Service
 {
@@ -28,6 +30,15 @@ namespace Services.Service
         public async Task<List<ResponseDTO>> GetResponseByFeedbackId(int id)
         {
             var feedback = await _feedbackRepository.GetFeedbackById(id);
+            if (feedback == null)
+            {
+                throw new Exception("Not found feedback");
+            }
+            else
+            {
+                var response = await _responseRepository.GetResponseByFeedbackId(feedback.Id);
+                return _mapper.Map<List<ResponseDTO>>(response);
+            }
         }
         public async Task<List<Response>> GetAllResponse()
         {

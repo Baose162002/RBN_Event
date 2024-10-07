@@ -67,13 +67,10 @@ namespace RBN_FE.Pages.LogIn_Out
                         HttpContext.Session.SetString("UserRole", loginResult.Role);
                         HttpContext.Session.SetString("TokenExpiration", loginResult.Expiration.ToString());
 
-
-                        // Extract user name from the token (this is just an example, adjust as needed)
                         var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
                         var jsonToken = handler.ReadToken(loginResult.Token) as System.IdentityModel.Tokens.Jwt.JwtSecurityToken;
                         var userName = jsonToken?.Claims.FirstOrDefault(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value;
                         var userId = jsonToken?.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
-
 
                         if (!string.IsNullOrEmpty(userId))
                         {
@@ -97,13 +94,13 @@ namespace RBN_FE.Pages.LogIn_Out
                 else
                 {
                     _logger.LogWarning($"Login failed. Status code: {response.StatusCode}");
-                    ErrorMessage = $"Login failed. Status code: {response.StatusCode}";
+                    ErrorMessage = "Sai email hoặc mật khẩu. Vui lòng thử lại.";
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred during login");
-                ErrorMessage = "An error occurred during login. Please try again later.";
+                ErrorMessage = "Đã xảy ra lỗi trong quá trình đăng nhập. Vui lòng thử lại sau.";
             }
 
             ModelState.AddModelError(string.Empty, ErrorMessage ?? "Invalid login attempt.");

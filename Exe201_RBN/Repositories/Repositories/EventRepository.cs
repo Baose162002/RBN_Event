@@ -157,6 +157,58 @@ namespace Repositories.Repositories
                 Data = pagedEvents
             };
         }
+        public async Task<PagedResult<Event>> GetEventsByTypeAsync(string? searchTerm, int pageNumber, int pageSize)
+        {
+            using var _context = new ApplicationDBContext(); // Use a using statement to ensure proper disposal
+
+            // Start with a basic query
+            var query = _context.Events
+                .Include(e => e.Company)   // Include related Company
+                .Include(e => e.EventImg)
+                .Where(e => e.Status == 1) // Only get events with status = 1
+                .AsQueryable();
+
+            // Get total count before applying pagination
+            var totalCount = await query.CountAsync();
+
+            // If searchTerm is provided, retrieve all events and filter in memory
+            List<Event> events = new List<Event>();
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                // Retrieve all events and filter in memory
+                events = await query.ToListAsync(); // Get all matching events
+                var normalizedSearchTerm = RemoveDiacritics(searchTerm.ToLower());
+
+                // Filter by searchTerm after fetching data
+                events = events.Where(e =>
+                    RemoveDiacritics(e.EventType.ToLower()).Contains(normalizedSearchTerm)).ToList();
+            }
+            else
+            {
+                // If no search term is provided, get events directly
+                events = await query.ToListAsync();
+            }
+
+            // Apply pagination
+            var pagedEvents = events
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            // Calculate total pages
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+            // Create and return PagedResult
+            return new PagedResult<Event>
+            {
+                Page = pageNumber,
+                PerPage = pageSize,
+                Total = totalCount,
+                TotalPages = totalPages,
+                Data = pagedEvents
+            };
+        }
 
         public async Task<Event> GetEventById(int id)
         {
