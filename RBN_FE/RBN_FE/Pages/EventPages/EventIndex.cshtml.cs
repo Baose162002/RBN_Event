@@ -27,18 +27,49 @@ namespace RBN_FE.Pages.EventPages
 
         public async Task<IActionResult> OnGetAsync(string searchTerm = "", int pageNumber = 1, int pageSize = 10)
         {
-            // Get token from session
+            // Get token, UserId, and UserRole from session
             var token = HttpContext.Session.GetString("JWTToken");
+            var userId = HttpContext.Session.GetString("UserId");
+            var userRole = HttpContext.Session.GetString("UserRole");
 
             if (string.IsNullOrEmpty(token))
             {
                 return RedirectToPage("/Login&Out/Login");
             }
 
+            if (string.IsNullOrEmpty(userRole))
+            {
+                ModelState.AddModelError(string.Empty, "User role not found in session.");
+                return Page(); // Or handle as needed
+            }
+
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // Prepare the API request URL
-            var requestUrl = $"{_baseApiUrl}/event?searchTerm={Uri.EscapeDataString(searchTerm)}&pageNumber={pageNumber}&pageSize={pageSize}";
+            // Prepare the API request URL based on user role
+            string requestUrl;
+            var searchTermValue = searchTerm ?? string.Empty; // If searchTerm is null, use an empty string
+
+            if (userRole == "Company")
+            {
+                if (string.IsNullOrEmpty(userId))
+                {
+                    ModelState.AddModelError(string.Empty, "User ID not found in session.");
+                    return Page(); // Handle if the user is Company but UserId is missing
+                }
+
+                // If user role is Company, use Company-specific API endpoint
+                requestUrl = $"{_baseApiUrl}/event/company/{Uri.EscapeDataString(userId)}?searchTerm={Uri.EscapeDataString(searchTermValue)}&pageNumber={pageNumber}&pageSize={pageSize}";
+            }
+            else if (userRole == "Admin")
+            {
+                // If user role is Admin, get all events
+                requestUrl = $"{_baseApiUrl}/event?searchTerm={Uri.EscapeDataString(searchTermValue)}&pageNumber={pageNumber}&pageSize={pageSize}";
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Invalid user role.");
+                return Page();
+            }
 
             var response = await _httpClient.GetAsync(requestUrl);
 
@@ -67,5 +98,6 @@ namespace RBN_FE.Pages.EventPages
 
             return Page();
         }
+
     }
 }
