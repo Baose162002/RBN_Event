@@ -30,6 +30,17 @@ namespace RBN_Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("company/{id}")]
+        public async Task<IActionResult> GetAllEventsByCompanyId(int id, string? searchTerm, int pageNumber = 1, int pageSize = 10)
+        {
+            var result = await _eventService.GetAllEventsByCompanyId(id, searchTerm, pageNumber, pageSize);
+            if (result == null || !result.Data.Any())
+            {
+                return NotFound("No events found.");
+            }
+
+            return Ok(result);
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateEvent(CreateEventDto eventDTO)
