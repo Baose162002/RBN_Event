@@ -18,7 +18,8 @@ namespace BusinessObject.Dto.ResponseDto
         public string UserNote { get; set; }
         public int Status { get; set; }
         public int UserId { get; set; }
-        public int EventId { get; set; }
+        public string EventName { get; set; }
+        public string CompanyName { get; set; }
 
     }
 }
