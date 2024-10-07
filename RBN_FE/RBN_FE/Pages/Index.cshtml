@@ -120,18 +120,23 @@
                     {
                         <div class="col">
                             <div class="card h-100 shadow-sm">
-                                @if (!string.IsNullOrEmpty(eventItem.EventImg?.ImageUrl))
-                                {
-                                    <img src="@eventItem.EventImg.ImageUrl" class="card-img-top" alt="@eventItem.Title" style="height: 200px; object-fit: cover;" loading="lazy">
-                                }
-                                else
-                                {
-                                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-                                        <span class="text-muted">Không có hình ảnh</span>
-                                    </div>
-                                }
+                                <a href="HomeEvent/HomeEventDetail?id=@eventItem.Id">
+                                    <!-- Link for the image -->
+                                    @if (!string.IsNullOrEmpty(eventItem.EventImg?.ImageUrl))
+                                    {
+                                        <img src="@eventItem.EventImg.ImageUrl" class="card-img-top" alt="@eventItem.Title" style="height: 200px; object-fit: cover;" loading="lazy">
+                                    }
+                                    else
+                                    {
+                                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                            <span class="text-muted">Không có hình ảnh</span>
+                                        </div>
+                                    }
+                                </a>
                                 <div class="card-body">
-                                    <h5 class="card-title">@eventItem.Title</h5>
+                                    <h5 class="card-title">
+                                        <a asp-page="/HomeEventDetail" asp-route-id="@eventItem.Id">@eventItem.Title</a> <!-- Link for the title -->
+                                    </h5>
                                     <p class="card-text">@eventItem.Name</p>
                                     <p class="card-text"><small class="text-muted">@eventItem.EventType</small></p>
                                 </div>
@@ -143,6 +148,7 @@
                         </div>
                     }
                 </div>
+
 
                 <!-- Phân trang -->
                 <div class="mt-4 d-flex justify-content-between align-items-center">

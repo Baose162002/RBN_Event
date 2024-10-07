@@ -17,5 +17,6 @@ namespace Repositories.IRepositories
         Task<PagedResult<Event>> GetAllEvent(string? searchTerm, int pageNumber, int pageSize);
         Task Update(Event updateevent, int id);
         Task<PagedResult<Event>> GetAllEventsByCompanyId(int companyId, string? searchTerm, int pageNumber, int pageSize);
+        Task<PagedResult<Event>> GetEventsByTypeAsync(string? searchTerm, int pageNumber, int pageSize);
     }
 }

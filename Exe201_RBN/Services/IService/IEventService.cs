@@ -17,5 +17,6 @@ namespace Services.IService
         Task<EventDTO> GetEventById(int id);
         Task<PagedResult<EventDTO>> GetAllEvent(string? searchTerm, int pageNumber, int pageSize);
         Task<PagedResult<EventDTO>> GetAllEventsByCompanyId(int companyId, string? searchTerm, int pageNumber, int pageSize);
+        Task<PagedResult<EventDTO>> GetEventsByTypeAsync(string? searchTerm, int pageNumber, int pageSize);
     }
 }
