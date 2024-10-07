@@ -41,6 +41,12 @@
                         <input asp-for="LoginRequest.Password" class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" type="password" required />
                         <span asp-validation-for="LoginRequest.Password" class="text-red-500 text-xs"></span>
                     </div>
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="mt-4 text-red-500 text-sm">
+                            @Model.ErrorMessage
+                        </div>
+                    }
                     @if (!ModelState.IsValid)
                     {
                         <div class="mt-4 text-red-500">
