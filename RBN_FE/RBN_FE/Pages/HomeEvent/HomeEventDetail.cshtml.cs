@@ -1,3 +1,4 @@
+using BusinessObject.Dto.RequestDto;
 using BusinessObject.Dto.ResponseDto;
 using BusinessObject.DTO;
 using BusinessObject.DTO.RequestDto;
@@ -14,7 +15,7 @@ namespace RBN_FE.Pages.HomeEvent
         public EventDTO EventDetail { get; set; } // Property to hold event details
         public List<EventDTO> RelatedEvents { get; set; } // Property to hold related events
         [BindProperty]
-        public ViewDetailsBookingDto Booking { get; set; } // Property to hold booking information
+        public CreateBookingDto Booking { get; set; } // Property to hold booking information
 
         public HomeEventDetailModel(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
