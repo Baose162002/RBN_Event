@@ -28,7 +28,7 @@ namespace RBN_FE.Pages
             SearchTerm = searchTerm; // Assign value to property
             PageNumber = pageNumber; // Assign value to property
             PageSize = pageSize; // Assign value to property
-
+            ViewData["SearchTerm"] = SearchTerm;
             try
             {
                 var options = new JsonSerializerOptions
