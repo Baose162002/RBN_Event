@@ -24,12 +24,18 @@
                 <span asp-validation-for="Input.Name" class="text-red-500 text-sm"></span>
             </div>
 
-            <div>
-                <label asp-for="Input.EventType" class="block mb-2 text-sm font-medium text-gray-900"></label>
-                <input asp-for="Input.EventType" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Event Type" required>
-                <span asp-validation-for="Input.EventType" class="text-red-500 text-sm"></span>
+   <div class="w-full sm:w-1/2 px-2 mb-4">
+                <label asp-for="Input.EventType" class="block text-gray-700 font-medium mb-2">Loại Event</label>
+                <select asp-for="Input.EventType" class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
+                    <option value="">Chọn loại sự kiện</option>
+                    <option value="Tiệc Cá nhân">Tiệc Cá nhân</option>
+                    <option value="Tiệc cưới">Tiệc cưới</option>
+                    <option value="Tiệc sinh nhật">Tiệc sinh nhật</option>
+                    <option value="Chương trình">Chương trình</option>
+                    <option value="Tiệc Công Ty">Tiệc Công Ty</option>
+                </select>
+                <span asp-validation-for="Input.EventType" class="text-danger"></span>
             </div>
-
             <div>
                 <label asp-for="Input.Description" class="block mb-2 text-sm font-medium text-gray-900"></label>
                 <textarea asp-for="Input.Description" rows="4" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Event Description" required></textarea>
@@ -84,7 +90,10 @@
                 <a asp-page="/EventPages/EventIndex" class="text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                     Back to Events
                 </a>
-            </div>
+                </div>    <input type="hidden" name="Input.CreateBy" value="@HttpContext.Session.GetString("UserName")" />
+                <input type="hidden" name="Input.CreateAt" value="@DateTime.UtcNow.ToString("dd/MM/yyyy")" />
+                <input type="hidden" name="Input.UpdateBy" value="@HttpContext.Session.GetString("UserName")" />
+                <input type="hidden" name="Input.UpdateAt" value="@DateTime.UtcNow.ToString("dd/MM/yyyy")" />
         </form>
     </div>
 </div></div>
