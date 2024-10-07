@@ -5,6 +5,8 @@ using System.Net.Http.Json;
 using BusinessObject.Dto.RequestDto;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using BusinessObject;
+using System.Security.Claims;
 
 namespace RBN_FE.Pages.LogIn_Out
 {
@@ -64,14 +66,19 @@ namespace RBN_FE.Pages.LogIn_Out
                         HttpContext.Session.SetString("JWTToken", loginResult.Token);
                         HttpContext.Session.SetString("UserRole", loginResult.Role);
                         HttpContext.Session.SetString("TokenExpiration", loginResult.Expiration.ToString());
-                        HttpContext.Session.SetString("UserId", loginResult.Id.ToString());
 
 
                         // Extract user name from the token (this is just an example, adjust as needed)
                         var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
                         var jsonToken = handler.ReadToken(loginResult.Token) as System.IdentityModel.Tokens.Jwt.JwtSecurityToken;
                         var userName = jsonToken?.Claims.FirstOrDefault(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value;
+                        var userId = jsonToken?.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
 
+
+                        if (!string.IsNullOrEmpty(userId))
+                        {
+                            HttpContext.Session.SetString("UserId", userId);
+                        }
                         if (!string.IsNullOrEmpty(userName))
                         {
                             HttpContext.Session.SetString("UserName", userName);
