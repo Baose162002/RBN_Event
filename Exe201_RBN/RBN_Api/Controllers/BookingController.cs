@@ -73,5 +73,10 @@ namespace RBN_Api.Controllers
         {
             return await _bookingService.SearchBooking(id, email, fullname, address, price, phone, bookingDay, status, eventId);
         }
+        [HttpGet("get-booking-by-company/{id}")]
+        public async Task<List<ViewDetailsBookingDto>> GetBookingsByCompanyIdAsync(int id)
+        {
+            return await _bookingService.GetBookingsByCompanyIdAsync(id);
+        }
     }
 }

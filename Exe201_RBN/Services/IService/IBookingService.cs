@@ -11,6 +11,7 @@ namespace Services.IService
 {
     public interface IBookingService
     {
+        Task<List<ViewDetailsBookingDto>> GetBookingsByCompanyIdAsync(int companyId);
         Task<List<ViewDetailsBookingDto>> GetAllBooking();
         Task<ViewDetailsBookingDto> GetBookingById(int id);
         Task CreateBooking(CreateBookingDto createBookingDto);

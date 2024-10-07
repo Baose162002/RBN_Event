@@ -17,14 +17,29 @@ namespace Services.Service
     {
         private readonly IBookingRepository _bookingRepo;
         private readonly IBaseRepository<User> _userRepo;
+        private readonly IBaseRepository<Company> _companyRepo;
         private readonly IMapper _mapper;
-        public BookingService(IBookingRepository bookingRepo, IBaseRepository<User> userRepo, IMapper mapper)
+        public BookingService(IBookingRepository bookingRepo, IBaseRepository<User> userRepo, IBaseRepository<Company> companyRepo, IMapper mapper)
         {
             _bookingRepo = bookingRepo;
             _userRepo = userRepo;
+            _companyRepo = companyRepo;
             _mapper = mapper;
         }
-
+        public async Task<List<ViewDetailsBookingDto>> GetBookingsByCompanyIdAsync(int companyId)
+        {
+            var company = await _companyRepo.GetByIdAsync(companyId);
+            if (company == null)
+            {
+                throw new Exception("Not found company");
+            }
+            else
+            {
+                var bookings = await _bookingRepo.GetBookingsByCompanyIdAsync(company.Id);
+                return _mapper.Map<List<ViewDetailsBookingDto>>(bookings);
+            }
+        }
+        
         public async Task<List<ViewDetailsBookingDto>> GetAllBooking()
         {
             var bookings = await _bookingRepo.GetAllBooking();
@@ -118,6 +133,10 @@ namespace Services.Service
             if (bookingDay != null)
             {
                 bookings = bookings.Where(x => x.BookingDay == bookingDay.Value).ToList();
+            }
+            if (status.HasValue)
+            {
+                bookings = bookings.Where(x => x.Status == status.Value).ToList();
             }
             var bookingList = bookings.ToList();
             if (bookingList == null)

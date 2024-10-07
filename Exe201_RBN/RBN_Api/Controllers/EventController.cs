@@ -1,4 +1,5 @@
-﻿using BusinessObject.DTO;
+﻿using BusinessObject.Dto.ResponseDto;
+using BusinessObject.DTO;
 using BusinessObject.DTO.RequestDto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,11 @@ namespace RBN_Api.Controllers
             _eventService = eventService;
 			_eventImgService = eventImgService;
 		}
+        [HttpGet("get-event-by-company/{id}")]
+        public async Task<List<EventDTO>> GetBookingsByCompanyIdAsync(int id)
+        {
+            return await _eventService.GetEventsByCompanyIdAsync(id);
+        }
         [HttpGet]
         public async Task<IActionResult> GetAllEvent(string? searchTerm, int pageNumber = 1, int pageSize = 10)
         {

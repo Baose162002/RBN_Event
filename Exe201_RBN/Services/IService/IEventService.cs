@@ -16,6 +16,7 @@ namespace Services.IService
         Task Create(CreateEventDto events);
         Task<EventDTO> GetEventById(int id);
         Task<PagedResult<EventDTO>> GetAllEvent(string? searchTerm, int pageNumber, int pageSize);
+        Task<List<EventDTO>> GetEventsByCompanyIdAsync(int companyId);
         Task<PagedResult<EventDTO>> GetAllEventsByCompanyId(int companyId, string? searchTerm, int pageNumber, int pageSize);
     }
 }
