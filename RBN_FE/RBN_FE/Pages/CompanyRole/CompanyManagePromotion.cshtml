@@ -119,30 +119,26 @@
             <h2 class="text-2xl font-semibold mb-4">Quản Lý Tin Quảng Cáo</h2>
 
             <!-- Filters -->
-            <div class="filter-section grid grid-cols-3 gap-4 mb-4">
-                <div class="input-group">
-                    <label for="orderCode" class="font-medium">Mã quảng cáo</label>
-                    <input type="text" id="orderCode" placeholder="Nhập mã quảng cáo" class="p-2 border border-gray-300 rounded-lg">
-                </div>
-                <div class="input-group">
-                    <label for="date" class="font-medium">Ngày hết hạn</label>
-                    <input type="date" id="date" class="p-2 border border-gray-300 rounded-lg">
-                </div>
-                <div class="input-group">
-                    <label for="status" class="font-medium">Trạng Thái</label>
-                    <select id="status" class="p-2 border border-gray-300 rounded-lg">
+<form method="get" class="filter-section grid grid-cols-3 gap-6 mb-6 items-end">
+    <!-- Mã quảng cáo (Promotion Code) -->
+    
+    <div class="input-group">
+        <label for="searchId" class="block text-sm font-medium text-gray-700">Mã quảng cáo</label>
+        <input type="number" id="searchId" name="SearchId" placeholder="Nhập mã quảng cáo" class="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:ring-cyan-500 focus:border-cyan-500" value="@Model.SearchId">
+    </div>
+
+    <!-- Trạng Thái (Status) -->
+    <div class="input-group">
+        <label for="SearchStatus" class="block text-sm font-medium text-gray-700">Trạng Thái</label>
+                    <select id="SearchStatus" name="SearchStatus" class="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:ring-cyan-500 focus:border-cyan-500">
                         <option value="">Tất cả</option>
-                        <option value="processed">Còn hạn</option>
-                        <option value="pending">Hết hạn</option>
+                        <option value="1" selected="@(Model.SearchStatus == 1 ? "selected" : null)">Còn hạn</option>
+                        <option value="0" selected="@(Model.SearchStatus == 0 ? "selected" : null)">Hết hạn</option>
                     </select>
-                </div>
-            </div>
+    </div>
 
-            <!-- Search Button -->
-            <div class="text-right mb-4">
-                <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Tìm Kiếm</button>
-            </div>
-
+    
+</form>
             <!-- Table -->
             <table class="w-full table-auto border-collapse bg-white shadow-md mb-4">
                 <thead>
@@ -155,25 +151,59 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="text-center border-b">
-                        <td class="p-3">#1</td>
-                        <td class="p-3">03/10/2024</td>
-                        <td class="p-3">1.000.000</td>
-                        <td class="p-3">Giúp công ty xuất hiện ở ví trị ngẫu nhiên trong trang đầu của danh sách công ty</td>
-                        <td class="p-3">Còn hạn</td>
-                    </tr>
+                    @if (Model.PromotionFee != null && Model.PromotionFee.Any())
+                    {
+                        foreach (var fee in Model.PromotionFee)
+                        {
+                            <tr class="text-center border-b">
+                                <td class="p-3">@fee.Id</td>
+                                <td class="p-3">@fee.EndTime.ToString("dd/MM/yyyy")</td>
+                                <td class="p-3">@String.Format("{0:N0}", fee.Price)</td>
+                                <td class="p-3">@fee.Promotion.Description</td>
+                                <td class="p-3">
+                                    @if (fee.Status == 1)
+                                    {
+                                        <span class="text-green-600 font-semibold">Còn hạn</span>
+                                    }
+                                    else if (fee.Status == 0)
+                                    {
+                                        <span class="text-red-600 font-semibold">Hết hạn</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-gray-600">Không xác định</span>
+                                    }
+                                </td>
+                                <td class="p-3">
+                                    <!-- Nút đăng ký gói quảng cáo trong bảng -->
+                                    <button type="button" class="register-promotion-button bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300">
+                                        Đăng ký gói quảng cáo
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="p-3 text-center">Chưa đăng ký tin quảng cáo.</td>
+                        </tr>
+                    }
                 </tbody>
             </table>
 
             <!-- Pagination -->
             <div class="pagination flex justify-center items-center gap-4">
-                <span>01</span> / <span>05</span>
+                <span>01</span> / <span>01</span>
                 <button class="p-2 border rounded-lg">→</button>
             </div>
             <div>
                 <form action="#" method="GET" class="hidden lg:block lg:pl-32">
                     <div class="text-right mb-4">
-                        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Đăng ký quảng cáo</button>
+                        <!-- Thêm type="button" và class "register-promotion-button" -->
+                        <button type="button" class="register-promotion-button bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                            Đăng ký quảng cáo
+                        </button>
                     </div>
                 </form>
             </div>
@@ -181,6 +211,93 @@
     </main>
 </div>
 
+<!-- Promotion Modal -->
+<div id="promotionModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white rounded-lg shadow-lg w-11/12 md:w-3/4 lg:w-1/2">
+        <div class="flex justify-between items-center p-4 border-b">
+            <h3 class="text-xl font-semibold">Danh Sách Các Gói Quảng Cáo</h3>
+            <button id="closeModal" type="button" class="text-gray-500 hover:text-gray-700">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div>
+        <div class="p-4">
+            <!-- Danh sách các gói quảng cáo -->
+            @if (Model.Promotion != null && Model.Promotion.Any())
+            {
+                <table class="w-full table-auto border-collapse bg-white shadow-md mb-4">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th class="p-3 border text-left">Tên Gói</th>
+                            <th class="p-3 border text-left">Mức giá</th>
+                            <th class="p-3 border text-left">Thời gian (ngày)</th>
+                            <th class="p-3 border text-left">Mô tả</th>
+                            <th class="p-3 border text-left">Trạng thái</th>
+                            <th class="p-3 border text-left">Đăng ký</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var promo in Model.Promotion)
+                        {
+                            <tr class="text-center border-b">
+                                <td class="p-3">@promo.Name</td>
+                                <td class="p-3">@String.Format("{0:N0} VNĐ", promo.Price)</td>
+                                <td class="p-3">@promo.DurationInDays</td>
+                                <td class="p-3">@promo.Description</td>
+                                <td class="p-3">
+                                    @if (promo.IsAvailable)
+                                    {
+                                        <span class="text-green-600 font-semibold">Có sẵn</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-red-600 font-semibold">Không sẵn</span>
+                                    }
+                                </td>
+                                <td class="p-3"><a href="#">Đăng ký</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="text-center text-gray-500">Không có gói quảng cáo nào.</div>
+            }
+        </div>
+    </div>
+</div>
+<!-- JavaScript để xử lý modal -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('promotionModal');
+        const openButtons = document.querySelectorAll('.register-promotion-button');
+        const closeModalButton = document.getElementById('closeModal');
+
+        // Mở modal khi nhấn nút "Đăng ký quảng cáo"
+        openButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            });
+        });
+
+        // Đóng modal khi nhấn nút đóng
+        closeModalButton.addEventListener('click', () => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        });
+
+        // Đóng modal khi nhấn ngoài vùng nội dung modal
+        window.addEventListener('click', function (e) {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        });
+    });
+</script>
 <style>
     /* General Styles */
     .main-content {

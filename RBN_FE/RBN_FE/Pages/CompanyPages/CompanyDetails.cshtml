@@ -80,7 +80,7 @@
                             <div class="mb-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
                                 <h3 class="font-semibold text-lg -white">@evnt.Name</h3>
                                 <p class="mt-2 text-md "><strong>Loại sự kiện:</strong> @evnt.EventType</p>
-                                <p class="mt-2 text-md "><strong>Giá:</strong> @evnt.Price</p>
+                                <p class="mt-2 text-md"><strong>Giá:</strong> @evnt.Price.ToString("N0") VNĐ</p>
                                 <p class="mt-2 text-md "><strong>Mô tả:</strong> @evnt.Description</p>
                             </div>
                         }
@@ -103,95 +103,115 @@
             </div>
         </div>
     </div>
+<!-- Comment Section -->
+<div class="w-[80%] mx-auto p-6 bg-gray-50 rounded-lg shadow-md">
+    <h2 class="text-lg font-semibold mb-4 text-gray-800">
+        Đánh giá của bạn sau khi sử dụng dịch vụ của @Model.Company?.Name
+    </h2>
 
+    <!-- Comment List -->
+    <div class="space-y-6">
+        @if (Model.FeedBack != null && Model.FeedBack.Count > 0)
+        {
+            @foreach (var feedback in Model.FeedBack)
+            {
+                <div class="flex flex-col p-4 bg-white rounded-lg shadow-lg">
+                    <!-- User Information -->
+                    <div class="flex items-start space-x-4 mb-2">
+                        <div class="flex-shrink-0">
+                            <img class="h-10 w-10 rounded-full object-cover" src="/img/customerAvatar.png" alt="Avatar" />
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-sm">
+                                @{
+                                    string userName = "Không xác định";
+                                    if (Model.UserNames != null && Model.UserNames.TryGetValue(feedback.UserId, out var name))
+                                    {
+                                        userName = name;
+                                    }
+                                }
+                                <p class="font-medium text-gray-900">@userName</p>
+                                <p class="text-gray-500">@feedback.FeedbackDate.ToString("dd/MM/yyyy HH:mm")</p>
+                            </div>
+                            <div class="mt-1 text-sm text-gray-700">
+                                @feedback.Comment
+                            </div>
+                        </div>
+                    </div>
 
-<!-- Divider -->
-<div class="relative mb-4">
-    <div class="absolute inset-0 flex items-center" aria-hidden="true">
-        <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
+                    <!-- Responses -->
+                    @if (Model.Response != null && Model.Response.Any(r => r.FeedBackId == feedback.Id))
+                    {
+                        <div class="mt-4 space-y-4 pl-12 border-l border-gray-300">
+                            @foreach (var response in Model.Response.Where(r => r.FeedBackId == feedback.Id))
+                            {
+                                <div class="flex items-start space-x-4 mb-2">
+                                    <div class="flex-shrink-0">
+                                        <img class="h-8 w-8 rounded-full object-cover" src="@Model.Company.Avatar" alt="Avatar" />
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="text-sm">
+                                            <p class="font-medium text-gray-900">@Model.Company?.Name</p>
+                                            <p class="text-gray-500">@response.ResponseDate.ToString("dd/MM/yyyy HH:mm")</p>
+                                        </div>
+                                        <div class="mt-1 text-sm text-gray-700">
+                                            @response.Comment
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    <!-- Reply Form -->
+                    <div class="mt-4 space-y-2 pl-12">
+                        <form method="post" asp-page-handler="SubmitResponse">
+                            <input type="hidden" name="FeedbackId" value="@feedback.Id" />
+                            <textarea name="ResponseContent" rows="2" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Nhập phản hồi của bạn..."></textarea>
+                            <div class="flex justify-end mt-2">
+                                <button type="submit" class="bg-indigo-600 text-white py-1 px-4 rounded hover:bg-indigo-700">Gửi phản hồi</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-gray-500">Chưa có phản hồi nào.</p>
+        }
     </div>
-    <div class="relative flex justify-center">
-        <span class="px-3 bg-gray-100 dark:bg-gray-800 text-lg font-medium text-gray-900 dark:text-gray-100">
-            Đánh giá của mọi người sau khi sử dụng dịch vụ của @Model.Company?.Name
-        </span>
-    </div>
-</div>
-<!-- Comment List -->
-<div class="space-y-6 w-1/2 mx-auto">
-    <!-- Comment 1 -->
-    <div class="flex items-start space-x-4 bg-slate-100 p-4 rounded-lg shadow-md">
-        <div class="flex-shrink-0">
-            <img class="h-10 w-10 rounded-full" src="/img/customerAvatar.png" alt="Avatar" />
+    <!-- Pagination -->
+        <div class="flex justify-center mt-4">
+            <nav aria-label="Page navigation">
+                <ul class="inline-flex items-center -space-x-px">
+                    <li>
+                        <a asp-page="CompanyDetails" asp-route-companyId="@Model.Company?.Id" asp-route-pageIndex="@(Model.PageIndex - 1)" class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 @(Model.PageIndex <= 1 ? "cursor-not-allowed text-gray-300 bg-gray-200" : "")">Trước</a>
+                    </li>
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        <li>
+                            <a asp-page="CompanyDetails" asp-route-companyId="@Model.Company?.Id" asp-route-pageIndex="@i" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 @(i == Model.PageIndex ? "z-10 text-blue-600 bg-blue-50 border-blue-300" : "")">@i</a>
+                        </li>
+                    }
+                    <li>
+                        <a asp-page="CompanyDetails" asp-route-companyId="@Model.Company?.Id" asp-route-pageIndex="@(Model.PageIndex + 1)" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 @(Model.PageIndex >= Model.TotalPages ? "cursor-not-allowed text-gray-300 bg-gray-200" : "")">Sau</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
-        <div class="flex-1">
-            <div class="text-sm">
-                <p class="font-medium text-gray-900">Quốc Bảo</p>
-                <p class="text-gray-500">6 giờ trước</p>
-            </div>
-            <div class="mt-1 text-sm text-gray-700">
-                Tôi sẽ tiếp tục ủng hộ Mega House trong các sự kiện tới.
-            </div>
-
-            <!-- Reply Button -->
-            <button onclick="toggleReply(this)" class="mt-2 text-indigo-600 text-sm hover:underline">Phản hồi</button>
-
-            <!-- Reply Input (Hidden by Default) -->
-            <div class="hidden mt-2 space-y-2">
-                <textarea rows="2" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Nhập phản hồi của bạn..."></textarea>
-                <button class="bg-indigo-600 text-white py-1 px-4 rounded hover:bg-indigo-700">Gửi phản hồi</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Comment 2 -->
-    <div class="flex items-start space-x-4 bg-slate-100 p-4 rounded-lg shadow-md">
-        <div class="flex-shrink-0">
-            <img class="h-10 w-10 rounded-full" src="/img/user-avatar.jpg" alt="Avatar" />
-        </div>
-        <div class="flex-1">
-            <div class="text-sm">
-                <p class="font-medium text-gray-900">Minh Mạnh</p>
-                <p class="text-gray-500">5 ngày trước</p>
-            </div>
-            <div class="mt-1 text-sm text-gray-700">
-                Mega House quá tuyệt, phục vụ chuyên nghiệp.
-            </div>
-
-            <!-- Reply Button -->
-            <button onclick="toggleReply(this)" class="mt-2 text-indigo-600 text-sm hover:underline">Phản hồi</button>
-
-            <!-- Reply Input (Hidden by Default) -->
-            <div class="hidden mt-2 space-y-2">
-                <textarea rows="2" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Nhập phản hồi của bạn..."></textarea>
-                <button class="bg-indigo-600 text-white py-1 px-4 rounded hover:bg-indigo-700">Gửi phản hồi</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
     <!-- Comment Form -->
-    <form class="mt-8 space-y-4 mb-8">
-    <!-- Comment Input -->
-    
-    <div class="w-1/2 mx-auto mt-6 ">
-        <h2 class="text-lg font-semibold mb-2">
-            Đánh giá của bạn sau khi sử dụng dịch vụ của @Model.Company?.Name:     
-        </h2>
-        <textarea rows="3" class="border-1 m w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Đánh giá của bạn..."></textarea>
-        <button class="mt-2 bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700">Gửi đánh giá</button>
-    </div>
-
+    <form class="mt-8 space-y-4" method="post" asp-page-handler="SubmitFeedback">
+        <div>
+            <textarea name="FeedbackContent" rows="4" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Đánh giá của bạn..."></textarea>
+        </div>
+        <div class="flex justify-end">
+            <button type="submit" class="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700">Gửi đánh giá</button>
+        </div>
     </form>
 </div>
 
-<!-- JavaScript for Toggling Reply Input -->
-<script>
-    function toggleReply(button) {
-        const replyInput = button.nextElementSibling;
-        replyInput.classList.toggle('hidden');
-    }
-</script>
+
 
     <partial name="_Footer" />
 

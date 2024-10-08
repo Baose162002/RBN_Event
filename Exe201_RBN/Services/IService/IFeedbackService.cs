@@ -11,6 +11,7 @@ namespace Services.IService
 {
     public interface IFeedbackService
     {
+        Task<List<FeedbackDTO>> GetFeedBacksByCompanyIdAsync(int companyId);
         Task<List<FeedBack>> GetAllFeedback();
         Task Create(FeedbackDTO feedback);
         Task UpdateFeedback(FeedbackDTO feedback, int id);

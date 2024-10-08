@@ -18,6 +18,18 @@ namespace Repositories.Repositories
             return feedbacks;
 
         }
+        public async Task<List<FeedBack>> GetFeedBacksByCompanyIdAsync(int companyId)
+        {
+            using var _context = new ApplicationDBContext();
+            var feedbacks = await _context.FeedBacks.OrderByDescending(x=>x.FeedbackDate)
+                .Include(b => b.User)
+                .Include(e => e.Company)
+                .Include(b => b.Responses)
+                .Where(b => b.Company.Id == companyId)
+                .ToListAsync();
+
+            return feedbacks;
+        }
         public async Task<FeedBack> GetFeedbackById(int id)
         {
             var _context = new ApplicationDBContext();

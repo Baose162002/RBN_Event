@@ -12,6 +12,7 @@ namespace Services.IService
     public interface IEventService
     {
         Task Delete(int id);
+        Task<EventDTO> ChangeStatusEvent(int id);
         Task Update(UpdateEventDto events, int id);
         Task Create(CreateEventDto events);
         Task<EventDTO> GetEventById(int id);

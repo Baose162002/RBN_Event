@@ -28,6 +28,21 @@ namespace Services.Service
             _companyRepository = companyRepository;
             _mapper = mapper;
         }
+        public async Task<EventDTO> ChangeStatusEvent(int id)
+        {
+            var existedevent = await _eventRepository.GetEventById(id);
+            if (existedevent == null)
+            {
+                throw new KeyNotFoundException();
+            }
+            if (existedevent.Status == 0)
+            {
+                existedevent.Status = 1;
+            }
+            else existedevent.Status = 0;
+            await _eventRepository.Update(existedevent, existedevent.Id);
+            return _mapper.Map<EventDTO>(existedevent);
+        }
         public async Task<List<EventDTO>> GetEventsByCompanyIdAsync(int companyId)
         {
             var company = await _companyRepository.GetCompanyById(companyId);
