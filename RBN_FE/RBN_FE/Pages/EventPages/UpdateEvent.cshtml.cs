@@ -12,6 +12,8 @@ using BusinessObject;
 using BusinessObject.Enum;
 using BusinessObject.DTO.ResponseDto;
 using Microsoft.EntityFrameworkCore;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace RBN_FE.Pages.EventPages
 {
@@ -44,9 +46,17 @@ namespace RBN_FE.Pages.EventPages
                 return RedirectToPage("/LogIn&Out/Login");
             }
 
+            // Extract the role from JWT token
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadToken(token) as JwtSecurityToken;
+            var roleClaim = jwtToken?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+            // Store the role in ViewData for use in Razor Page
+            ViewData["UserRole"] = roleClaim;
+
             try
             {
-                // Gọi API để lấy thông tin event hiện tại
+                // Fetch event data
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var apiUrl = $"{_configuration["ApiSettings:BaseUrl"]}/event/{id}";
                 var response = await _httpClient.GetAsync(apiUrl);
@@ -87,14 +97,17 @@ namespace RBN_FE.Pages.EventPages
                     ModelState.AddModelError(string.Empty, "You are not authenticated. Please log in.");
                     return Page();
                 }
-                int companyId = GetCompanyIdFromRole(HttpContext.Session.GetString("UserRole"));
-
-                Input.CompanyId = companyId; // Thay vì dùng UserRole
+           
 
 
 
-
-
+                var existingEvent = await GetEventByIdAsync(id); // Khai báo existingEvent và lấy dữ liệu sự kiện
+                if (existingEvent == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Failed to load event data.");
+                    return Page();
+                }
+                
                 // Xử lý upload ảnh nếu có
                 if (EventImage != null)
                 {
@@ -109,7 +122,13 @@ namespace RBN_FE.Pages.EventPages
                         return Page();
                     }
                 }
-                
+                else
+                {
+                    // Giữ lại EventImgId nếu không có ảnh mới
+                    Input.EventImgId = existingEvent.EventImg.Id;
+                }
+
+
                 var apiUrl = $"{_configuration["ApiSettings:BaseUrl"]}/event/{id}"; // Pass eventId separately in the URL
 
                 // Serialize the DTO
@@ -139,20 +158,7 @@ namespace RBN_FE.Pages.EventPages
             }
         }
 
-        private int GetCompanyIdFromRole(string role)
-        {
-            if (role == "Admin")
-            {
-                return 1;
-            }
-            else if (role == "Company")
-            {
-                return 3;
-            }
-
-            _logger.LogError($"Invalid role: {role}");
-            throw new ArgumentException($"Invalid role: {role}");
-        }
+       
 
 
         public async Task<int?> UploadImageAsync(IFormFile image)
@@ -191,5 +197,41 @@ namespace RBN_FE.Pages.EventPages
 
             return null;
         }
+
+        private async Task<EventDTO> GetEventByIdAsync(int eventId)
+        {
+            var token = HttpContext.Session.GetString("JWTToken");
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new UnauthorizedAccessException("JWT Token is missing from session");
+            }
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var apiUrl = $"{_configuration["ApiSettings:BaseUrl"]}/event/{eventId}";
+            var response = await _httpClient.GetAsync(apiUrl);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var eventDto = JsonSerializer.Deserialize<EventDTO>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                // Manually map EventImgId if it's available in the response
+                if (eventDto.EventImg == null)
+                {
+                    eventDto.Id = eventDto.EventImg.Id;  // Extract EventImgId from the eventImg object
+                }
+
+                return eventDto;
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                _logger.LogError($"Error fetching event by ID. Status code: {response.StatusCode}, Content: {errorContent}");
+                return null;
+            }
+        }
+
+
     }
 }

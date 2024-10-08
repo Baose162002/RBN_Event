@@ -5,6 +5,7 @@ using System.Net;
 using BusinessObject.DTO.ResponseDto;
 using BusinessObject.DTO;
 using BusinessObject.DTO.RequestDto;
+using System.Text.Json;
 
 namespace RBN_FE.Pages.EventPages
 {
@@ -56,9 +57,15 @@ namespace RBN_FE.Pages.EventPages
                     ModelState.AddModelError(string.Empty, "User ID not found in session.");
                     return Page(); // Handle if the user is Company but UserId is missing
                 }
-
+                var company = await GetCompanyByUserIdAsync(userId);
+                if (company == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Company not found for the user.");
+                    return Page();
+                }
+                var companyId = company.Id;
                 // If user role is Company, use Company-specific API endpoint
-                requestUrl = $"{_baseApiUrl}/event/company/{Uri.EscapeDataString(userId)}?searchTerm={Uri.EscapeDataString(searchTermValue)}&pageNumber={pageNumber}&pageSize={pageSize}";
+                requestUrl = $"{_baseApiUrl}/event/company/{Uri.EscapeDataString(companyId.ToString())}?searchTerm ={Uri.EscapeDataString(searchTermValue)}&pageNumber={pageNumber}&pageSize={pageSize}";
             }
             else if (userRole == "Admin")
             {
@@ -98,6 +105,36 @@ namespace RBN_FE.Pages.EventPages
 
             return Page();
         }
+        private async Task<CompanyDTO> GetCompanyByUserIdAsync(string userId)
+        {
+            var token = HttpContext.Session.GetString("JWTToken");
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new UnauthorizedAccessException("JWT Token is missing from session");
+            }
 
+            // Thiết lập Header Authorization với JWT Token
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            // Tạo URL cho API để lấy thông tin công ty
+            var apiUrl = $"{_baseApiUrl}/Company/user/{userId}";
+
+            // Gọi API để lấy thông tin công ty
+            var response = await _httpClient.GetAsync(apiUrl);
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var company = JsonSerializer.Deserialize<CompanyDTO>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                return company;
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                return null;
+
+
+
+            }
+        }
     }
 }

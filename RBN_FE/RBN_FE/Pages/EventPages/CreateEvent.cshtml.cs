@@ -65,7 +65,7 @@ namespace RBN_FE.Pages.EventPages
                 if (string.IsNullOrEmpty(token))
                 {
                     _logger.LogWarning("JWT Token is missing from session");
-                    ModelState.AddModelError(string.Empty, "You are not authenticated. Please log in.");
+                    ModelState.AddModelError(string.Empty, "Bạn chưa login. Vui lòng login vào");
                     return Page();
                 }
 
@@ -77,7 +77,7 @@ namespace RBN_FE.Pages.EventPages
                     // Validate that the CompanyId was selected
                     if (Input.CompanyId <= 0) // or check for null if nullable
                     {
-                        ModelState.AddModelError(string.Empty, "Please select a valid company.");
+                        ModelState.AddModelError(string.Empty, "Hãy chọn company");
                         return Page();
                     }
                 }
@@ -100,7 +100,7 @@ namespace RBN_FE.Pages.EventPages
                     var company = await GetCompanyByUserIdAsync(userIdString);
                     if (company == null)
                     {
-                        ModelState.AddModelError(string.Empty, "Company not found for the user.");
+                        ModelState.AddModelError(string.Empty, "Không tìm thấy company của bạn");
                         return Page();
                     }
                     Input.CompanyId = company.Id; // Set the Company ID for Company role
@@ -124,7 +124,7 @@ namespace RBN_FE.Pages.EventPages
                     }
                     else
                     {
-                        ModelState.AddModelError("EventImage", "Failed to upload the image. Please try again.");
+                        ModelState.AddModelError("EventImage", "Upload ảnh bị lỗi. Vui lòng thử lại");
                         return Page();
                     }
                 }
@@ -139,20 +139,19 @@ namespace RBN_FE.Pages.EventPages
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["SuccessMessage"] = "Batch created successfully!";
                     return RedirectToPage("/EventPages/EventIndex");
                 }
                 else
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
-                    ModelState.AddModelError(string.Empty, $"Error creating event. Status code: {errorContent}");
+                    ModelState.AddModelError(string.Empty, $"Cập nhật thông tin bị lỗi: {errorContent}");
                     return Page();
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception occurred while creating event");
-                ModelState.AddModelError(string.Empty, "An unexpected error occurred. Please try again.");
+                ModelState.AddModelError(string.Empty, "Có trục gì đó. Vui lòng thử lại");
                 return Page();
             }
         }
