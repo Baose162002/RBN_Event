@@ -23,7 +23,7 @@
 
 
             <!-- Company Name -->
-        <div class="w-[92%] mx-auto flex items-center justify-between py-8">
+        <div class="w-[92%] mx-auto flex items-center justify-between py-4">
             <a class="group relative inline-flex items-center overflow-hidden rounded border border-current px-8 py-3 text-indigo-600 focus:outline-none focus:ring active:text-indigo-500"
                href="javascript:history.back()">
                 <span class="absolute -start-full transition-all group-hover:start-4">
@@ -103,74 +103,85 @@
             </div>
         </div>
     </div>
-<!-- Comment Section -->
-<h2 class="text-lg font-semibold mb-4">
-    Đánh giá của bạn sau khi sử dụng dịch vụ của @Model.Company?.Name
-</h2>
 
-    <!-- Comment List -->
-    <div class="space-y-6">
-        <!-- Comment -->
-        <div class="flex items-start space-x-4">
-            <div class="flex-shrink-0">
-                <img class="h-8 w-8 rounded-full" src="/img/customerAvatar.png" alt="Avatar" />
-            </div>
-            <div class="flex-1">
-                <div class="text-sm">
-                    <p class="font-medium text-gray-900">Quốc Bảo</p>
-                    <p class="text-gray-500">6 giờ trước</p>
-                </div>
-                <div class="mt-1 text-sm text-gray-700">
-                    Tôi sẽ tiếp tục ủng hộ Mega House trong các sự kiện tới.
-                </div>
 
-                <!-- Reply Button -->
-                <button onclick="toggleReply(this)" class="mt-2 text-indigo-600 text-sm hover:underline">Phản hồi</button>
-
-                <!-- Reply Input (Hidden by Default) -->
-                <div class="hidden mt-2 space-y-2">
-                    <textarea rows="2" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Nhập phản hồi của bạn..."></textarea>
-                    <button class="bg-indigo-600 text-white py-1 px-4 rounded hover:bg-indigo-700">Gửi phản hồi</button>
-                </div>
-            </div>
+<!-- Divider -->
+<div class="relative mb-4">
+    <div class="absolute inset-0 flex items-center" aria-hidden="true">
+        <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
+    </div>
+    <div class="relative flex justify-center">
+        <span class="px-3 bg-gray-100 dark:bg-gray-800 text-lg font-medium text-gray-900 dark:text-gray-100">
+            Đánh giá của mọi người sau khi sử dụng dịch vụ của @Model.Company?.Name
+        </span>
+    </div>
+</div>
+<!-- Comment List -->
+<div class="space-y-6 w-1/2 mx-auto">
+    <!-- Comment 1 -->
+    <div class="flex items-start space-x-4 bg-slate-100 p-4 rounded-lg shadow-md">
+        <div class="flex-shrink-0">
+            <img class="h-10 w-10 rounded-full" src="/img/customerAvatar.png" alt="Avatar" />
         </div>
-
-        <!-- Another Comment -->
-        <div class="flex items-start space-x-4">
-            <div class="flex-shrink-0">
-                <img class="h-8 w-8 rounded-full" src="/img/user-avatar.jpg" alt="Avatar" />
+        <div class="flex-1">
+            <div class="text-sm">
+                <p class="font-medium text-gray-900">Quốc Bảo</p>
+                <p class="text-gray-500">6 giờ trước</p>
             </div>
-            <div class="flex-1">
-                <div class="text-sm">
-                    <p class="font-medium text-gray-900">Minh Mạnh</p>
-                    <p class="text-gray-500">5 ngày trước</p>
-                </div>
-                <div class="mt-1 text-sm text-gray-700">
-                    Mega House quá tuyệt, phục vụ chuyên nghiệp.
-                </div>
+            <div class="mt-1 text-sm text-gray-700">
+                Tôi sẽ tiếp tục ủng hộ Mega House trong các sự kiện tới.
+            </div>
 
-                <!-- Reply Button -->
-                <button onclick="toggleReply(this)" class="mt-2 text-indigo-600 text-sm hover:underline">Phản hồi</button>
+            <!-- Reply Button -->
+            <button onclick="toggleReply(this)" class="mt-2 text-indigo-600 text-sm hover:underline">Phản hồi</button>
 
-                <!-- Reply Input (Hidden by Default) -->
-                <div class="hidden mt-2 space-y-2">
-                    <textarea rows="2" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Nhập phản hồi của bạn..."></textarea>
-                    <button class="bg-indigo-600 text-white py-1 px-4 rounded hover:bg-indigo-700">Gửi phản hồi</button>
-                </div>
+            <!-- Reply Input (Hidden by Default) -->
+            <div class="hidden mt-2 space-y-2">
+                <textarea rows="2" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Nhập phản hồi của bạn..."></textarea>
+                <button class="bg-indigo-600 text-white py-1 px-4 rounded hover:bg-indigo-700">Gửi phản hồi</button>
             </div>
         </div>
     </div>
 
+    <!-- Comment 2 -->
+    <div class="flex items-start space-x-4 bg-slate-100 p-4 rounded-lg shadow-md">
+        <div class="flex-shrink-0">
+            <img class="h-10 w-10 rounded-full" src="/img/user-avatar.jpg" alt="Avatar" />
+        </div>
+        <div class="flex-1">
+            <div class="text-sm">
+                <p class="font-medium text-gray-900">Minh Mạnh</p>
+                <p class="text-gray-500">5 ngày trước</p>
+            </div>
+            <div class="mt-1 text-sm text-gray-700">
+                Mega House quá tuyệt, phục vụ chuyên nghiệp.
+            </div>
+
+            <!-- Reply Button -->
+            <button onclick="toggleReply(this)" class="mt-2 text-indigo-600 text-sm hover:underline">Phản hồi</button>
+
+            <!-- Reply Input (Hidden by Default) -->
+            <div class="hidden mt-2 space-y-2">
+                <textarea rows="2" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Nhập phản hồi của bạn..."></textarea>
+                <button class="bg-indigo-600 text-white py-1 px-4 rounded hover:bg-indigo-700">Gửi phản hồi</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
     <!-- Comment Form -->
-    <form class="mt-8 space-y-4">
-        <div>
-            <textarea rows="4" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Đánh giá của bạn..."></textarea>
-        </div>
-        <div class="flex justify-end">
-            <button type="submit" class="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700">Gửi đánh giá</button>
-        </div>
+    <form class="mt-8 space-y-4 mb-8">
+    <!-- Comment Input -->
+    
+    <div class="w-1/2 mx-auto mt-6 ">
+        <h2 class="text-lg font-semibold mb-2">
+            Đánh giá của bạn sau khi sử dụng dịch vụ của @Model.Company?.Name:     
+        </h2>
+        <textarea rows="3" class="border-1 m w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Đánh giá của bạn..."></textarea>
+        <button class="mt-2 bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700">Gửi đánh giá</button>
+    </div>
+
     </form>
 </div>
 

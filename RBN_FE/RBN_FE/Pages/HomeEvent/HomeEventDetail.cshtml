@@ -9,23 +9,43 @@
 <div class="flex flex-wrap text-slate-800">
     <div class="relative hidden h-screen select-none flex-col justify-center bg-cover bg-center text-center md:flex md:w-1/2" style="background-image: url('@(Model.EventDetail?.EventImg?.ImageUrl ?? "/images/default-event-image.png")');">
         <div class="absolute inset-0 bg-gray-900 bg-opacity-50"></div>
+        <a href="javascript:history.back()" class="absolute top-4 left-4 group inline-flex items-center overflow-hidden rounded border border-white px-4 py-2 text-white hover:bg-blue-600 hover:text-white transition-all duration-300 focus:outline-none focus:ring active:bg-blue-700 z-20">
+            <span class="mr-2 transition-transform group-hover:-translate-x-1">
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+                </svg>
+            </span>
+            <span class="text-sm font-medium"> Quay lại </span>
+        </a>
         <div class="relative z-10 mx-auto py-16 px-8 text-white">
-            <p class="my-6 text-4xl font-bold leading-10">Muốn trải nghiệm <span class="border-b-8 border-yellow-400 font-bold text-yellow-400">sự kiện ?</span></p>
+            <p class="my-6 text-4xl font-bold leading-10">Muốn trải nghiệm <span class="border-b-8 font-bold">sự kiện ?</span></p>
             <p class="mb-4 text-lg font-medium">Đặt chỗ ngay phía bên phải nào!</p>
         </div>
     </div>
     <div class="flex w-full flex-col md:w-1/2">
-        <div class="flex justify-center pt-12 md:justify-start md:pl-12">
-            <a href="#" class="text-2xl font-bold text-gray-800 bg-yellow-400 px-2 py-1"> Sự kiện RBN </a>
-        </div>
-        <div class="my-auto flex w-full flex-col justify-center px-6 md:pl-12 pt-8 sm:pt-0 md:justify-start">
+        <div class="my-10 flex w-full flex-col justify-center px-6 md:pl-12 sm:pt-0 md:justify-start">
             @if (Model.EventDetail != null)
             {
-                <h2 class="text-center text-3xl font-bold md:text-left mb-4">@Model.EventDetail.Title</h2>
-                <p class="mb-4">@Model.EventDetail.Description</p>
-                <p class="mb-2"><strong>Loại:</strong> @Model.EventDetail.EventType</p>
-                <p class="mb-2"><strong>Giá:</strong> @Model.EventDetail.Price.ToString("C")</p>
-                <p class="mb-4"><strong>Công ty:</strong> @Model.EventDetail.Company?.Name</p>
+                <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-4xl font-bold text-gray-800">Tiêu đề: @Model.EventDetail.Title</h2>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 text-lg">
+                        <div>
+                            <p class="font-semibold text-gray-600">Loại:</p>
+                            <p class="text-2xl font-bold text-gray-800">@Model.EventDetail.EventType</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-600">Giá:</p>
+                            <p class="text-2xl font-bold text-green-600">@Model.EventDetail.Price.ToString("C")</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-600">Công ty:</p>
+                            <p class="text-2xl font-bold text-gray-800">@Model.EventDetail.Company?.Name</p>
+                        </div>
+                    </div>
+                    <p class="mt-4 text-gray-600">Mô tả sự kiện: @Model.EventDetail.Description</p>
+                </div>
             }
             else
             {
