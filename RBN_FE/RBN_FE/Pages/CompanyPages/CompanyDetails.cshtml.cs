@@ -4,8 +4,11 @@ using BusinessObject.DTO;
 using BusinessObject.DTO.ResponseDto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using RBN_FE.Pages.LogIn_Out;
 using System.ComponentModel.Design;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace RBN_FE.Pages.CompanyPages
@@ -28,21 +31,19 @@ namespace RBN_FE.Pages.CompanyPages
         public List<FeedbackDTO> FeedBack { get; set; }
         public List<ResponseDTO> Response { get; set; }
         public Dictionary<int, string> UserNames { get; set; } // Để lưu trữ UserId và UserName
-        public string ErrorMessage { get; set; } // Thêm thuộc tính để hiển thị lỗi
+        public string ErrorMessage { get; set; } 
         [BindProperty]
         public string FeedbackContent { get; set; }
+
+
         public async Task OnGetAsync(int companyId)
         {
             try
             {
-                Company = await _httpClient.GetFromJsonAsync<ListCompanyDTO>($"http://localhost:5250/api/Company/{companyId}"); Response = await _httpClient.GetFromJsonAsync<List<ResponseDTO>>($"http://localhost:5250/api/Response");
-                var allFeedbacks = await _httpClient.GetFromJsonAsync<List<FeedbackDTO>>($"http://localhost:5250/api/Feedback?companyId={companyId}");
-                if (allFeedbacks == null)
-                {
-                    FeedBack = new List<FeedbackDTO>();
-                }
-                else
-                {
+                Company = await _httpClient.GetFromJsonAsync<ListCompanyDTO>($"http://localhost:5250/api/Company/{companyId}"); 
+                Response = await _httpClient.GetFromJsonAsync<List<ResponseDTO>>($"http://localhost:5250/api/Response");
+                var allFeedbacks = await _httpClient.GetFromJsonAsync<List<FeedbackDTO>>($"http://localhost:5250/api/Feedback/get-feedback-by-company/{companyId}");
+                
                     // Calculate total pages
                     TotalPages = (int)Math.Ceiling(allFeedbacks.Count / (double)PageSize);
 
@@ -52,7 +53,6 @@ namespace RBN_FE.Pages.CompanyPages
                         .Skip((PageIndex - 1) * PageSize)
                         .Take(PageSize)
                         .ToList();
-                }
                 // Fetch all responses for the company
                 Response = await _httpClient.GetFromJsonAsync<List<ResponseDTO>>($"http://localhost:5250/api/Response?companyId={companyId}");
                 if (Response == null)
@@ -115,12 +115,26 @@ namespace RBN_FE.Pages.CompanyPages
                 await OnGetAsync(companyId);
                 return Page();
             }
+            var userIdStr = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(userIdStr))
+            {
+                ErrorMessage = "Bạn cần đăng nhập để gửi đánh giá.";
+                await OnGetAsync(companyId);
+                return Page();
+            }
+
+            if (!int.TryParse(userIdStr, out int userId))
+            {
+                ErrorMessage = "Lỗi khi lấy UserId từ session.";
+                await OnGetAsync(companyId);
+                return Page();
+            }
 
             var newFeedback = new FeedbackDTO
             {
                 Comment = FeedbackContent,
                 FeedbackDate = DateTime.Now,
-                UserId = 1, // Giả sử UserId là 1, bạn cần thay đổi theo cách xác thực người dùng
+                UserId = userId,
                 CompanyId = companyId
             };
             try
@@ -145,41 +159,61 @@ namespace RBN_FE.Pages.CompanyPages
         }
 
         // Phương thức để xử lý POST tạo Response (được gọi qua AJAX)
-        public async Task<IActionResult> OnPostCreateResponseAsync(int companyId, int feedbackId, string comment)
+        public class CreateResponseRequest
         {
-            if (string.IsNullOrEmpty(comment))
-            {
-                ErrorMessage = "Phản hồi không được để trống.";
-                return Page();
-            }
+            public int CompanyId { get; set; }
+            public int FeedbackId { get; set; }
+            public string Comment { get; set; }
+        }
 
+        public async Task<IActionResult> OnPostCreateResponseAsync()
+        {
             try
             {
-                // Tạo một đối tượng ResponseDTO mới
-                var response = new ResponseDTO
+                // Đọc JSON từ request body
+                using var reader = new StreamReader(Request.Body);
+                var body = await reader.ReadToEndAsync();
+                var data = JsonSerializer.Deserialize<CreateResponseRequest>(body, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                if (data == null)
                 {
-                    Comment = comment,
+                    return BadRequest("Dữ liệu không hợp lệ.");
+                }
+
+                if (string.IsNullOrEmpty(data.Comment))
+                {
+                    return BadRequest("Phản hồi không được để trống.");
+                }
+
+                // Tạo ResponseDTO
+                var newResponse = new ResponseDTO
+                {
+                    Comment = data.Comment,
                     ResponseDate = DateTime.UtcNow,
-                    FeedBackId = feedbackId,
-                    CompanyId = companyId
+                    FeedBackId = data.FeedbackId,
+                    CompanyId = data.CompanyId
                 };
 
                 // Gửi POST request tới API để tạo Response
-                var responseResult = await _httpClient.PostAsJsonAsync("http://localhost:5250/api/Response", response);
+                var apiResponse = await _httpClient.PostAsJsonAsync("http://localhost:5250/api/Response", newResponse);
 
-                if (responseResult.IsSuccessStatusCode)
+                if (apiResponse.IsSuccessStatusCode)
                 {
-                    // Tải lại thông tin của Company, Feedback, và Response sau khi thêm thành công
-                    await OnGetAsync(companyId);
+                    var createdResponse = await apiResponse.Content.ReadFromJsonAsync<ResponseDTO>();
+                    // Lấy tên công ty từ Company đối tượng đã được lấy ở OnGetAsync
+                    string companyName = Company?.Name ;
+
+                    return new JsonResult(new { companyName, createdResponse });
                 }
                 else
                 {
-                    ErrorMessage = $"Lỗi khi tạo phản hồi: {responseResult.StatusCode} - {responseResult.ReasonPhrase}";
+                    var error = await apiResponse.Content.ReadAsStringAsync();
+                    return BadRequest($"Lỗi khi tạo phản hồi: {apiResponse.StatusCode} - {error}");
                 }
             }
             catch (HttpRequestException e)
             {
-                ErrorMessage = $"Lỗi khi gọi API: {e.Message}";
+                return StatusCode(500, $"Lỗi khi gọi API: {e.Message}");
             }
             catch (Exception e)
             {

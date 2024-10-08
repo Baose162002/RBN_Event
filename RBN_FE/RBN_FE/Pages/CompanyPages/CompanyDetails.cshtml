@@ -139,15 +139,6 @@
                         </div>
                     </div>
 
-                    <!-- Reply Button & Reply Form -->
-                    <button onclick="toggleReply(this)" class="mt-2 text-indigo-600 text-sm hover:underline">Phản hồi</button>
-
-                    <!-- Reply Input (Hidden by Default) -->
-                    <div class="hidden mt-4 space-y-2 ml-12">
-                        <textarea rows="2" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Nhập phản hồi của bạn..."></textarea>
-                        <button onclick="sendResponse(@feedback.Id, this)" class="bg-indigo-600 text-white py-1 px-4 rounded hover:bg-indigo-700">Gửi phản hồi</button>
-                    </div>
-
                     <!-- Responses -->
                     @if (Model.Response != null && Model.Response.Any(r => r.FeedBackId == feedback.Id))
                     {
@@ -156,7 +147,7 @@
                             {
                                 <div class="flex items-start space-x-4 mb-2">
                                     <div class="flex-shrink-0">
-                                        <img class="h-8 w-8 rounded-full object-cover" src="/img/companyAvatar.jpg" alt="Avatar" />
+                                        <img class="h-8 w-8 rounded-full object-cover" src="@Model.Company.Avatar" alt="Avatar" />
                                     </div>
                                     <div class="flex-1">
                                         <div class="text-sm">
@@ -171,6 +162,17 @@
                             }
                         </div>
                     }
+
+                    <!-- Reply Form -->
+                    <div class="mt-4 space-y-2 pl-12">
+                        <form method="post" asp-page-handler="SubmitResponse">
+                            <input type="hidden" name="FeedbackId" value="@feedback.Id" />
+                            <textarea name="ResponseContent" rows="2" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Nhập phản hồi của bạn..."></textarea>
+                            <div class="flex justify-end mt-2">
+                                <button type="submit" class="bg-indigo-600 text-white py-1 px-4 rounded hover:bg-indigo-700">Gửi phản hồi</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             }
         }
@@ -180,24 +182,24 @@
         }
     </div>
     <!-- Pagination -->
-    <div class="flex justify-center mt-4">
-        <nav aria-label="Page navigation">
-            <ul class="inline-flex items-center -space-x-px">
-                <li>
-                    <a asp-page="CompanyDetails" asp-route-companyId="@Model.Company?.Id" asp-route-pageIndex="@(Model.PageIndex - 1)" class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 @(Model.PageIndex <= 1 ? "cursor-not-allowed text-gray-300 bg-gray-200" : "")">Trước</a>
-                </li>
-                @for (int i = 1; i <= Model.TotalPages; i++)
-                {
+        <div class="flex justify-center mt-4">
+            <nav aria-label="Page navigation">
+                <ul class="inline-flex items-center -space-x-px">
                     <li>
-                        <a asp-page="CompanyDetails" asp-route-companyId="@Model.Company?.Id" asp-route-pageIndex="@i" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 @(i == Model.PageIndex ? "z-10 text-blue-600 bg-blue-50 border-blue-300" : "")">@i</a>
+                        <a asp-page="CompanyDetails" asp-route-companyId="@Model.Company?.Id" asp-route-pageIndex="@(Model.PageIndex - 1)" class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 @(Model.PageIndex <= 1 ? "cursor-not-allowed text-gray-300 bg-gray-200" : "")">Trước</a>
                     </li>
-                }
-                <li>
-                    <a asp-page="CompanyDetails" asp-route-companyId="@Model.Company?.Id" asp-route-pageIndex="@(Model.PageIndex + 1)" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 @(Model.PageIndex >= Model.TotalPages ? "cursor-not-allowed text-gray-300 bg-gray-200" : "")">Sau</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        <li>
+                            <a asp-page="CompanyDetails" asp-route-companyId="@Model.Company?.Id" asp-route-pageIndex="@i" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 @(i == Model.PageIndex ? "z-10 text-blue-600 bg-blue-50 border-blue-300" : "")">@i</a>
+                        </li>
+                    }
+                    <li>
+                        <a asp-page="CompanyDetails" asp-route-companyId="@Model.Company?.Id" asp-route-pageIndex="@(Model.PageIndex + 1)" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 @(Model.PageIndex >= Model.TotalPages ? "cursor-not-allowed text-gray-300 bg-gray-200" : "")">Sau</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     <!-- Comment Form -->
     <form class="mt-8 space-y-4" method="post" asp-page-handler="SubmitFeedback">
         <div>
@@ -208,104 +210,7 @@
         </div>
     </form>
 </div>
-<!-- JavaScript for Toggling Reply Input và Gửi Response -->
-<script>
-    function toggleReply(button) {
-        const replyInput = button.nextElementSibling;
-        replyInput.classList.toggle('hidden');
-    }
 
-    async function sendResponse(feedbackId, button) {
-        const replyContainer = button.parentElement;
-        const textarea = replyContainer.querySelector('textarea');
-        const comment = textarea.value.trim();
-
-        if (comment === "") {
-            alert("Vui lòng nhập phản hồi.");
-            return;
-        }
-
-        // Lấy thông tin công ty từ PageModel (đảm bảo có thuộc tính Id trong Company)
-        const companyId = @Model.Company?.Id;
-
-        if (!companyId) {
-            alert("Không xác định được công ty.");
-            return;
-        }
-
-        try {
-            const response = await fetch('@Url.Page("/CompanyPages/CompanyDetails", null, new { companyId = Model.Company?.Id }, Request.Scheme)', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'RequestVerificationToken': getAntiForgeryToken()
-                },
-                body: JSON.stringify({
-                    companyId: companyId,
-                    feedbackId: feedbackId,
-                    comment: comment
-                }),
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-
-                // Tạo phần tử HTML mới cho phản hồi
-                const responseDiv = document.createElement('div');
-                responseDiv.classList.add('flex', 'items-start', 'space-x-4', 'mb-2');
-                responseDiv.innerHTML = `
-                        <div class="flex-shrink-0">
-                            <img class="h-8 w-8 rounded-full object-cover" src="/img/companyAvatar.jpg" alt="Avatar" />
-                        </div>
-                        <div class="flex-1">
-                            <div class="text-sm">
-                                <p class="font-medium text-gray-900">${data.companyName}</p>
-                                <p class="text-gray-500">${new Date(data.createdResponse.ResponseDate).toLocaleString()}</p>
-                            </div>
-                            <div class="mt-1 text-sm text-gray-700">
-                                ${data.createdResponse.Comment}
-                            </div>
-                        </div>
-                    `;
-
-                // Thêm phản hồi mới vào DOM
-                const responsesContainer = replyContainer.parentElement.querySelector('.pl-12');
-                if (responsesContainer) {
-                    responsesContainer.appendChild(responseDiv);
-                } else {
-                    // Nếu chưa có container cho phản hồi, tạo mới
-                    const newResponsesContainer = document.createElement('div');
-                    newResponsesContainer.classList.add('mt-4', 'space-y-4', 'pl-12', 'border-l', 'border-gray-300');
-                    newResponsesContainer.appendChild(responseDiv);
-                    replyContainer.parentElement.appendChild(newResponsesContainer);
-                }
-
-                // Ẩn input phản hồi và làm trống textarea
-                replyContainer.classList.add('hidden');
-                textarea.value = "";
-            } else {
-                const errorText = await response.text();
-                alert(`Đã xảy ra lỗi: ${errorText}`);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert("Đã xảy ra lỗi khi gửi phản hồi.");
-        }
-    }
-
-    // Hàm để lấy Anti-Forgery Token từ cookie
-    function getAntiForgeryToken() {
-        const name = '__RequestVerificationToken';
-        const cookies = document.cookie.split(';');
-        for (let cookie of cookies) {
-            cookie = cookie.trim();
-            if (cookie.startsWith(name + '=')) {
-                return decodeURIComponent(cookie.substring(name.length + 1));
-            }
-        }
-        return '';
-    }
-</script>
 
 
     <partial name="_Footer" />

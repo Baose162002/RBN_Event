@@ -9,6 +9,7 @@ namespace Repositories.IRepositories
 {
     public interface IFeedbackRepository
     {
+        Task<List<FeedBack>> GetFeedBacksByCompanyIdAsync(int companyId);
         Task<List<FeedBack>> GetAllFeedback();
         Task<FeedBack> GetFeedbackById(int id);
         Task Create(FeedBack feedback);

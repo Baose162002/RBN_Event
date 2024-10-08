@@ -47,11 +47,19 @@ namespace Repositories.Repositories
 
         public async Task<List<Booking>> GetAllBooking()
         {
-            return await _context.Bookings.Include(u => u.User).Include(e => e.Event).ToListAsync();
+            return await _context.Bookings
+                .Include(u => u.User)
+                .Include(e => e.Event)
+                .ThenInclude(e => e.Company)
+                .ToListAsync();
         }
         public async Task<Booking> GetBookingById(int id)
         {
-            return await _context.Bookings.Include(u => u.User).Include(e => e.Event).FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Bookings
+                .Include(u => u.User)
+                .Include(e => e.Event)
+                .ThenInclude(e => e.Company)
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
         public async Task CreateBooking(Booking booking)
         {

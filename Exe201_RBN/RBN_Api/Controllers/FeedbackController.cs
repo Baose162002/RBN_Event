@@ -17,7 +17,11 @@ namespace RBN_Api.Controllers
         {
             _feedbackService = feedbackService;
         }
-
+        [HttpGet("get-feedback-by-company/{id}")]
+        public async Task<List<FeedbackDTO>> GetEventsByCompanyIdAsync(int id)
+        {
+            return await _feedbackService.GetFeedBacksByCompanyIdAsync(id);
+        }
         [HttpGet]
         public async Task<IActionResult> GetAllFeedback()
         {

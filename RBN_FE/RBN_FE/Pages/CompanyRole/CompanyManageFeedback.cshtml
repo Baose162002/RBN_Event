@@ -122,18 +122,19 @@
             <div class="filter-section grid grid-cols-3 gap-4 mb-4">
                 <div class="input-group">
                     <label for="orderCode" class="font-medium">Mã phản hồi</label>
-                    <input type="text" id="orderCode" placeholder="Nhập mã phản hồi" class="p-2 border border-gray-300 rounded-lg">
+                    <input type="text" id="orderCode" placeholder="Nhập mã phản hồi" class="p-2 border border-gray-300 rounded-lg" asp-for="SearchId">
                 </div>
                 <div class="input-group">
                     <label for="date" class="font-medium">Ngày</label>
-                    <input type="date" id="date" class="p-2 border border-gray-300 rounded-lg">
+                    <input type="date" id="date" class="p-2 border border-gray-300 rounded-lg" asp-for="SearchDate">
                 </div>
-
             </div>
 
             <!-- Search Button -->
             <div class="text-right mb-4">
-                <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Tìm Kiếm</button>
+                <form method="get">
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Tìm Kiếm</button>
+                </form>
             </div>
 
             <!-- Table -->
@@ -147,25 +148,57 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="text-center border-b">
-                        <td class="p-3">#1</td>
-                        <td class="p-3">03/10/2024</td>
-                        <td class="p-3">sự kiện tuyệt vời</td>
-                        <td class="p-3"><a href="#" class="text-blue-500 hover:underline">Phản hồi</a></td>
-                    </tr>
+                    @if (Model.FeedBack != null && Model.FeedBack.Count > 0)
+                    {
+                        @foreach (var feedback in Model.FeedBack)
+                        {
+                            <tr class="text-center border-b">
+                                <input type="hidden" name="FeedBackId" value="@feedback.Id" />
+                                <td class="p-3">@feedback.Id</td>
+                                <td class="p-3">@feedback.FeedbackDate.ToShortDateString()</td>
+                                <td class="p-3">@feedback.Comment</td>
+                                <td class="p-3">
+                                    <a href="/CompanyPages/CompanyDetails/@Model.Company.Id" class="text-blue-500 hover:underline">Phản hồi</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center p-3">Không có phản hồi nào</td>
+                        </tr>
+                    }
                 </tbody>
             </table>
 
+
             <!-- Pagination -->
             <div class="pagination flex justify-center items-center gap-4">
-                <span>01</span> / <span>05</span>
+                <span>01</span> / <span>01</span>
                 <button class="p-2 border rounded-lg">→</button>
             </div>
-        </div>
-    </main>
-</div>
 
 <style>
+
+                /* Pagination */
+                .pagination {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                }
+
+                    .pagination button {
+                        padding: 8px 12px;
+                        border: 1px solid #ccc;
+                        border-radius: 4px;
+                        background-color: white;
+                        cursor: pointer;
+                    }
+
+                    .pagination span {
+                        font-weight: bold;
+                    }
     /* General Styles */
     .main-content {
         padding: 20px;
