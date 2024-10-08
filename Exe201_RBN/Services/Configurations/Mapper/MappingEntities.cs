@@ -42,8 +42,9 @@ namespace Services.Configurations.Mapper
             CreateMap<LoginUserRequest, User>();
             CreateMap<FeedbackDTO, FeedBack>();
             CreateMap<ResponseDTO, Response>();
-
+            CreateMap<Response, ResponseDTO>();
             CreateMap<Booking, ViewDetailsBookingDto>();
+            CreateMap<User, UserDTO>();
 
             // Promotion
             CreateMap<Promotion, ViewDetailsPromotionDto>();

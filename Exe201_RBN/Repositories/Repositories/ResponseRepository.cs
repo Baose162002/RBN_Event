@@ -23,7 +23,7 @@ namespace Repositories.Repositories
         public async Task<List<Response>> GetAllResponse()
         {
             var _context = new ApplicationDBContext();
-            var responses = await _context.Responses.ToListAsync();
+            var responses = await _context.Responses.Include(x=>x.Company).ToListAsync();
             return responses;
 
         }

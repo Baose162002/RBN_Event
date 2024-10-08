@@ -20,10 +20,10 @@ namespace RBN_FE.Pages
         public List<EventDTO> Events { get; set; }
         public string SearchTerm { get; set; } = string.Empty; // Property to hold searchTerm
         public int PageNumber { get; set; } = 1; // Property for pageNumber
-        public int PageSize { get; set; } = 10; // Property for pageSize
+        public int PageSize { get; set; } = 6; // Property for pageSize
         public int TotalPages { get; set; } // Property for total pages
 
-        public async Task OnGetAsync(string searchTerm = "", int pageNumber = 1, int pageSize = 10)
+        public async Task OnGetAsync(string searchTerm = "", int pageNumber = 1, int pageSize = 6)
         {
             SearchTerm = searchTerm; // Assign value to property
             PageNumber = pageNumber; // Assign value to property

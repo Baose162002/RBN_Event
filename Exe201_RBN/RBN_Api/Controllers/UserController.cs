@@ -31,6 +31,12 @@ namespace RBN_Api.Controllers
             var user = await _userService.GetUserByIdAsync(id);
             return user;
         }
+        [HttpGet("get-username/{id}")]
+        public async Task<ActionResult<UserDTO>> GetUserNameById(int id)
+        {
+            var user = await _userService.GetUserNameById(id);
+            return user;
+        }
         [HttpPost("create-user")]
         public async Task<IActionResult> CreateUser(CreateUserDto createUserDto)
         {

@@ -20,7 +20,7 @@ namespace RBN_Api.Controllers
 			_eventImgService = eventImgService;
 		}
         [HttpGet("get-event-by-company/{id}")]
-        public async Task<List<EventDTO>> GetBookingsByCompanyIdAsync(int id)
+        public async Task<List<EventDTO>> GetEventsByCompanyIdAsync(int id)
         {
             return await _eventService.GetEventsByCompanyIdAsync(id);
         }
