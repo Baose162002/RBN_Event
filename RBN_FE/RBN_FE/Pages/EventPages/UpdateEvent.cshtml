@@ -24,18 +24,22 @@
                 <span asp-validation-for="Input.Name" class="text-red-500 text-sm"></span>
             </div>
 
-   <div class="w-full sm:w-1/2 px-2 mb-4">
-                <label asp-for="Input.EventType" class="block text-gray-700 font-medium mb-2">Loại Event</label>
-                <select asp-for="Input.EventType" class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
-                    <option value="">Chọn loại sự kiện</option>
-                    <option value="Tiệc Cá nhân">Tiệc Cá nhân</option>
-                    <option value="Tiệc cưới">Tiệc cưới</option>
-                    <option value="Tiệc sinh nhật">Tiệc sinh nhật</option>
-                    <option value="Chương trình">Chương trình</option>
-                    <option value="Tiệc Công Ty">Tiệc Công Ty</option>
-                </select>
-                <span asp-validation-for="Input.EventType" class="text-danger"></span>
-            </div>
+              <div>
+                    <div class="w-full sm:w-1/2 px-2 mb-4">
+                        <label asp-for="Input.EventType" class="block text-gray-700 font-medium mb-2">Loại Event</label>
+                        <select asp-for="Input.EventType" class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
+                            <option value="">Chọn loại sự kiện</option>
+                            <option value="Tiệc Cá nhân">Tiệc Cá nhân</option>
+                            <option value="Tiệc cưới">Tiệc cưới</option>
+                            <option value="Tiệc sinh nhật">Tiệc sinh nhật</option>
+                            <option value="Chương trình">Chương trình</option>
+                            <option value="Tiệc Công Ty">Tiệc Công Ty</option>
+                        </select>
+                        <span asp-validation-for="Input.EventType" class="text-danger"></span>
+                    </div>
+              </div>
+
+
             <div>
                 <label asp-for="Input.Description" class="block mb-2 text-sm font-medium text-gray-900"></label>
                 <textarea asp-for="Input.Description" rows="4" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Event Description" required></textarea>
@@ -61,16 +65,30 @@
                     <span asp-validation-for="Input.MaxCapacity" class="text-red-500 text-sm"></span>
                 </div>
 
-                <div>
-                    <label asp-for="Input.Status" class="block mb-2 text-sm font-medium text-gray-900"></label>
-                    <select asp-for="Input.Status" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required>
-                        <option value="">Select Status</option>
-                        <option value="1">Active</option>
-                        <option value="2">Inactive</option>
-                    </select>
-                    <span asp-validation-for="Input.Status" class="text-red-500 text-sm"></span>
-                </div>
+                    <div>
+                        @if (ViewData["UserRole"]?.ToString() == "Admin")
+                        {
+                            <!-- Show dropdown for Admin role -->
+                            <label asp-for="Input.Status" class="block mb-2 text-sm font-medium text-gray-900"></label>
+                            <select asp-for="Input.Status" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required>
+                                <option value="">Select Status</option>
+                                <option value="1">Active</option>
+                                <option value="2">Inactive</option>
+                            </select>
+                            <span asp-validation-for="Input.Status" class="text-red-500 text-sm"></span>
+                        }
+                        else
+                        {
+                            <!-- Hidden for Company, keep the existing status -->
+                            <input type="hidden" asp-for="Input.Status" />
+                        }
+                    </div>
+
             </div>
+                <div>
+                    <label asp-for="Input.EventType" class="block mb-2 text-sm font-medium text-gray-900">Event Type</label>
+                    <span asp-validation-for="Input.EventType" class="text-red-500 text-sm"></span>
+                </div>
 
             <div>
                 <label asp-for="EventImage" class="block mb-2 text-sm font-medium text-gray-900"></label>
@@ -95,6 +113,20 @@
                 <input type="hidden" name="Input.UpdateBy" value="@HttpContext.Session.GetString("UserName")" />
                 <input type="hidden" name="Input.UpdateAt" value="@DateTime.UtcNow.ToString("dd/MM/yyyy")" />
         </form>
+            @if (!ModelState.IsValid)
+            {
+                <div class="alert alert-danger mt-4">
+                    <ul>
+                        @foreach (var modelState in ViewData.ModelState.Values)
+                        {
+                            foreach (var error in modelState.Errors)
+                            {
+                                <li>@error.ErrorMessage</li>
+                            }
+                        }
+                    </ul>
+                </div>
+            }
     </div>
 </div></div>
 
