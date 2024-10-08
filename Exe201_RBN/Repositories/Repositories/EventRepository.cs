@@ -239,7 +239,6 @@ namespace Repositories.Repositories
                     existing.MaxCapacity = events.MaxCapacity;
                     existing.Description = events.Description;
                     existing.Status = events.Status;
-                    existing.CompanyId = events.CompanyId;
                     existing.CreateBy = events.CreateBy;
                     existing.CreateAt = events.CreateAt;
                     existing.UpdateBy = events.UpdateBy;
