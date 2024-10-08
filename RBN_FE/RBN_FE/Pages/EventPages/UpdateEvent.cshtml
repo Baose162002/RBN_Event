@@ -9,7 +9,7 @@
 
 <div class="max-w-screen-lg mx-auto p-5 sm:p-10 md:p-16">
     <div class="mb-10 rounded overflow-hidden flex flex-col mx-auto">
-        <h2 class="text-3xl font-semibold mb-6">Update Event</h2>
+        <h2 class="text-3xl font-semibold mb-6">Cập nhật sự kiện</h2>
 
         <form method="post" enctype="multipart/form-data" class="space-y-6">
             <div>
@@ -47,21 +47,23 @@
             </div>
 
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                    <div>
-                        <label asp-for="Input.Price" class="block mb-2 text-sm font-medium text-gray-900"></label>
-                        <input asp-for="Input.Price" type="number" step="0.01" min="0" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="0.00" required>
-                        <span asp-validation-for="Input.Price" class="text-red-500 text-sm"></span>
-                    </div>
-                    <div>
-                        <label asp-for="Input.MinCapacity" class="block mb-2 text-sm font-medium text-gray-900"></label>
-                        <input asp-for="Input.MinCapacity" type="number" min="0" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Minimum Capacity" required>
-                        <span asp-validation-for="Input.MinCapacity" class="text-red-500 text-sm"></span>
-                    </div>
-                    <div>
-                        <label asp-for="Input.MaxCapacity" class="block mb-2 text-sm font-medium text-gray-900"></label>
-                        <input asp-for="Input.MaxCapacity" type="number" min="0" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Maximum Capacity" required>
-                        <span asp-validation-for="Input.MaxCapacity" class="text-red-500 text-sm"></span>
-                    </div>
+                <div>
+                    <label asp-for="Input.Price" class="block mb-2 text-sm font-medium text-gray-900"></label>
+                    <input asp-for="Input.Price" type="number" step="0.01" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="0.00" required>
+                    <span asp-validation-for="Input.Price" class="text-red-500 text-sm"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Input.MinCapacity" class="block mb-2 text-sm font-medium text-gray-900"></label>
+                    <input asp-for="Input.MinCapacity" type="number" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Minimum Capacity" required>
+                    <span asp-validation-for="Input.MinCapacity" class="text-red-500 text-sm"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Input.MaxCapacity" class="block mb-2 text-sm font-medium text-gray-900"></label>
+                    <input asp-for="Input.MaxCapacity" type="number" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Maximum Capacity" required>
+                    <span asp-validation-for="Input.MaxCapacity" class="text-red-500 text-sm"></span>
+                </div>
 
                     <div>
                         @if (ViewData["UserRole"]?.ToString() == "Admin")
@@ -81,12 +83,8 @@
                             <input type="hidden" asp-for="Input.Status" />
                         }
                     </div>
-                     
+
             </div>
-                <div>
-                    <label asp-for="Input.EventType" class="block mb-2 text-sm font-medium text-gray-900">Event Type</label>
-                    <span asp-validation-for="Input.EventType" class="text-red-500 text-sm"></span>
-                </div>
 
             <div>
                 <label asp-for="EventImage" class="block mb-2 text-sm font-medium text-gray-900"></label>
@@ -106,7 +104,7 @@
                 <a asp-page="/EventPages/EventIndex" class="text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                     Back to Events
                 </a>
-                </div>  
+                </div>   
         </form>
             @if (!ModelState.IsValid)
             {
