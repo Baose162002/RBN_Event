@@ -16,7 +16,6 @@ namespace BusinessObject.DTO.RequestDto
         public int MaxCapacity { get; set; }
         public string Description { get; set; }
         public int Status { get; set; }
-        public int CompanyId { get; set; }
         public string CreateBy { get; set; }
         public string CreateAt { get; set; }
         public string UpdateBy { get; set; }
