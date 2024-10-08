@@ -14,6 +14,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"] - Rise Church</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+    .wave-divider {
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        overflow: hidden;
+        line-height: 0;
+    }
+
+    .wave-divider svg {
+        position: relative;
+        display: block;
+        width: calc(100% + 1.3px);
+        height: 60px;
+    }
+
+        @@media (min-width: 768px) {
+            .wave-divider svg {
+                height: 150px;
+            }
+        }
+
+</style>
 </head>
 <body class="font-sans flex flex-col min-h-screen">
     <partial name="_Header" />
@@ -44,7 +68,7 @@
                                 <path d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"></path>
                             </svg>
                         </span>
-                        <span data-aos="zoom-out-left" data-aos-easing="linear" data-aos-duration="800" class="text-sm font-medium text-slate-100 capitalize transition-all group-hover:me-4 aos-init aos-animate">
+                        <span data-aos="zoom-out-left" data-aos-easing="linear" data-aos-duration="800" class="text-sm font-light text-slate-100 capitalize transition-all group-hover:me-4 aos-init aos-animate">
                             Tìm ngay
                         </span>
                     </a>
@@ -101,7 +125,7 @@
 
     <!-- sk quan tam -->
 
-    <div class="w-full bg-gray-100 py-12">
+    <section class="bg-gray-200 py-12 sm:py-20">
         <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold text-center mb-8">Sự kiện được quan tâm</h2>
 
@@ -121,7 +145,6 @@
                         <div class="col">
                             <div class="card h-100 shadow-sm">
                                 <a href="HomeEvent/HomeEventDetail?id=@eventItem.Id">
-                                    <!-- Link for the image -->
                                     @if (!string.IsNullOrEmpty(eventItem.EventImg?.ImageUrl))
                                     {
                                         <img src="@eventItem.EventImg.ImageUrl" class="card-img-top" alt="@eventItem.Title" style="height: 200px; object-fit: cover;" loading="lazy">
@@ -135,7 +158,7 @@
                                 </a>
                                 <div class="card-body">
                                     <h5 class="card-title">
-                                        <a asp-page="/HomeEventDetail" asp-route-id="@eventItem.Id">@eventItem.Title</a> <!-- Link for the title -->
+                                        <a asp-page="/HomeEventDetail" asp-route-id="@eventItem.Id">@eventItem.Title</a>
                                     </h5>
                                     <p class="card-text">@eventItem.Name</p>
                                     <p class="card-text"><small class="text-muted">@eventItem.EventType</small></p>
@@ -149,7 +172,6 @@
                     }
                 </div>
 
-
                 <!-- Phân trang -->
                 <div class="mt-4 d-flex justify-content-between align-items-center">
                     <div>
@@ -159,15 +181,13 @@
                         }
                     </div>
                     <div>
-                        @if (Model.Events.Count() == Model.PageSize) // Kiểm tra xem có còn trang tiếp theo không
+                        @if (Model.Events.Count() == Model.PageSize)
                         {
                             <a class="btn btn-outline-secondary" asp-page-handler="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-pageNumber="@(Model.PageNumber + 1)" asp-route-pageSize="@Model.PageSize">Tiếp theo</a>
                         }
                     </div>
                     <div>
                         <span class="text-muted">Trang @Model.PageNumber</span>
-                        <!-- Optionally, show total pages if you have that information -->
-                        <!-- <span class="text-muted">/ @Model.TotalPages</span> -->
                     </div>
                 </div>
             }
@@ -178,37 +198,35 @@
                 </div>
             }
         </div>
-    </div>
+    </section>
 
-        <!-- Gallery -->
+            <!-- Wave divider -->
+            <div class="wave-divider">
+                <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                    <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="#E5E7EB"></path>
+                </svg>
+            </div>
 
-    <div class="bg-white dark:bg-gray-800 h-screen h-full py-6 sm:py-8 lg:py-12">
+
+
+ <!-- Gallery -->
+    <section class="bg-white py-12 sm:py-20">
         <div class="mx-auto max-w-screen-2xl px-4 md:px-8">
-            <div class="mb-4 flex items-center justify-between gap-8 sm:mb-8 md:mb-12">
-                <div class="flex items-center gap-12">
-                    <h2 class="text-2xl font-bold text-gray-800 lg:text-3xl dark:text-white">Gallery</h2>
-
-                    <p class="hidden max-w-screen-sm text-gray-500 dark:text-gray-300 md:block">
-                        This is a section of some simple filler text,
-                        also known as placeholder text. It shares some characteristics of a real written text.
-                    </p>
+            <div class="relative mt-8 mb-4">
+                <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                    <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
                 </div>
-
-                <a href="#"
-                   class="inline-block rounded-lg border bg-white dark:bg-gray-700 dark:border-none px-4 py-2 text-center text-sm font-semibold text-gray-500 dark:text-gray-200 outline-none ring-indigo-300 transition duration-100 hover:bg-gray-100 focus-visible:ring active:bg-gray-200 md:px-8 md:py-3 md:text-base">
-                    More
-                </a>
+                <div class="relative flex justify-center">
+                    <span class="px-3 bg-gray-100 dark:bg-gray-800 text-4xl font-light text-gray-900 dark:text-gray-100">
+                        Hình ảnh từ các sự kiện
+                    </span>
+                </div>
             </div>
 
             <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-6 xl:gap-8 mt-4">
-                <!-- image - start -->
-                <a href="#"
-                   class="group relative flex h-48 items-end overflow-hidden rounded-lg bg-gray-100 shadow-lg md:h-80">
+                <a href="#" class="group relative flex h-48 items-end overflow-hidden rounded-lg bg-gray-100 shadow-lg md:h-80">
                     <img src="https://lesroches.edu/wp-content/uploads/2024/01/Future-Event-Planning-Header.jpg" loading="lazy" alt="Photo by Minh Pham" class="absolute inset-0 h-full w-full object-cover object-center transition duration-200 group-hover:scale-110" />
-
-                    <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-gray-800 via-transparent to-transparent opacity-50">
-                    </div>
-
+                    <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-gray-800 via-transparent to-transparent opacity-50"></div>
                     <span class="relative ml-4 mb-3 inline-block text-sm text-white md:ml-5 md:text-lg">VR</span>
                 </a>
                 <!-- image - end -->
@@ -293,12 +311,22 @@
                 <!-- image - end -->
             </div>
 
+       </div>
+</section>
+
+
+<!-- trải nghiệm khách -->
+    <div class="relative mt-8 mb-4">
+        <div class="absolute inset-0 flex items-center" aria-hidden="true">
+            <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
+        </div>
+        <div class="relative flex justify-center">
+            <span class="px-3 bg-gray-100 dark:bg-gray-800 text-4xl font-light text-gray-900 dark:text-gray-100">
+                Đánh giá từ khách hàng
+            </span>
         </div>
     </div>
 
-
-
-    <!-- trải nghiệm khách -->
     <div class="w-full mx-auto">
 
         <div id="default-carousel" class="relative rounded-lg overflow-hidden shadow-lg w-full" data-carousel="static">
@@ -377,7 +405,7 @@
         <ul class="max-w-2xl mx-auto  divide-y  shadow shadow-blue-600 rounded-xl">
             <li>
                 <details class="group">
-                    <summary class="flex items-center gap-3 px-4 py-3 font-medium marker:content-none hover:cursor-pointer">
+                    <summary class="flex items-center gap-3 px-4 py-3 font-light marker:content-none hover:cursor-pointer">
                         <svg class="w-5 h-5 text-gray-500 transition group-open:rotate-90" xmlns="http://www.w3.org/2000/svg"
                              width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
@@ -396,7 +424,7 @@
             </li>
             <li>
                 <details class="group">
-                    <summary class="flex items-center gap-3 px-4 py-3 font-medium marker:content-none hover:cursor-pointer">
+                    <summary class="flex items-center gap-3 px-4 py-3 font-light marker:content-none hover:cursor-pointer">
                         <svg class="w-5 h-5 text-gray-500 transition group-open:rotate-90" xmlns="http://www.w3.org/2000/svg"
                              width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
@@ -415,7 +443,7 @@
             </li>
             <li>
                 <details class="group">
-                    <summary class="flex items-center gap-3 px-4 py-3 font-medium marker:content-none hover:cursor-pointer">
+                    <summary class="flex items-center gap-3 px-4 py-3 font-light marker:content-none hover:cursor-pointer">
                         <svg class="w-5 h-5 text-gray-500 transition group-open:rotate-90" xmlns="http://www.w3.org/2000/svg"
                              width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
@@ -434,7 +462,7 @@
             </li>
             <li>
                 <details class="group">
-                    <summary class="flex items-center gap-3 px-4 py-3 font-medium marker:content-none hover:cursor-pointer">
+                    <summary class="flex items-center gap-3 px-4 py-3 font-light marker:content-none hover:cursor-pointer">
                         <svg class="w-5 h-5 text-gray-500 transition group-open:rotate-90" xmlns="http://www.w3.org/2000/svg"
                              width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
