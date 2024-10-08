@@ -11,7 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.47"
+    "postcss": "^8.4.47",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.13"
