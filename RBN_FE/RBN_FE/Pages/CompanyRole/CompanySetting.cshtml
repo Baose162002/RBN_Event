@@ -114,52 +114,83 @@
         </div>
     </aside>
 
-    <!-- Main Content -->
+    <!-- Nội dung chính -->
     <main class="flex-1 lg:ml-64 p-8 bg-gray-100">
         <div class="form-management bg-white p-6 rounded-lg shadow-md">
             <h2 class="text-2xl font-semibold mb-4">Cài đặt</h2>
 
-          
-            <!-- Table -->
-            
-            <div class="settings-form bg-white p-6 rounded-lg shadow-md">
-                    <div class="avatar">
-                        <img src="/img/Logo.png" alt="Avatar" class="rounded-full w-24 h-24">
-                    </div>
-                <div class="flex items-center space-x-4 mb-4">
-                    <div class="input-group w-full">
-                        <label for="companyName">Tên Công Ty</label>
-                        <input type="text" id="companyName" class="border border-gray-300 p-2 rounded w-full" value="RBN">
-                    </div>
-                    <div class="input-group w-full">
-                        <label for="phoneNumber">Số Điện Thoại</label>
-                        <input type="text" id="phoneNumber" class="border border-gray-300 p-2 rounded w-full" value="0987654321">
-                    </div>
+            <!-- Hiển thị thông báo lỗi hoặc thành công -->
+            @if (!string.IsNullOrEmpty(Model.StatusMessage))
+            {
+                <div class="bg-green-100 text-green-600 p-4 rounded mb-4">
+                    @Model.StatusMessage
                 </div>
-                <div class="flex space-x-4 mb-4">
-                    <div class="input-group w-full">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" class="border border-gray-300 p-2 rounded w-full" value="rbnevent@gmail.com">
-                    </div>
-                    <div class="input-group w-full">
-                        <label for="city">Thành Phố</label>
-                        <input type="text" id="city" class="border border-gray-300 p-2 rounded w-full" value="HCM">
-                    </div>
-                </div>
-                <div class="flex space-x-4 mb-4">
-                    <div class="input-group w-full">
-                        <label for="address">Địa Chỉ</label>
-                        <input type="text" id="address" class="border border-gray-300 p-2 rounded w-full" value="113/114">
-                    </div>
-                    <div class="input-group w-full">
-                        <label for="country">Quốc Gia</label>
-                        <input type="text" id="country" class="border border-gray-300 p-2 rounded w-full" value="Việt Nam">
-                    </div>
-                </div>
-                <button class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Lưu</button>
-            </div>
+            }
 
-          
+            <!-- Hiển thị thông tin công ty hoặc thông báo không có dữ liệu -->
+            @if (Model.Company == null)
+            {
+                <div class="bg-red-100 text-red-600 p-4 rounded">
+                    Không có thông tin của công ty.
+                </div>
+            }
+            else
+            {
+                <!-- Biểu mẫu để cập nhật thông tin công ty -->
+                <form method="post" enctype="multipart/form-data">
+                    <div class="settings-form bg-white p-6 rounded-lg shadow-md">
+                        <div class="avatar mb-4">
+                            <img src="@Model.Company.Avatar" alt="Avatar" class="rounded-full w-24 h-24">
+                        </div>
+                        <div class="flex items-center space-x-4 mb-4">
+                            <div class="input-group w-full">
+                                <label for="companyName" class="block text-sm font-medium text-gray-700">Tên Công Ty</label>
+                                <input type="text" id="companyName" name="Company.Name" class="border border-gray-300 p-2 rounded w-full" value="@Model.Company.Name" required>
+                            </div>
+                            <div class="input-group w-full">
+                                <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Số Điện Thoại</label>
+                                <input type="text" id="phoneNumber" name="Company.Phone" class="border border-gray-300 p-2 rounded w-full" value="@Model.Company.Phone" required>
+                            </div>
+                        </div>
+                        <div class="flex space-x-4 mb-4">
+                            <div class="input-group w-full">
+                                <label for="address" class="block text-sm font-medium text-gray-700">Địa Chỉ</label>
+                                <input type="text" id="address" name="Company.Address" class="border border-gray-300 p-2 rounded w-full" value="@Model.Company.Address" required>
+                            </div>
+                            <div class="input-group w-full">
+                                <label for="taxCode" class="block text-sm font-medium text-gray-700">Mã Số Thuế</label>
+                                <input type="text" id="taxCode" name="Company.TaxCode" class="border border-gray-300 p-2 rounded w-full" value="@Model.Company.TaxCode" required>
+                            </div>
+                        </div>
+                        <div class="flex space-x-4 mb-4">
+                            <div class="input-group w-full">
+                                <label for="oldPassword" class="block text-sm font-medium text-gray-700">Mật khẩu cũ</label>
+                                <input type="password" id="oldPassword" name="OldPassword" class="border border-gray-300 p-2 rounded w-full">
+                            </div>
+                            <div class="input-group w-full">
+                                <label for="newPassword" class="block text-sm font-medium text-gray-700">Mật khẩu mới</label>
+                                <input type="password" id="newPassword" name="NewPassword" class="border border-gray-300 p-2 rounded w-full">
+                            </div>
+                        </div>
+                        <div class="flex space-x-4 mb-4">
+                            <div class="input-group w-full">
+                                <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Xác nhận mật khẩu mới</label>
+                                <input type="password" id="confirmPassword" name="ConfirmPassword" class="border border-gray-300 p-2 rounded w-full">
+                            </div>
+                        </div>
+                        <div class="flex space-x-4 mb-4">
+                            <div class="input-group w-full">
+                                <label for="avatarFile" class="block text-sm font-medium text-gray-700">Ảnh đại diện công ty</label>
+                                <input type="file" id="avatarFile" name="AvatarFile" class="border border-gray-300 p-2 rounded w-full">
+                            </div>
+                            
+                        </div>
+                        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+                            Lưu
+                        </button>
+                    </div>
+                </form>
+            }
         </div>
     </main>
 </div>

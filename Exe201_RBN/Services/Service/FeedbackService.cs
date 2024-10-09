@@ -29,7 +29,19 @@ namespace Services.Service
             _userService = userService;
             _companyService = companyService;
         }
-
+        public async Task<List<FeedbackDTO>> GetFeedBacksByCompanyIdAsync(int companyId)
+        {
+            var company = await _companyService.GetCompanyById(companyId);
+            if (company == null)
+            {
+                throw new Exception("Not found company");
+            }
+            else
+            {
+                var bookings = await _feedbackRepository.GetFeedBacksByCompanyIdAsync(company.Id);
+                return _mapper.Map<List<FeedbackDTO>>(bookings);
+            }
+        }
         public async Task<List<FeedBack>> GetAllFeedback()
         {
             return await _feedbackRepository.GetAllFeedback();

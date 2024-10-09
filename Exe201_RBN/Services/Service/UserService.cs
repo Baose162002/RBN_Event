@@ -29,6 +29,11 @@ namespace Services.Service
             _mapper = mapper;
             _sendMail = sendMail;
         }
+        public async Task<UserDTO> GetUserNameById(int id)
+        {
+            var user = await _userRepo.GetByIdAsync(id);
+            return _mapper.Map<UserDTO>(user);
+        }
         public async Task<List<UserResponseDto>> getAllUser()
         {
             var users = await _userRepo.GetAllAsync();

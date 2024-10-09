@@ -163,7 +163,7 @@
                         <th class="p-3 border">Từ</th>
                         <th class="p-3 border">Đến</th>
                         <th class="p-3 border">Trạng thái</th>
-                        <th class="p-3 border">Chỉnh sửa</th>
+                        <th class="p-3 border">Đổi trạng thái</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -190,7 +190,10 @@
                                     }
                                 </td>
                                 <td class="p-3">
-                                    <a href="/CompanyRole/EditEvent/@eventItem.Id" class="text-blue-500 hover:underline">Chỉnh sửa</a>
+                                    <form asp-page-handler="ChangeStatus" method="post">
+                                        <input type="hidden" name="EventId" value="@eventItem.Id" />
+                                        <button id="status-button">✔</button>
+                                    </form>
                                 </td>
                             </tr>
                         }
@@ -206,17 +209,11 @@
 
             <!-- Pagination -->
             <div class="pagination flex justify-center items-center gap-4">
-                <span>01</span> / <span>05</span>
+                <span>01</span> / <span>01</span>
                 <button class="p-2 border rounded-lg">→</button>
             </div>
 
-            <div>
-                <form action="#" method="GET" class="hidden lg:block lg:pl-32">
-                    <div class="text-right mb-4">
-                        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Tạo sự kiện</button>
-                    </div>
-                </form>
-            </div>
+           
         </div>
     </main>
 </div>

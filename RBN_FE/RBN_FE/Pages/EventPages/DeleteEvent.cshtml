@@ -3,75 +3,74 @@
 @{
     ViewData["Title"] = "Xóa Sự Kiện";
 }
-}
+
 <partial name="_AdminHeader" />
 <div class="flex overflow-hidden bg-white pt-40">
     <partial name="_AdminNav" />
-<h2 class="text-2xl font-semibold mb-4">Xóa Sự Kiện</h2>
-
-@if (Model.Event != null)
-{
-    <div class="bg-white border rounded-lg p-6 mx-auto max-w-2xl">
-        <p class="text-gray-700 mb-4">
-            Bạn có chắc chắn muốn xóa sự kiện <strong class="font-semibold">@Model.Event.Title</strong>?
-        </p>
-
-        <!-- Sử dụng flexbox để chia thông tin sự kiện thành 2 cột -->
-        <div class="flex flex-wrap -mx-2 mb-4">
-            <div class="w-full sm:w-1/2 px-2 mb-4">
-                <strong class="block mb-1">Tên sự kiện:</strong>
-                <span>@Model.Event.Name</span>
-            </div>
-            <div class="w-full sm:w-1/2 px-2 mb-4">
-                <strong class="block mb-1">Giá:</strong>
-                <span>@Model.Event.Price.ToString("N0") VND</span>
-            </div>
-            <div class="w-full sm:w-1/2 px-2 mb-4">
-                <strong class="block mb-1">Trạng thái:</strong>
-                <span>@((Model.Event.Status == 1) ? "Hoạt động" : "Không hoạt động")</span>
-            </div>
-            <div class="w-full sm:w-1/2 px-2 mb-4">
-                <strong class="block mb-1">Ngày tạo:</strong>
-                <span>@Model.Event.CreateAt</span>
-            </div>
-            <div class="w-full px-2 mb-4">
-                <strong class="block mb-1">Mô tả:</strong>
-                <span>@Model.Event.Description</span>
-            </div>
+    <div class="bg-gray-100 w-full px-4 py-8">
+        <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+            @if (Model.Event != null)
+            {
+                <div class="p-4">
+                    <p class="text-gray-700 mb-4">
+                        Bạn có chắc chắn muốn xóa sự kiện <strong class="font-semibold">@Model.Event.Name</strong>?
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <strong class="block text-sm font-medium text-gray-700">Tên sự kiện:</strong>
+                            <span class="mt-1 block text-sm text-gray-900">@Model.Event.Name</span>
+                        </div>
+                        <div>
+                            <strong class="block text-sm font-medium text-gray-700">Giá:</strong>
+                            <span class="mt-1 block text-sm text-gray-900">@Model.Event.Price.ToString("N0") VND</span>
+                        </div>
+                        <div>
+                            <strong class="block text-sm font-medium text-gray-700">Trạng thái:</strong>
+                            <span class="mt-1 block text-sm text-gray-900">@((Model.Event.Status == 1) ? "Hoạt động" : "Không hoạt động")</span>
+                        </div>
+                        <div>
+                            <strong class="block text-sm font-medium text-gray-700">Ngày tạo:</strong>
+                            <span class="mt-1 block text-sm text-gray-900">@Model.Event.CreateAt</span>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <strong class="block text-sm font-medium text-gray-700">Mô tả:</strong>
+                        <span class="mt-1 block text-sm text-gray-900">@Model.Event.Description</span>
+                    </div>
+                    <div class="mt-4">
+                        <strong class="block text-sm font-medium text-gray-700 mb-2">Hình ảnh:</strong>
+                        <div class="w-full h-48 bg-gray-100 rounded-lg overflow-hidden">
+                            @if (!string.IsNullOrEmpty(Model.Event.EventImg?.ImageUrl))
+                            {
+                                <img src="@Model.Event.EventImg.ImageUrl" alt="@Model.Event.Name" class="w-full h-full object-cover">
+                            }
+                            else
+                            {
+                                <div class="w-full h-full flex items-center justify-center text-gray-500">Không có hình ảnh</div>
+                            }
+                        </div>
+                    </div>
+                    <div class="mt-6 flex justify-end space-x-3">
+                        <form method="post" onsubmit="return confirmDelete();">
+                            <input type="hidden" name="id" value="@Model.EventId" />
+                            <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">Xóa</button>
+                        </form>
+                        <a asp-page="/EventPages/EventIndex" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">Hủy</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="p-4">
+                    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role="alert">
+                        <p>Không tìm thấy sự kiện nào để xóa.</p>
+                    </div>
+                </div>
+            }
         </div>
-
-        <!-- Hiển thị hình ảnh của sự kiện -->
-        <div class="mb-4">
-            <strong class="block mb-2">Hình ảnh:</strong>
-            <div class="relative w-full sm:w-80 h-80 overflow-hidden rounded-lg">
-                @if (!string.IsNullOrEmpty(Model.Event.EventImg?.ImageUrl))
-                {
-                    <img src="@Model.Event.EventImg.ImageUrl" alt="@Model.Event.Title" class="object-cover w-full h-full" />
-                }
-                else
-                {
-                    <img src="https://via.placeholder.com/400" alt="No Image Available" class="object-cover w-full h-full" />
-                }
-            </div>
-        </div>
-
-        <!-- Form xác nhận xóa sự kiện -->
-        <div class="flex justify-between">
-            <form method="post" onsubmit="return confirmDelete();">
-                <input type="hidden" name="id" value="@Model.EventId" />
-                <button type="submit" class="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600">Xóa</button>
-            </form>
-            <a asp-page="/EventPages/EventIndex" class="bg-gray-500 text-white font-bold py-2 px-4 rounded hover:bg-gray-600">Hủy</a>
-        </div>
-    </div> 
-}
-else
-{
-    <div class="alert alert-warning">
-        Không tìm thấy sự kiện nào để xóa.
     </div>
-}
 </div>
+
 @section Scripts {
     <script>
         function confirmDelete() {

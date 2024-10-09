@@ -1,3 +1,30 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+    .after-line {
+        position: relative;
+    }
+
+    .no-hover-color:hover {
+        color: inherit !important;
+    }
+
+    .after-line::after {
+        background-color: currentColor !important;
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        height: 1px;
+        width: 0;
+        background-color: black; /* Hoặc màu bạn muốn cho đường gạch chân */
+        transition: width 0.3s ease, left 0.3s ease;
+    }
+
+        .after-line:hover::after {
+            width: 100%;
+            left: 0;
+        }
+}

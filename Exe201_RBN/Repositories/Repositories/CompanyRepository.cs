@@ -51,7 +51,6 @@ namespace Repositories.Repositories
                 throw e;
             }
         }
-
         public async Task Update(Company company, int id)
         {
             try

@@ -65,6 +65,16 @@ namespace RBN_Api.Controllers
             }
             return Ok(response);
         }
+        [HttpGet("get-response-by-feedback/{id}")]
+        public async Task<IActionResult> GetResponseByFeedbackId(int id)
+        {
+            var response = await _responseService.GetResponseByFeedbackId(id);
+            if (response == null)
+            {
+                return NotFound("Response not found");
+            }
+            return Ok(response);
+        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateResponse(int id, ResponseDTO responseDTO)

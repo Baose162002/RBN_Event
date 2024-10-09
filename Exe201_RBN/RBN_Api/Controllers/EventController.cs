@@ -19,8 +19,14 @@ namespace RBN_Api.Controllers
             _eventService = eventService;
 			_eventImgService = eventImgService;
 		}
+        [HttpPut("change-status-event/{id}")]
+        public async Task<EventDTO> ChangeStatusBooking(int id)
+        {
+            var existedEvent = await _eventService.ChangeStatusEvent(id);
+            return existedEvent;
+        }
         [HttpGet("get-event-by-company/{id}")]
-        public async Task<List<EventDTO>> GetBookingsByCompanyIdAsync(int id)
+        public async Task<List<EventDTO>> GetEventsByCompanyIdAsync(int id)
         {
             return await _eventService.GetEventsByCompanyIdAsync(id);
         }

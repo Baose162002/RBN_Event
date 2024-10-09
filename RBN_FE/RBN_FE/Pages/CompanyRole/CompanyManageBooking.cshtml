@@ -151,51 +151,197 @@
                 </tr>
             </thead>
             <tbody>
-                @if (Model.Booking != null && Model.Booking.Count > 0)
-                {
-                    @foreach (var booking in Model.Booking)
+    @if (Model.Booking != null && Model.Booking.Count > 0)
+    {
+        @foreach (var booking in Model.Booking)
+        {
+            <tr class="text-center border-b">
+                <td class="p-3">#@booking.Id</td>
+                <td class="p-3">@booking.BookingDay.ToString("dd/MM/yyyy")</td>
+                <td class="p-3">
+                    <a href="#" 
+                       class="text-blue-500 hover:underline view-details" 
+                       data-id="@booking.Id"
+                       data-fullname="@booking.FullName"
+                       data-email="@booking.Email"
+                       data-phone="@booking.Phone"
+                       data-address="@booking.Address"
+                       data-price="@booking.Price"
+                       data-bookingday="@booking.BookingDay.ToString("dd/MM/yyyy")"
+                       data-eventname="@booking.EventName"
+                       data-companyname="@booking.CompanyName"
+                       data-usernote="@booking.UserNote"
+                       data-status="@booking.Status">
+                       Xem
+                    </a>
+                </td>
+                <td class="p-3">
+                    @if (booking.Status == 1)
                     {
-                        <tr class="text-center border-b">
-                            <td class="p-3">#@booking.Id</td>
-                            <td class="p-3">@booking.BookingDay.ToString("dd/MM/yyyy")</td>
-                                <td class="p-3">
-                                    <a href="#" class="text-blue-500 hover:underline view-details" data-id="@booking.Id">Xem</a>
-                                </td>
-                            <td class="p-3">
-                                @if (booking.Status == 1)
-                                {
-                                    <span>Đã xử lý</span>
-                                }
-                                else
-                                {
-                                    <span>Đang chờ xử lý</span>
-                                }
-                            </td>
-                            <td class="p-3">
-                                <button class="action-button accept">✔</button>
-                                <button class="action-button reject">✘</button>
-                            </td>
-                        </tr>
+                        <span class="text-green-600">Đã xử lý</span>
                     }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="5" class="text-center p-3">Không có dữ liệu đơn đặt hàng.</td>
-                    </tr>
-                }
-            </tbody>
+                    else
+                    {
+                        <span class="text-red-600">Đang chờ xử lý</span>
+                    }
+                </td>
+                <td class="p-3">
+                    <form asp-page-handler="ChangeStatus" method="post">
+                    <input type="hidden" name="BookingId" value="@booking.Id" />
+                    <button id="status-button">✔</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td colspan="5" class="text-center p-3">Không có dữ liệu đơn đặt hàng.</td>
+        </tr>
+    }
+</tbody>
         </table>
+            <!-- Modal để hiển thị chi tiết đơn đặt hàng -->
+            <div id="bookingModal" class="fixed inset-0 hidden z-50 flex items-center justify-center">
+                <div class="bg-white p-4 rounded-lg shadow-lg max-w-md w-full">
+                    <h2 class="text-xl font-semibold mb-4">Chi tiết đơn đặt</h2>
 
-        <!-- Pagination (Placeholder) -->
-        <div class="pagination flex justify-center items-center gap-4">
-            <span>01</span> / <span>05</span>
-            <button class="p-2 border rounded-lg">→</button>
-        </div>
-    </div>
+                    <div id="bookingDetails">
+                        <p><strong>Mã đơn:</strong> <span id="bookingId"></span></p>
+                        <p><strong>Họ tên:</strong> <span id="fullName"></span></p>
+                        <p><strong>Email:</strong> <span id="email"></span></p>
+                        <p><strong>Số điện thoại:</strong> <span id="phone"></span></p>
+                        <p><strong>Địa chỉ:</strong> <span id="address"></span></p>
+                        <p><strong>Ngày đặt:</strong> <span id="bookingDay"></span></p>
+                        <p><strong>Ghi chú:</strong> <span id="userNote"></span></p>
+                        <p><strong>Giá:</strong> <span id="price"></span></p>
+                        <p><strong>Tên sự kiện:</strong> <span id="eventName"></span></p>
+                        <p><strong>Tên công ty:</strong> <span id="companyName"></span></p>
+                        <p><strong>Trạng thái:</strong> <span id="status"></span></p>
+                    </div>
+
+                    <button id="closeModal" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Đóng</button>
+                </div>
+            </div>
+            <!-- Pagination -->
+            <div class="flex justify-center mt-4">
+                <nav aria-label="Page navigation">
+                    <ul class="inline-flex items-center -space-x-px">
+                        <li>
+                            <a asp-page="CompanyManageBooking" asp-route-bookingId="@Model.BookingId" asp-route-pageIndex="@(Model.PageIndex - 1)" class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 @(Model.PageIndex <= 1 ? "cursor-not-allowed text-gray-300 bg-gray-200" : "")">Trước</a>
+                        </li>
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li>
+                                <a asp-page="CompanyManageBooking" asp-route-bookingId="@Model.BookingId" asp-route-pageIndex="@i" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 @(i == Model.PageIndex ? "z-10 text-blue-600 bg-blue-50 border-blue-300" : "")">@i</a>
+                            </li>
+                        }
+                        <li>
+                            <a asp-page="CompanyManageBooking" asp-route-bookingId="@Model.BookingId" asp-route-pageIndex="@(Model.PageIndex + 1)" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 @(Model.PageIndex >= Model.TotalPages ? "cursor-not-allowed text-gray-300 bg-gray-200" : "")">Sau</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
 </main>
+    <!-- JS to handle the accept and reject actions -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Lắng nghe sự kiện khi nhấn vào link "Xem"
+            document.querySelectorAll('.view-details').forEach(function (link) {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault(); // Ngăn chặn việc chuyển trang
+                    const bookingId = this.getAttribute('data-id'); // Lấy ID booking từ thuộc tính data-id
+                    const fullName = this.getAttribute('data-fullname');
+                    const email = this.getAttribute('data-email');
+                    const phone = this.getAttribute('data-phone');
+                    const address = this.getAttribute('data-address');
+                    const price = this.getAttribute('data-price');
+                    const bookingDay = this.getAttribute('data-bookingday');
+                    const eventName = this.getAttribute('data-eventname');
+                    const companyName = this.getAttribute('data-companyname');
+                    const userNote = this.getAttribute('data-usernote');
+                    const status = this.getAttribute('data-status') == 1 ? 'Đã xử lý' : 'Đang chờ xử lý';
 
+                    // Hiển thị modal và dữ liệu chi tiết đơn đặt hàng
+                    openModal(bookingId, fullName, email, phone, address, price, bookingDay, eventName, companyName, userNote, status);
+                });
+            });
+
+            // Hàm mở modal với dữ liệu
+            function openModal(bookingId, fullName, email, phone, address, price, bookingDay, eventName, companyName, userNote, status) {
+                // Hiển thị modal
+                document.getElementById('bookingModal').classList.remove('hidden');
+
+                // Cập nhật nội dung chi tiết
+                document.getElementById('bookingDetails').innerHTML = `
+                    <p><strong>Mã đơn:</strong> #${bookingId}</p>
+                    <p><strong>Họ và tên:</strong> ${fullName}</p>
+                    <p><strong>Email:</strong> ${email}</p>
+                    <p><strong>Số điện thoại:</strong> ${phone}</p>
+                    <p><strong>Địa chỉ:</strong> ${address}</p>
+                    <p><strong>Giá:</strong> ${price.toLocaleString()} VND</p>
+                    <p><strong>Ngày đặt:</strong> ${bookingDay}</p>
+                    <p><strong>Tên sự kiện:</strong> ${eventName}</p>
+                    <p><strong>Tên công ty:</strong> ${companyName}</p>
+                    <p><strong>Ghi chú của khách hàng:</strong> ${userNote}</p>
+                    <p><strong>Trạng thái:</strong> ${status}</p>
+                `;
+            }
+
+            // Đóng modal
+            document.getElementById('closeModal').addEventListener('click', function () {
+                document.getElementById('bookingModal').classList.add('hidden');
+            });
+        });
+    </script>
 <style>
+        /* Modal Background */
+        #bookingModal {
+            background-color: rgba(0, 0, 0, 0.5); /* Nền mờ */
+        }
+
+            /* Modal Container */
+            #bookingModal .bg-white {
+                background-color: #ffffff; /* Nền trắng cho modal */
+                border-radius: 8px; /* Bo góc */
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Đổ bóng */
+                max-width: 400px; /* Đặt chiều rộng tối đa cho modal */
+                padding: 20px; /* Padding cho nội dung */
+                transition: transform 0.3s ease, opacity 0.3s ease; /* Hiệu ứng chuyển động */
+            }
+
+            /* Modal Header */
+            #bookingModal h2 {
+                font-size: 24px; /* Kích thước chữ cho tiêu đề */
+                color: #333; /* Màu chữ */
+                margin-bottom: 15px; /* Khoảng cách dưới tiêu đề */
+            }
+
+        /* Modal Close Button */
+        #closeModal {
+            background-color: #ff4c4c; /* Nền đỏ cho nút đóng */
+            color: #fff; /* Màu chữ trắng */
+            padding: 10px 15px; /* Padding cho nút */
+            border: none; /* Bỏ viền */
+            border-radius: 5px; /* Bo góc */
+            cursor: pointer; /* Con trỏ tay khi hover */
+            transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu */
+        }
+
+            /* Hover Effect for Close Button */
+            #closeModal:hover {
+                background-color: #ff1a1a; /* Đổi màu khi hover */
+            }
+
+        /* Modal Content */
+        #bookingDetails p {
+            font-size: 16px; /* Kích thước chữ cho nội dung */
+            color: #555; /* Màu chữ xám tối */
+            margin-bottom: 10px; /* Khoảng cách giữa các dòng */
+        }
+
+
     /* General Styles */
     .main-content {
         padding: 20px;
@@ -298,4 +444,24 @@
     .pagination span {
         font-weight: bold;
     }
+
+        #status-container {
+            display: flex;
+            align-items: center;
+        }
+
+        #status-text.pending {
+            color: red; /* Màu chữ cho trạng thái "Đang chờ xử lý" */
+        }
+
+        #status-text.processed {
+            color: green; /* Màu chữ cho trạng thái "Đã xử lý" */
+        }
+
+        #status-button {
+            background: none; /* Xóa nền của nút */
+            border: none; /* Xóa viền của nút */
+            cursor: pointer; /* Hiển thị con trỏ chuột khi hover */
+            font-size: 24px; /* Kích thước của nút */
+        }
 </style>

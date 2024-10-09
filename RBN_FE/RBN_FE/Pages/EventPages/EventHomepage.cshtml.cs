@@ -1,17 +1,17 @@
-﻿using BusinessObject.DTO;
 using BusinessObject.DTO.RequestDto;
+using BusinessObject.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.Json;
 
-namespace RBN_FE.Pages
+namespace RBN_FE.Pages.EventPages
 {
-    public class IndexModel : PageModel
+    public class EventHomepageModel : PageModel
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
 
-        public IndexModel(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public EventHomepageModel(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
             _httpClient = httpClientFactory.CreateClient();
             _configuration = configuration;
@@ -20,10 +20,10 @@ namespace RBN_FE.Pages
         public List<EventDTO> Events { get; set; }
         public string SearchTerm { get; set; } = string.Empty; // Property to hold searchTerm
         public int PageNumber { get; set; } = 1; // Property for pageNumber
-        public int PageSize { get; set; } = 6; // Property for pageSize
+        public int PageSize { get; set; } = 10; // Property for pageSize
         public int TotalPages { get; set; } // Property for total pages
 
-        public async Task OnGetAsync(string searchTerm = "", int pageNumber = 1, int pageSize = 6)
+        public async Task OnGetAsync(string searchTerm = "", int pageNumber = 1, int pageSize = 10)
         {
             SearchTerm = searchTerm; // Assign value to property
             PageNumber = pageNumber; // Assign value to property

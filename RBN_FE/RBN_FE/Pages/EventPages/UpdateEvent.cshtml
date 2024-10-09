@@ -9,7 +9,7 @@
 
 <div class="max-w-screen-lg mx-auto p-5 sm:p-10 md:p-16">
     <div class="mb-10 rounded overflow-hidden flex flex-col mx-auto">
-        <h2 class="text-3xl font-semibold mb-6">Update Event</h2>
+        <h2 class="text-3xl font-semibold mb-6">Cập nhật sự kiện</h2>
 
         <form method="post" enctype="multipart/form-data" class="space-y-6">
             <div>
@@ -85,10 +85,6 @@
                     </div>
 
             </div>
-                <div>
-                    <label asp-for="Input.EventType" class="block mb-2 text-sm font-medium text-gray-900">Event Type</label>
-                    <span asp-validation-for="Input.EventType" class="text-red-500 text-sm"></span>
-                </div>
 
             <div>
                 <label asp-for="EventImage" class="block mb-2 text-sm font-medium text-gray-900"></label>
@@ -108,7 +104,7 @@
                 <a asp-page="/EventPages/EventIndex" class="text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                     Back to Events
                 </a>
-            </div>
+                </div>   
         </form>
             @if (!ModelState.IsValid)
             {

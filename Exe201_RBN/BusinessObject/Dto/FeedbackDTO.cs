@@ -8,6 +8,7 @@ namespace BusinessObject.Dto
 {
     public class FeedbackDTO
     {
+        public int Id { get; set; }
         public string Comment { get; set; }
         public DateTime FeedbackDate { get; set; }
         public int UserId { get; set; }

@@ -41,9 +41,13 @@ namespace Services.Configurations.Mapper
             CreateMap<CreateUserDto, User>();
             CreateMap<LoginUserRequest, User>();
             CreateMap<FeedbackDTO, FeedBack>();
+            CreateMap<FeedBack, FeedbackDTO>();
             CreateMap<ResponseDTO, Response>();
-
-            CreateMap<Booking, ViewDetailsBookingDto>();
+            CreateMap<Response, ResponseDTO>();
+            CreateMap<Booking, ViewDetailsBookingDto>()
+            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Event.Price))
+            .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.Event.Company.Name));
+            CreateMap<User, UserDTO>();
 
             // Promotion
             CreateMap<Promotion, ViewDetailsPromotionDto>();
