@@ -4,10 +4,13 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using CloudinaryDotNet;
 using RBN_FE;
+using RBN_FE.Pages.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddTransient<PaymentService>();
+builder.Services.AddTransient<VnPayLibrary>();
 builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 {
     options.Conventions.AddPageRoute("/LogIn_Out/CompanySignup", "/CompanySignup");
