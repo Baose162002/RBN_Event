@@ -37,7 +37,9 @@
                         </div>
                         <div>
                             <p class="font-semibold text-gray-600">Giá:</p>
-                            <p class="text-2xl font-bold text-green-600">@Model.EventDetail.Price.ToString("C")</p>
+                            <p class="text-2xl font-bold text-green-600">
+                                @Model.EventDetail.Price.ToString("#,##0") VND
+                            </p>
                         </div>
                         <div>
                             <p class="font-semibold text-gray-600">Công ty:</p>
@@ -76,37 +78,69 @@
                         <textarea asp-for="Booking.UserNote" class="h-32 w-full rounded-md border bg-white py-2 px-2 outline-none ring-yellow-500 focus:ring-2" placeholder="Viết yêu cầu đặc biệt của bạn tại đây"></textarea>
                     </label>
                 </div>
-                <button type="submit" class="mt-6 rounded-full bg-yellow-400 px-4 py-2 text-center text-base font-semibold shadow-md outline-none ring-yellow-500 ring-offset-2 transition hover:bg-yellow-500 focus:ring-2 md:w-40">Đặt ngay</button>
+                <button type="submit" class="mt-6 rounded-full bg-blue-500 px-4 py-2 text-center text-base font-semibold text-white shadow-md outline-none ring-blue-600 ring-offset-2 transition hover:bg-blue-600 focus:ring-2 md:w-40">
+                    Đặt ngay
+                </button>
             </form>
 
-            @if (Model.RelatedEvents != null && Model.RelatedEvents.Count > 0)
-            {
-                <h3 class="text-2xl font-bold mb-4">Sự kiện liên quan</h3>
-                <div class="scrollable-container">
-                    @foreach (var relatedEvent in Model.RelatedEvents)
-                    {
-                        <div class="scrollable-card">
-                            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                                <img src="@relatedEvent.EventImg?.ImageUrl" class="w-full h-48 object-cover" alt="@relatedEvent.Title">
-                                <div class="p-4">
-                                    <h5 class="text-xl font-semibold mb-2">@relatedEvent.Title</h5>
-                                    <p class="text-gray-600 mb-2">@relatedEvent.Description</p>
-                                    <p class="text-sm text-gray-500 mb-4">@relatedEvent.EventType</p>
-                                    <a asp-page="/HomeEvent/HomeEventDetail" asp-route-id="@relatedEvent.Id" class="bg-yellow-400 text-gray-800 px-4 py-2 rounded-full inline-block hover:bg-yellow-500 transition">Xem chi tiết</a>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                </div>
-            }
-            else
-            {
-                <p class="mt-4">Không tìm thấy sự kiện liên quan.</p>
-            }
+           
         </div>
     </div>
 </div>
-
+@if (Model.RelatedEvents != null && Model.RelatedEvents.Count > 0)
+{
+    <div class="relative mt-8 mb-4">
+        <div class="absolute inset-0 flex items-center" aria-hidden="true">
+            <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
+        </div>
+        <div class="relative flex justify-center">
+            <span class="px-3 bg-gray-100 text-4xl font-light text-gray-900 ">
+                Các sự kiện liên quan khác 
+            </span>
+        </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 scrollable-container">
+        @foreach (var relatedEvent in Model.RelatedEvents)
+        {
+            <div class="flex flex-col mb-10 items-center border border-gray-200 rounded-lg shadow-lg p-4">
+                <div class="w-full mb-6">
+                    <img class="object-cover object-center rounded w-full h-[300px]" src="@relatedEvent.EventImg?.ImageUrl" alt="@relatedEvent.Title">
+                </div>
+                <div class="w-full text-center">
+                    <h2 class="text-sm title-font text-gray-500 tracking-widest mb-1">@relatedEvent.EventType</h2>
+                    <h1 class="text-gray-900 text-4xl title-font font-medium mb-4">@relatedEvent.Title</h1>
+                    <p class="leading-relaxed text-lg mb-4">@relatedEvent.Description</p>
+                    <a asp-page="/HomeEvent/HomeEventDetail" asp-route-id="@relatedEvent.Id" class="flex items-center text-indigo-700 border border-indigo-600 py-2 px-6 gap-2 rounded inline-flex items-center">
+                        <span>
+                            XEM CHI TIẾT
+                        </span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="relative mt-8 mb-4">
+        <div class="absolute inset-0 flex items-center" aria-hidden="true">
+            <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
+        </div>
+        <div class="relative flex justify-center">
+            <span class="px-3 bg-gray-100 text-4xl font-light text-gray-900 ">
+                Các sự kiện liên quan khác
+            </span>
+        </div>
+    </div>
+    <div class="relative flex justify-center mb-4">
+        <span class="px-3 bg-gray-100 text-2xl font-light text-gray-900 ">
+            Không tìm thấy sự kiện liên quan nào.
+        </span>
+    </div>
+}
 <partial name="_Footer" />
 
 <style>
