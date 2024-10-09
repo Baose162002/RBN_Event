@@ -11,7 +11,7 @@
         @if (Model.Input == null)
         {
             <div class="alert alert-danger">
-                Unable to load event details. Please try again later.
+               Không thể tải chi tiết sự kiện, hãy thử lại sau!
             </div>
         }
         else
@@ -50,7 +50,7 @@
                                 </g>
                             </g>
                         </svg>
-                    <span class="ml-1">Created @Model.Input.CreateAt</span>
+                    <span class="ml-1">Ngày tạo: @Model.Input.CreateAt</span>
                 </span>
                 <a href="#" class="flex flex-row items-center hover:text-indigo-600">
                     <svg class="text-indigo-600" fill="currentColor" height="16px" aria-hidden="true" role="img"
@@ -65,7 +65,7 @@
             </div>
             <hr>
             <div class="mt-4">
-                <h3 class="text-xl font-semibold mb-2">Event Details</h3>
+                <h3 class="text-xl font-semibold mb-2">Chi tiết sự kiện</h3>
                 <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
                     <div class="sm:col-span-1">
                         <dt class="text-sm font-medium text-gray-500">Name</dt>
@@ -95,5 +95,5 @@
             </div>
         }
     </div>
-    <a asp-page="/EventPages/EventIndex" class="inline-block bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700 transition duration-300">Back to Events</a>
+    <a asp-page="/EventPages/EventIndex" class="inline-block bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700 transition duration-300">Trở về</a>
 </div></div>
