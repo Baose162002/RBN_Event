@@ -9,7 +9,8 @@ using RBN_FE.Pages.Service;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddTransient<VnPayService>();
+builder.Services.AddTransient<PaymentService>();
+builder.Services.AddTransient<VnPayLibrary>();
 builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 {
     options.Conventions.AddPageRoute("/LogIn_Out/CompanySignup", "/CompanySignup");

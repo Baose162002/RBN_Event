@@ -5,6 +5,7 @@ using BusinessObject.DTO.RequestDto;
 using BusinessObject.DTO.ResponseDto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 using RBN_FE.Pages.Service;
 using System.Security.Cryptography;
 using System.Text;
@@ -16,7 +17,7 @@ namespace RBN_FE.Pages.HomeEvent
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
-        private readonly VnPayService _vnPayService;
+        private readonly PaymentService _vnPayService;
 
         public EventDTO EventDetail { get; set; } // Property to hold event details
         public List<EventDTO> RelatedEvents { get; set; } // Property to hold related events
@@ -25,7 +26,7 @@ namespace RBN_FE.Pages.HomeEvent
 
 
 
-        public HomeEventDetailModel(IHttpClientFactory httpClientFactory, IConfiguration configuration, VnPayService vnPayService)
+        public HomeEventDetailModel(IHttpClientFactory httpClientFactory, IConfiguration configuration, PaymentService vnPayService)
         {
             _httpClient = httpClientFactory.CreateClient();
             _configuration = configuration;
@@ -75,6 +76,7 @@ namespace RBN_FE.Pages.HomeEvent
                 {
                     Booking.UserId = userId;
                     Booking.EventId = EventDetail.Id;
+                    HttpContext.Session.SetString("EventId", EventDetail.Id.ToString()); // Store as integer
 
                     // Lấy giá từ EventDetail
                     var eventPrice = EventDetail.Price; // Đảm bảo EventDetail đã được nạp
@@ -84,9 +86,20 @@ namespace RBN_FE.Pages.HomeEvent
                         ModelState.AddModelError("", "Giá sự kiện không hợp lệ.");
                         return Page();
                     }
-
+                    var booking = new VnPaymentRequestModel
+                    {
+                        Amount = eventPrice,
+                        CreatedDate = DateTime.Now,
+                        OrderId = id
+                    };
+                    // Store user details in session
+                    HttpContext.Session.SetString("FullName", Request.Form["Booking.FullName"]);
+                    HttpContext.Session.SetString("Email", Request.Form["Booking.Email"]);
+                    HttpContext.Session.SetString("Address", Request.Form["Booking.Address"]);
+                    HttpContext.Session.SetString("Phone", Request.Form["Booking.Phone"]);
+                    HttpContext.Session.SetString("UserNote", Request.Form["Booking.UserNote"]);
                     // Tạo URL thanh toán
-                    var paymentUrl = _vnPayService.GeneratePaymentUrl(eventPrice, Booking);
+                    var paymentUrl = _vnPayService.GeneratePaymentUrl(HttpContext, booking);
                     return Redirect(paymentUrl);
                 }
                 else
