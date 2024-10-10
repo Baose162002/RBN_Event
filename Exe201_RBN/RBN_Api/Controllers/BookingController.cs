@@ -67,11 +67,11 @@ namespace RBN_Api.Controllers
             var booking = await _bookingService.ChangeStatusBooking(id);
             return booking;
         }
-        [HttpGet("search")]
-        public async Task<List<ViewDetailsBookingDto>> SearchBooking(int? id, string? email, string? fullname, string? address
-            , decimal? price, string? phone, DateTime? bookingDay, int? status, int? eventId)
+        [HttpGet("search/{companyId}")]
+        public async Task<List<ViewDetailsBookingDto>> SearchBooking(int companyId,int? id, string? email, string? fullname, string? address
+            , decimal? price, string? phone, int? status, int? eventId)
         {
-            return await _bookingService.SearchBooking(id, email, fullname, address, price, phone, bookingDay, status, eventId);
+            return await _bookingService.SearchBookingByCompanyId(companyId, id, email, fullname, address, price, phone, status, eventId);
         }
         [HttpGet("get-booking-by-company/{id}")]
         public async Task<List<ViewDetailsBookingDto>> GetBookingsByCompanyIdAsync(int id)

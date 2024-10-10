@@ -121,24 +121,24 @@
             <!-- Filters -->
             <div class="filter-section grid grid-cols-3 gap-4 mb-4">
                 <div class="input-group">
-                    <label for="orderCode" class="font-medium">Mã sự kiện</label>
-                    <input type="text" id="orderCode" placeholder="Nhập mã sự kiện" class="p-2 border border-gray-300 rounded-lg">
+                    <label for="SearchCreate" class="font-medium">Mã sự kiện</label>
+                    <input type="text" id="SearchId" name="SearchId" placeholder="Nhập mã sự kiện" class="p-2 border border-gray-300 rounded-lg">
                 </div>
                 <div class="input-group">
-                    <label for="date" class="font-medium">Ngày tạo</label>
-                    <input type="date" id="date" class="p-2 border border-gray-300 rounded-lg">
+                    <label for="SearchCreate" class="font-medium">Ngày tạo</label>
+                    <input type="date" id="SearchCreate" name="SearchCreate" class="p-2 border border-gray-300 rounded-lg">
                 </div>
                 <div class="input-group">
-                    <label for="orderCode" class="font-medium">Tên sự kiện</label>
-                    <input type="text" id="orderCode" placeholder="Nhập tên sự kiện" class="p-2 border border-gray-300 rounded-lg">
+                    <label for="SearchEventName" class="font-medium">Tên sự kiện</label>
+                    <input type="text" id="SearchEventName" name="SearchEventName" placeholder="Nhập tên sự kiện" class="p-2 border border-gray-300 rounded-lg">
                 </div>
                 <div class="input-group">
-                    <label for="orderCode" class="font-medium">Mức giá</label>
-                    <input type="text" id="orderCode" placeholder="Nhập giá sự kiện" class="p-2 border border-gray-300 rounded-lg">
+                    <label for="SearchPrice" class="font-medium">Mức giá</label>
+                    <input type="text" id="SearchPrice" name="SearchPrice" placeholder="Nhập giá sự kiện" class="p-2 border border-gray-300 rounded-lg">
                 </div>
                 <div class="input-group">
-                    <label for="status" class="font-medium">Trạng Thái</label>
-                    <select id="status" class="p-2 border border-gray-300 rounded-lg">
+                    <label for="SearchStatus" class="font-medium">Trạng Thái</label>
+                    <select id="SearchStatus" name="SearchStatus" class="p-2 border border-gray-300 rounded-lg">
                         <option value="">Tất cả</option>
                         <option value="processed">Đang cung cấp</option>
                         <option value="pending">Ngừng cung cấp</option>
@@ -208,9 +208,23 @@
             </table>
 
             <!-- Pagination -->
-            <div class="pagination flex justify-center items-center gap-4">
-                <span>01</span> / <span>01</span>
-                <button class="p-2 border rounded-lg">→</button>
+            <div class="flex justify-center mt-4">
+                <nav aria-label="Page navigation">
+                    <ul class="inline-flex items-center -space-x-px">
+                        <li>
+                            <a asp-page="CompanyManageEvent" asp-route-bookingId="@Model.EventId" asp-route-pageIndex="@(Model.PageIndex - 1)" class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 @(Model.PageIndex <= 1 ? "cursor-not-allowed text-gray-300 bg-gray-200" : "")">Trước</a>
+                        </li>
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li>
+                                <a asp-page="CompanyManageEvent" asp-route-bookingId="@Model.EventId" asp-route-pageIndex="@i" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 @(i == Model.PageIndex ? "z-10 text-blue-600 bg-blue-50 border-blue-300" : "")">@i</a>
+                            </li>
+                        }
+                        <li>
+                            <a asp-page="CompanyManageEvent" asp-route-bookingId="@Model.EventId" asp-route-pageIndex="@(Model.PageIndex + 1)" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 @(Model.PageIndex >= Model.TotalPages ? "cursor-not-allowed text-gray-300 bg-gray-200" : "")">Sau</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
 
            

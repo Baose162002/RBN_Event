@@ -145,7 +145,12 @@ namespace RBN_Api.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-
+        [HttpGet("search/{companyId}")]
+        public async Task<List<EventDTO>> SearchEventByCompanyId(int companyId, int? id, DateTime? createDate, string? eventname
+           , double? price, int? status)
+        {
+            return await _eventService.SearchEventByCompanyId(companyId, id, createDate, eventname, price, status);
+        }
 
     }
 }

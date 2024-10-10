@@ -174,8 +174,55 @@ namespace Services.Service
 
             return response;
         }
+        public async Task<List<EventDTO>> SearchEventByCompanyId(int companyId, int? id, DateTime? createDate, string? eventname
+           , double? price, int? status)
+        {
+            var company = await _companyRepository.GetCompanyById(companyId);
+            if (company == null)
+            {
+                throw new Exception("Not found company");
+            }
+            else
+            {
+                var events = await _eventRepository.GetEventsByCompanyIdAsync(company.Id);
+                if (events == null)
+                {
+                    throw new Exception("No data");
+                }
+                if (id.HasValue)
+                {
+                    events = events.Where(x => x.Id == id.Value).ToList();
+                }
+                if (createDate.HasValue)
+                {
+                    events = events.Where(x => x.CreateAt == createDate.Value).ToList();
+                }
+                if (!string.IsNullOrEmpty(eventname))
+                {
+                    events = events.Where(x => x.Name.ToLower().Contains(eventname.ToLower())).ToList();
+                }
+                
+                if (price.HasValue)
+                {
+                    events = events.Where(x => x.Price == price.Value).ToList();
+                }
+                
+                if (status.HasValue)
+                {
+                    events = events.Where(x => x.Status == status.Value).ToList();
+                }
 
-        public async Task Update(UpdateEventDto events, int id)
+                var eventList = events.ToList();
+
+                if (eventList == null)
+                {
+                    throw new Exception("No data");
+                }
+
+                return _mapper.Map<List<EventDTO>>(eventList);
+            }
+        }
+    public async Task Update(UpdateEventDto events, int id)
         {
             if(events == null || string.IsNullOrEmpty(events.Title)
                 || string.IsNullOrEmpty(events.Name)
