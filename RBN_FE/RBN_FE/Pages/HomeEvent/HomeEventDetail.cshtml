@@ -6,8 +6,8 @@
 
 <partial name="_Header" />
 
-<div class="flex flex-wrap text-slate-800">
-    <div class="relative hidden h-screen select-none flex-col justify-center bg-cover bg-center text-center md:flex md:w-1/2" style="background-image: url('@(Model.EventDetail?.EventImg?.ImageUrl ?? "/images/default-event-image.png")');">
+<div class="flex flex-wrap text-slate-800 max-h-8xl my-auto border-1 border-gray-200 rounded-lg shadow-lg">
+    <div class="relative hidden h-[89vh] select-none flex-col justify-center bg-cover bg-center text-center md:flex md:w-1/2" style="background-image: url('@(Model.EventDetail?.EventImg?.ImageUrl ?? "/images/default-event-image.png")');">
         <div class="absolute inset-0 bg-gray-900 bg-opacity-50"></div>
         <a href="javascript:history.back()" class="absolute top-4 left-4 group inline-flex items-center overflow-hidden rounded border border-white px-4 py-2 text-white hover:bg-blue-600 hover:text-white transition-all duration-300 focus:outline-none focus:ring active:bg-blue-700 z-20">
             <span class="mr-2 transition-transform group-hover:-translate-x-1">
@@ -22,7 +22,7 @@
             <p class="mb-4 text-lg font-medium">Đặt chỗ ngay phía bên phải nào!</p>
         </div>
     </div>
-    <div class="flex w-full flex-col md:w-1/2">
+    <div class="flex w-full  flex-col md:w-1/2">
         <div class="my-10 flex w-full flex-col justify-center px-6 md:pl-12 sm:pt-0 md:justify-start">
             @if (Model.EventDetail != null)
             {
@@ -46,7 +46,7 @@
                             <p class="text-2xl font-bold text-gray-800">@Model.EventDetail.Company?.Name</p>
                         </div>
                     </div>
-                    <p class="mt-4 text-gray-600">Mô tả sự kiện: @Model.EventDetail.Description</p>
+                    <p class="mt-4 text-gray-600 whitespace-normal break-words">Mô tả sự kiện: @Model.EventDetail.Description</p>
                 </div>
             }
             else
@@ -99,7 +99,7 @@
             </span>
         </div>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 scrollable-container">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 scrollable-container mx-4">
         @foreach (var relatedEvent in Model.RelatedEvents)
         {
             <div class="flex flex-col mb-10 items-center border border-gray-200 rounded-lg shadow-lg p-4">
@@ -108,9 +108,9 @@
                 </div>
                 <div class="w-full text-center">
                     <h2 class="text-sm title-font text-gray-500 tracking-widest mb-1">@relatedEvent.EventType</h2>
-                    <h1 class="text-gray-900 text-4xl title-font font-medium mb-4">@relatedEvent.Title</h1>
-                    <p class="leading-relaxed text-lg mb-4">@relatedEvent.Description</p>
-                    <a asp-page="/HomeEvent/HomeEventDetail" asp-route-id="@relatedEvent.Id" class="flex items-center text-indigo-700 border border-indigo-600 py-2 px-6 gap-2 rounded inline-flex items-center">
+                    <h1 class="text-gray-900 text-4xl title-font font-medium mb-4 truncate">@relatedEvent.Title</h1>
+                    <p class="leading-relaxed text-lg mb-4 overflow-hidden line-clamp-3">@relatedEvent.Description</p>
+                    <a asp-page="/HomeEvent/HomeEventDetail" asp-route-id="@relatedEvent.Id" class="flex items-center justify-center text-indigo-700 border border-indigo-600 py-2 px-6 gap-2 rounded">
                         <span>
                             XEM CHI TIẾT
                         </span>
