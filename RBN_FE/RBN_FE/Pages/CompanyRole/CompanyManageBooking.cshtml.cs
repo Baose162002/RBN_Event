@@ -1,5 +1,6 @@
 ﻿using BusinessObject;
 using BusinessObject.Dto.ResponseDto;
+using BusinessObject.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ namespace RBN_FE.Pages.CompanyRole
         public List<ViewDetailsBookingDto> Booking { get; set; }
 
         public ViewDetailsBookingDto BookingDetails { get; set; }
+        public CompanyDTO Company { get; set; }
 
         private static readonly string APIPort = "http://localhost:5250/api/";
         [BindProperty(SupportsGet = true)]
@@ -37,12 +39,11 @@ namespace RBN_FE.Pages.CompanyRole
                 ModelState.AddModelError("", "BookingId không hợp lệ.");
                 return Page();
             }
-
+            
             using (var httpClient = new HttpClient())
             {
                 try
                 {
-                    // Gọi API để thay đổi trạng thái booking
                     var apiUrl = $"{APIPort}Booking/change-status-booking/{BookingId.Value}";
                     using (var response = await httpClient.PutAsync(apiUrl, null)) 
                     {
@@ -72,11 +73,30 @@ namespace RBN_FE.Pages.CompanyRole
         }
         public async Task OnGetAsync()
         {
+
             using (var httpClient = new HttpClient())
             {
                 try
                 {
-                    if (BookingId.HasValue)
+                    var userIdStr = HttpContext.Session.GetString("UserId");
+
+                    if (int.TryParse(userIdStr, out int userId))
+                    {
+                        using (var response = await httpClient.GetAsync(APIPort + "Company/user/" + userId))
+                        {
+                            if (response.IsSuccessStatusCode)
+                            {
+                                var content = await response.Content.ReadAsStringAsync();
+                                var result = JsonConvert.DeserializeObject<CompanyDTO>(content);
+
+                                if (result != null)
+                                {
+                                    Company = result;
+                                }
+                            }
+                        }
+                    }
+                        if (BookingId.HasValue)
                     {
                         var bookingApiUrl = $"{APIPort}Booking/{BookingId.Value}";
                         var bookingResponse = await httpClient.GetAsync(bookingApiUrl);
@@ -103,7 +123,7 @@ namespace RBN_FE.Pages.CompanyRole
 
                         var queryString = queryParameters.Any() ? "?" + string.Join("&", queryParameters) : "";
 
-                        var apiUrl = $"{APIPort}Booking/search{queryString}";
+                        var apiUrl = $"{APIPort}Booking/search/{Company.Id}/{queryString}";
 
                         var response = await httpClient.GetAsync(apiUrl);
 

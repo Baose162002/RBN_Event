@@ -5,19 +5,36 @@ using BusinessObject.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
+using CloudinaryDotNet;
 
 namespace RBN_FE.Pages.CompanyRole
 {
     public class CompanyManageEventModel : PageModel
     {
+        //Paging
+        [BindProperty(SupportsGet = true)]
+        public int PageIndex { get; set; } = 1;
+        [BindProperty(SupportsGet = true)]
+        public int PageSize { get; set; } = 8;
+        public int TotalPages { get; set; }
 
         public CompanyDTO Company { get; set; }
         public List<EventDTO> Event { get; set; }
         private static string APIPort = "http://localhost:5250/api/";
 
         [BindProperty(SupportsGet = true)]
-
         public int? EventId { get; set; }
+
+
+        [BindProperty(SupportsGet = true)]
+        public int? SearchId { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string? SearchEventName { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public double? SearchPrice { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int? SearchStatus { get; set; }
         public async Task<IActionResult> OnPostChangeStatusAsync()
         {
             if (EventId == null)
@@ -81,30 +98,45 @@ namespace RBN_FE.Pages.CompanyRole
                                 }
                             }
                         }
-
-                        // Kiểm tra nếu Company không null, sau đó lấy feedback dựa trên Company.Id
-                        if (Company != null)
-                        {
-                            using (var response = await httpClient.GetAsync(APIPort + "Event/get-event-by-company/" + Company.Id))
-                            {
-                                if (response.IsSuccessStatusCode)
-                                {
-                                    var content = await response.Content.ReadAsStringAsync();
-                                    var result = JsonConvert.DeserializeObject<List<EventDTO>>(content);
-
-                                    if (result != null)
-                                    {
-                                        Event = result;
-                                    }
-                                }
-                            }
-                        }
                     }
                     else
                     {
-                        Console.WriteLine("UserId không hợp lệ hoặc không tồn tại trong session.");
+                        var queryParameters = new List<string>();
+
+                        if (SearchId.HasValue)
+                            queryParameters.Add($"id={SearchId.Value}");
+
+                        if (!string.IsNullOrEmpty(SearchEventName))
+                            queryParameters.Add($"name={SearchEventName.ToString()}");
+
+                        if (SearchPrice.HasValue)
+                            queryParameters.Add($"price={SearchPrice.Value}");
+
+                        if (SearchStatus.HasValue)
+                            queryParameters.Add($"status={SearchStatus.Value}");
+
+                        var queryString = queryParameters.Any() ? "?" + string.Join("&", queryParameters) : "";
+
+                        var apiUrl = $"{APIPort}Event/search/{Company.Id}/{queryString}";
+
+                        var response = await httpClient.GetAsync(apiUrl);
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var content = await response.Content.ReadAsStringAsync();
+                            Event = JsonConvert.DeserializeObject<List<EventDTO>>(content) ?? new List<EventDTO>();
+                            TotalPages = (int)Math.Ceiling((double)Event.Count() / PageSize);
+                            Event = Event.OrderByDescending(f => f.CreateAt)
+                        .Skip((PageIndex - 1) * PageSize)
+                        .Take(PageSize)
+                        .ToList();
+                        }
+                        else
+                        {
+                            Event = new List<EventDTO>();
+                        }
                     }
-                }
+                    }
                 catch (HttpRequestException ex)
                 {
                     Console.WriteLine($"Request error: {ex.Message}");

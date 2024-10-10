@@ -98,53 +98,60 @@ namespace Services.Service
             await _bookingRepo.UpdateBooking(booking);
             return _mapper.Map<ViewDetailsBookingDto>(booking);
         }
-        public async Task<List<ViewDetailsBookingDto>> SearchBooking(int? id, string? email, string? fullname, string? address
-            , decimal? price, string? phone, DateTime? bookingDay, int? status, int? eventId)
+        public async Task<List<ViewDetailsBookingDto>> SearchBookingByCompanyId(int companyId, int? id, string? email, string? fullname, string? address
+            , decimal? price, string? phone, int? status, int? eventId)
         {
-            var bookings = await _bookingRepo.GetAllBooking();
-            if (bookings == null)
+            var company = await _companyRepo.GetByIdAsync(companyId);
+            if (company == null)
             {
-                throw new Exception("No data");
+                throw new Exception("Not found company");
             }
-            if (id.HasValue)
+            else
             {
-                bookings = bookings.Where(x => x.Id == id.Value).ToList();
-            }
-            if (!string.IsNullOrEmpty(email))
-            {
-                bookings = bookings.Where(x => x.Email.ToLower().Contains(email.ToLower())).ToList();
-            }
-            if (!string.IsNullOrEmpty(fullname))
-            {
-                bookings = bookings.Where(x => x.FullName.ToLower().Contains(fullname.ToLower())).ToList();
-            }
-            if (!string.IsNullOrEmpty(address))
-            {
-                bookings = bookings.Where(x => x.Address.ToLower().Contains(address.ToLower())).ToList();
-            }
-            if (price.HasValue)
-            {
-                bookings = bookings.Where(x => x.Price == price.Value).ToList();
-            }
-            if (!string.IsNullOrEmpty(phone))
-            {
-                bookings = bookings.Where(x => x.Phone.ToLower().Contains(phone.ToLower())).ToList();
-            }
-            if (bookingDay != null)
-            {
-                bookings = bookings.Where(x => x.BookingDay == bookingDay.Value).ToList();
-            }
-            if (status.HasValue)
-            {
-                bookings = bookings.Where(x => x.Status == status.Value).ToList();
-            }
-            var bookingList = bookings.ToList();
-            if (bookingList == null)
-            {
-                throw new Exception("No data");
-            }
+                var bookings = await _bookingRepo.GetBookingsByCompanyIdAsync(company.Id);
+                if (bookings == null)
+                {
+                    throw new Exception("No data");
+                }
+                if (id.HasValue)
+                {
+                    bookings = bookings.Where(x => x.Id == id.Value).ToList();
+                }
+                if (!string.IsNullOrEmpty(email))
+                {
+                    bookings = bookings.Where(x => x.Email.ToLower().Contains(email.ToLower())).ToList();
+                }
+                if (!string.IsNullOrEmpty(fullname))
+                {
+                    bookings = bookings.Where(x => x.FullName.ToLower().Contains(fullname.ToLower())).ToList();
+                }
+                if (!string.IsNullOrEmpty(address))
+                {
+                    bookings = bookings.Where(x => x.Address.ToLower().Contains(address.ToLower())).ToList();
+                }
+                if (price.HasValue)
+                {
+                    bookings = bookings.Where(x => x.Price == price.Value).ToList();
+                }
+                if (!string.IsNullOrEmpty(phone))
+                {
+                    bookings = bookings.Where(x => x.Phone.ToLower().Contains(phone.ToLower())).ToList();
+                }
+               
+                if (status.HasValue)
+                {
+                    bookings = bookings.Where(x => x.Status == status.Value).ToList();
+                }
 
-            return _mapper.Map<List<ViewDetailsBookingDto>>(bookingList);
+                var bookingList = bookings.ToList();
+
+                if (bookingList == null)
+                {
+                    throw new Exception("No data");
+                }
+
+                return _mapper.Map<List<ViewDetailsBookingDto>>(bookingList);
+            }
         }
     }
 }

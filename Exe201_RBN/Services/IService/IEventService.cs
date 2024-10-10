@@ -11,6 +11,8 @@ namespace Services.IService
 {
     public interface IEventService
     {
+        Task<List<EventDTO>> SearchEventByCompanyId(int companyId, int? id, DateTime? createDate, string? eventname
+           , double? price, int? status);
         Task Delete(int id);
         Task<EventDTO> ChangeStatusEvent(int id);
         Task Update(UpdateEventDto events, int id);
