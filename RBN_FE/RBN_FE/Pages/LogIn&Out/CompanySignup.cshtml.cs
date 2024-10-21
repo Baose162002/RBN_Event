@@ -58,7 +58,7 @@ namespace RBN_FE.Pages.LogIn_Out
                 var companyCreated = await CreateCompany(avatarUrl);
                 if (companyCreated)
                 {
-                    return new JsonResult(new { success = true, message = "Đăng ký công ty thành công!" });
+                    return new JsonResult(new { success = true, message = "Đăng ký công ty thành công! Vui lòng kiểm tra email để nhận tài khoản và mật khẩu" });
                 }
                 else
                 {

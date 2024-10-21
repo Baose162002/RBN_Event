@@ -85,11 +85,11 @@ namespace RBN_FE.Pages.CompanyRole
 
                     if (int.TryParse(userIdStr, out int userId))
                     {
-                        using (var response = await httpClient.GetAsync(APIPort + "Company/user/" + userId))
+                        using (var companyResponse = await httpClient.GetAsync(APIPort + "Company/user/" + userId))
                         {
-                            if (response.IsSuccessStatusCode)
+                            if (companyResponse.IsSuccessStatusCode)
                             {
-                                var content = await response.Content.ReadAsStringAsync();
+                                var content = await companyResponse.Content.ReadAsStringAsync();
                                 var result = JsonConvert.DeserializeObject<CompanyDTO>(content);
 
                                 if (result != null)
@@ -99,8 +99,7 @@ namespace RBN_FE.Pages.CompanyRole
                             }
                         }
                     }
-                    else
-                    {
+                    
                         var queryParameters = new List<string>();
 
                         if (SearchId.HasValue)
@@ -117,7 +116,7 @@ namespace RBN_FE.Pages.CompanyRole
 
                         var queryString = queryParameters.Any() ? "?" + string.Join("&", queryParameters) : "";
 
-                        var apiUrl = $"{APIPort}Event/search/{Company.Id}/{queryString}";
+                        var apiUrl = $"{APIPort}Event/search/{Company.Id}{queryString}";
 
                         var response = await httpClient.GetAsync(apiUrl);
 
@@ -135,7 +134,6 @@ namespace RBN_FE.Pages.CompanyRole
                         {
                             Event = new List<EventDTO>();
                         }
-                    }
                     }
                 catch (HttpRequestException ex)
                 {

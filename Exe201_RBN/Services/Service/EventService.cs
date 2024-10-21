@@ -62,7 +62,7 @@ namespace Services.Service
                || string.IsNullOrEmpty(events.Name)
                || string.IsNullOrEmpty(events.EventType)
                || string.IsNullOrEmpty(events.Description)
-               || events.MinCapacity == null || events.MaxCapacity == null || events.Price == null || events.CompanyId == null
+               || events.Quantity == null || events.Price == null || events.CompanyId == null
                || events.CreateAt == null || events.UpdateAt == null)
             {
                 throw new ArgumentException("All fieds must be filled");
@@ -71,13 +71,9 @@ namespace Services.Service
             {
                 throw new ArgumentException("Price must be a positive number");
             }
-            if (events.MinCapacity < 0)
+            if (events.Quantity < 0)
             {
-                throw new ArgumentException("Capacity minimum must be a positive number");
-            }
-            if (events.MinCapacity < 0)
-            {
-                throw new ArgumentException("Capacity maximum must be a positive number");
+                throw new ArgumentException("Quantity minimum must be a positive number");
             }
 
             string[] dateFormats = { "dd/MM/yyyy", "dd/M/yyyy", "d/MM/yyyy", "d/M/yyyy" };
@@ -96,8 +92,7 @@ namespace Services.Service
                 Name = events.Name,
                 EventType = events.EventType,
                 Price = events.Price,
-                MinCapacity = events.MinCapacity,
-                MaxCapacity = events.MaxCapacity,
+                Quantity = events.Quantity,
                 Description = events.Description,
                 Status = 1,
                 CompanyId = events.CompanyId,
@@ -228,7 +223,7 @@ namespace Services.Service
                 || string.IsNullOrEmpty(events.Name)
                 || string.IsNullOrEmpty(events.EventType)
                 || string.IsNullOrEmpty(events.Description)
-                || events.MinCapacity == null || events.MaxCapacity == null || events.Price == null ||  events.Status == null)
+                || events.Quantity == null || events.Price == null ||  events.Status == null)
             {
                 throw new ArgumentException("Không được để trống");
             }
@@ -237,13 +232,9 @@ namespace Services.Service
             {
                 throw new ArgumentException("Event này không tồn tại");
             }
-            if (events.MinCapacity < 0)
+            if (events.Quantity < 0)
             {
                 throw new ArgumentException("Số lượng tối thiểu phải là số dương");
-            }
-            if (events.MinCapacity < 0)
-            {
-                throw new ArgumentException("Số lượng tối đa phải là số dương");
             }
             if (events.Price <= 0)
             {

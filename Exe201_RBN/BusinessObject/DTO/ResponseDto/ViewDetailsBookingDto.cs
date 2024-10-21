@@ -12,6 +12,7 @@ namespace BusinessObject.Dto.ResponseDto
         public string Email { get; set; }
         public string FullName { get; set; }
         public string Address { get; set; }
+        public int Quantity { get; set; }
         public decimal Price { get; set; }
         public string Phone { get; set; }
         public DateTime BookingDay { get; set; }

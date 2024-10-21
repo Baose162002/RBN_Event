@@ -10,6 +10,7 @@ namespace Services.IService
 {
     public interface IResponseService
     {
+        Task<List<ResponseDTO>> GetResponsesByCompanyIdAsync(int companyId);
         Task<List<Response>> GetAllResponse();
         Task<List<ResponseDTO>> GetResponseByFeedbackId(int id);
         Task Create(ResponseDTO response);

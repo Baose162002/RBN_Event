@@ -235,8 +235,7 @@ namespace Repositories.Repositories
                     existing.Name = events.Name;
                     existing.EventType = events.EventType;
                     existing.Price = events.Price;
-                    existing.MinCapacity = events.MinCapacity;
-                    existing.MaxCapacity = events.MaxCapacity;
+                    existing.Quantity = events.Quantity;
                     existing.Description = events.Description;
                     existing.Status = events.Status;
                         existing.CreateBy = events.CreateBy;

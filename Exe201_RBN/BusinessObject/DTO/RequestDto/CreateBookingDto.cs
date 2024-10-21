@@ -11,9 +11,13 @@ namespace BusinessObject.Dto.RequestDto
     {
         [Required(ErrorMessage = "Yêu cầu nhập email của bạn")]
         public string Email { get; set; }
+        [Required(ErrorMessage = "Yêu cầu nhập tên của bạn")]
         public string FullName { get; set; }
         [Required(ErrorMessage = "Yêu cầu nhập nơi ở của bạn")]
         public string Address { get; set; }
+        [Required(ErrorMessage = "Yêu cầu nhập số lượng phần ăn bạn muốn đặt")]
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
         [Required(ErrorMessage = "Yêu cầu nhập số điện thoại của bạn"),Phone]
         public string Phone { get; set; }
         public string UserNote { get; set; }

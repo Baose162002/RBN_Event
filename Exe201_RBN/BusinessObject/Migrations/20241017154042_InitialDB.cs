@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BusinessObject.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -40,6 +40,23 @@ namespace BusinessObject.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Promotion", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubscriptionPackage",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DurationInDays = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    IsAvailable = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubscriptionPackage", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -93,11 +110,20 @@ namespace BusinessObject.Migrations
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Avatar = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TaxCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    SubscriptionPackageId = table.Column<int>(type: "int", nullable: true),
+                    SubscriptionStartTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    SubscriptionEndTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Company", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Company_SubscriptionPackage_SubscriptionPackageId",
+                        column: x => x.SubscriptionPackageId,
+                        principalTable: "SubscriptionPackage",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Company_User_UserId",
                         column: x => x.UserId,
@@ -141,8 +167,7 @@ namespace BusinessObject.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EventType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
-                    MinCapacity = table.Column<int>(type: "int", nullable: false),
-                    MaxCapacity = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     CompanyId = table.Column<int>(type: "int", nullable: false),
@@ -150,7 +175,10 @@ namespace BusinessObject.Migrations
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdateBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    EventImgId = table.Column<int>(type: "int", nullable: false)
+                    EventImgId = table.Column<int>(type: "int", nullable: false),
+                    IsPromoted = table.Column<bool>(type: "bit", nullable: false),
+                    PromotionStartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PromotionEndDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -203,7 +231,8 @@ namespace BusinessObject.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BookingDay = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserNote = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -258,8 +287,7 @@ namespace BusinessObject.Migrations
                         name: "FK_PromotionFee_Promotion_PromotionId",
                         column: x => x.PromotionId,
                         principalTable: "Promotion",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -289,35 +317,6 @@ namespace BusinessObject.Migrations
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Commission",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PaidAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    CompanyId = table.Column<int>(type: "int", nullable: false),
-                    BookingId = table.Column<int>(type: "int", nullable: false),
-                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Commission", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Commission_Booking_BookingId",
-                        column: x => x.BookingId,
-                        principalTable: "Booking",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Commission_Company_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Company",
-                        principalColumn: "Id");
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Booking_EventId",
                 table: "Booking",
@@ -334,14 +333,9 @@ namespace BusinessObject.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Commission_BookingId",
-                table: "Commission",
-                column: "BookingId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Commission_CompanyId",
-                table: "Commission",
-                column: "CompanyId");
+                name: "IX_Company_SubscriptionPackageId",
+                table: "Company",
+                column: "SubscriptionPackageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Company_UserId",
@@ -408,7 +402,7 @@ namespace BusinessObject.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Commission");
+                name: "Booking");
 
             migrationBuilder.DropTable(
                 name: "Message");
@@ -420,10 +414,10 @@ namespace BusinessObject.Migrations
                 name: "Responses");
 
             migrationBuilder.DropTable(
-                name: "Booking");
+                name: "Chat");
 
             migrationBuilder.DropTable(
-                name: "Chat");
+                name: "Event");
 
             migrationBuilder.DropTable(
                 name: "Promotion");
@@ -432,13 +426,13 @@ namespace BusinessObject.Migrations
                 name: "FeedBack");
 
             migrationBuilder.DropTable(
-                name: "Event");
+                name: "EventImg");
 
             migrationBuilder.DropTable(
                 name: "Company");
 
             migrationBuilder.DropTable(
-                name: "EventImg");
+                name: "SubscriptionPackage");
 
             migrationBuilder.DropTable(
                 name: "User");

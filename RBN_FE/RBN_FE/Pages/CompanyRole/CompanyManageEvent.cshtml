@@ -118,6 +118,7 @@
         <div class="form-management bg-white p-6 rounded-lg shadow-md">
             <h2 class="text-2xl font-semibold mb-4">Quản Lý Sự Kiện</h2>
 
+            <form method="get">
             <!-- Filters -->
             <div class="filter-section grid grid-cols-3 gap-4 mb-4">
                 <div class="input-group">
@@ -148,9 +149,9 @@
 
             <!-- Search Button -->
             <div class="text-right mb-4">
-                <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Tìm Kiếm</button>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Tìm Kiếm</button>
             </div>
-
+            </form>
             <!-- Table -->
             <table class="w-full table-auto border-collapse bg-white shadow-md mb-4">
                 <thead>
@@ -177,8 +178,7 @@
                                 <td class="p-3">@eventItem.Title</td>
                                 <td class="p-3">@eventItem.EventType</td>
                                 <td class="p-3">@eventItem.Price.ToString("N0")</td> <!-- Format the price with commas -->
-                                <td class="p-3">@eventItem.MinCapacity người</td>
-                                <td class="p-3">@eventItem.MaxCapacity người</td>
+                                <td class="p-3">@eventItem.Quantity người</td>
                                 <td class="p-3">
                                     @if (eventItem.Status == 1)
                                     {

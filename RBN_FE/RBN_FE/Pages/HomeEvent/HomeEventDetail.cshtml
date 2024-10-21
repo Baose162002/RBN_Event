@@ -18,8 +18,8 @@
             <span class="text-sm font-medium"> Quay lại </span>
         </a>
         <div class="relative z-10 mx-auto py-16 px-8 text-white">
-            <p class="my-6 text-4xl font-bold leading-10">Muốn trải nghiệm <span class="border-b-8 font-bold">sự kiện ?</span></p>
-            <p class="mb-4 text-lg font-medium">Đặt chỗ ngay phía bên phải nào!</p>
+            <p class="my-6 text-4xl font-bold leading-10">ĐẶT ĐƠN VÀ GỬI YÊU CẦU CỦA BẠN!</span></p>
+            <p class="mb-4 text-lg font-medium">CHÚNG TÔI SẼ NHANH CHÓNG LIÊN HỆ VỚI BẠN</p>
         </div>
     </div>
     <div class="flex w-full  flex-col md:w-1/2">
@@ -54,7 +54,7 @@
                 <h2 class="text-center text-3xl font-bold md:text-left mb-4">Không tìm thấy sự kiện.</h2>
             }
 
-            <h3 class="text-2xl font-bold mb-4">Mẫu đặt chỗ</h3>
+            <h3 class="text-2xl font-bold mb-4">Mẫu đặt sự kiện</h3>
             <form method="post" class="flex flex-col items-stretch pt-3 pb-8 md:pt-8">
                 <div class="grid gap-x-4 gap-y-3 sm:grid-cols-2">
                     <label class="block" for="FullName">
@@ -73,9 +73,19 @@
                         <p class="mb-1 mt-2 text-sm text-gray-600">Địa chỉ</p>
                         <input asp-for="Booking.Address" class="w-full rounded-md border bg-white py-2 px-2 outline-none ring-yellow-500 focus:ring-2" type="text" placeholder="Nhập địa chỉ của bạn" required />
                     </label>
+                    <label class="block" for="Quantity">
+                        <p class="mb-1 mt-2 text-sm text-gray-600">Số lượng</p>
+                        <input id="quantityInput" asp-for="Booking.Quantity" class="w-full rounded-md border bg-white py-2 px-2 outline-none ring-yellow-500 focus:ring-2" type="number" placeholder="Nhập số lượng" value="1" min="1" required />
+                    </label>
                     <label class="block sm:col-span-2" for="UserNote">
                         <p class="mb-1 mt-2 text-sm text-gray-600">Yêu cầu đặc biệt</p>
                         <textarea asp-for="Booking.UserNote" class="h-32 w-full rounded-md border bg-white py-2 px-2 outline-none ring-yellow-500 focus:ring-2" placeholder="Viết yêu cầu đặc biệt của bạn tại đây"></textarea>
+                    </label>
+                </div>
+                <div>
+                    <label class="block sm:col-span-2" for="Total">
+                        <h1 class="font-semibold text-gray-800">Tổng cộng:</h1>
+                        <h1 id="totalPrice" class="text-2xl font-bold text-green-700"> </h1>
                     </label>
                 </div>
                 <button type="submit" class="mt-6 rounded-full bg-blue-500 px-4 py-2 text-center text-base font-semibold text-white shadow-md outline-none ring-blue-600 ring-offset-2 transition hover:bg-blue-600 focus:ring-2 md:w-40">
@@ -142,7 +152,23 @@ else
     </div>
 }
 <partial name="_Footer" />
+<script>
+    var eventPrice = @Model.EventDetail.Price;
 
+    var quantityInput = document.getElementById('quantityInput');
+    var totalPriceInput = document.getElementById('totalPrice');
+
+    function updateTotalPrice() {
+        var quantity = parseInt(quantityInput.value) || 1; 
+        var totalPrice = quantity * eventPrice; 
+        totalPriceInput.innerText = totalPrice.toLocaleString('vi-VN') + ' VND';
+
+    }
+
+    updateTotalPrice();
+
+    quantityInput.addEventListener('input', updateTotalPrice);
+</script>
 <style>
     .scrollable-container {
         overflow-x: auto;

@@ -54,16 +54,11 @@
                 </div>
 
                 <div>
-                    <label asp-for="Input.MinCapacity" class="block mb-2 text-sm font-medium text-gray-900"></label>
-                    <input asp-for="Input.MinCapacity" type="number" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Minimum Capacity" required>
-                    <span asp-validation-for="Input.MinCapacity" class="text-red-500 text-sm"></span>
+                    <label asp-for="Input.Quantity" class="block mb-2 text-sm font-medium text-gray-900"></label>
+                        <input asp-for="Input.Quantity" type="number" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Quantity" required>
+                        <span asp-validation-for="Input.Quantity" class="text-red-500 text-sm"></span>
                 </div>
 
-                <div>
-                    <label asp-for="Input.MaxCapacity" class="block mb-2 text-sm font-medium text-gray-900"></label>
-                    <input asp-for="Input.MaxCapacity" type="number" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Maximum Capacity" required>
-                    <span asp-validation-for="Input.MaxCapacity" class="text-red-500 text-sm"></span>
-                </div>
 
                     <div>
                         @if (ViewData["UserRole"]?.ToString() == "Admin")
