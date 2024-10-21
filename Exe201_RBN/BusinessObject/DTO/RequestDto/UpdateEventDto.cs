@@ -25,13 +25,9 @@ namespace BusinessObject.DTO.RequestDto
         [Display(Name = "Giá")]
         public double Price { get; set; }
 
-        [Required(ErrorMessage = "Sức chứa tối thiểu không được để trống.")]
-        [Display(Name = "Sức chứa tối thiểu")]
-        public int MinCapacity { get; set; }
-
-        [Required(ErrorMessage = "Sức chứa tối đa không được để trống.")]
-        [Display(Name = "Sức chứa tối đa")]
-        public int MaxCapacity { get; set; }
+        [Required(ErrorMessage = "Số lượng tối thiểu không được để trống.")]
+        [Display(Name = "Số lượng")]
+        public int Quantity { get; set; }
 
         [Required(ErrorMessage = "Mô tả không được để trống.")]
         [Display(Name = "Mô tả")]

@@ -71,15 +71,18 @@
                                                         </td>
                                                         <td class="p-4 whitespace-nowrap">
                                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @(user.Status ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800")">
-                                                                @(user.Status ? "Active" : "Inactive")
+                                                                @(user.Status ? "Hoạt động" : "Ngừng hoạt động")
                                                             </span>
                                                         </td>
                                                         <td class="p-4 whitespace-nowrap text-sm text-gray-500">
-                                                            @(user.RoleId == 1 ? "Admin" : user.RoleId == 2 ? "Staff" : user.RoleId == 3 ? "User" : "Company")
+                                                            @(user.RoleId == 1 ? "Admin" : user.RoleId == 2 ? "Nhân viên" : user.RoleId == 3 ? "Người dùng" : "Công ty")
                                                         </td>
-                                                        <td class="p-4 whitespace-nowrap text-right text-sm font-medium">
-                                                            <a href="#" class="text-yellow-600 hover:text-yellow-900">Cập nhật</a>
+                                                        <form asp-page-handler="ChangeStatus" method="post">
+                                                        <td class="p-4 whitespace-nowrap text-center text-sm font-medium">
+                                                            <input type="hidden" name="UserId" value="@user.Id" />
+                                                            <button type="submit" class="text-yellow-600 hover:text-yellow-900">Cập nhật</button>
                                                         </td>
+                                                        </form>
                                                     </tr>
                                                 }
                                             </tbody>

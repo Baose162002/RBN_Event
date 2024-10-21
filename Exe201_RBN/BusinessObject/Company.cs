@@ -20,13 +20,19 @@ namespace BusinessObject
         public string Avatar { get; set; }
         public string TaxCode { get; set; }
         public int UserId { get; set; }
+        public int? SubscriptionPackageId { get; set; }
+
+        public DateTime? SubscriptionStartTime { get; set; }
+        public DateTime? SubscriptionEndTime { get; set; }
+        public bool IsActive { get; set; }
 
         // Navigation Properties
         public User User { get; set; }
         public ICollection<Event> Events { get; set; }
         public ICollection<FeedBack> FeedBacks { get; set; }
         public ICollection<PromotionFee> PromotionFees { get; set; }
-        public ICollection<CommissionFee> CommissionFees { get; set; }
+
+        public SubscriptionPackage SubscriptionPackage { get; set; }
     }
 
 }

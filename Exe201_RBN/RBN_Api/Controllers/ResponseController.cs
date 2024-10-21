@@ -2,6 +2,7 @@
 using BusinessObject.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Services.IService;
+using Services.Service;
 
 namespace RBN_Api.Controllers
 {
@@ -15,7 +16,11 @@ namespace RBN_Api.Controllers
         {
             _responseService = responseService;
         }
-
+        [HttpGet("get-responses-by-company/{id}")]
+        public async Task<List<ResponseDTO>> GetEventsByCompanyIdAsync(int id)
+        {
+            return await _responseService.GetResponsesByCompanyIdAsync(id);
+        }
         [HttpGet]
         public async Task<IActionResult> GetAllResponses()
         {

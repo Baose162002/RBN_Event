@@ -16,7 +16,7 @@ namespace BusinessObject
         public DbSet<EventImg> EventImgs { get; set; }
         public DbSet<PromotionFee> PromotionFees { get; set; }
         public DbSet<Promotion> Promotions { get; set; }
-        public DbSet<CommissionFee> CommissionFees { get; set; }
+        public DbSet<SubscriptionPackage> SubscriptionPackage { get; set; }
         public DbSet<Response> Responses { get; set; }
 
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options)
@@ -79,7 +79,7 @@ namespace BusinessObject
                 .HasOne(u => u.User)
                 .WithMany(f => f.FeedBacks)
                 .HasForeignKey(f => f.UserId)
-                .OnDelete(DeleteBehavior.NoAction); // Loại bỏ cascade delete
+                .OnDelete(DeleteBehavior.NoAction); 
 
             // Configuring One-to-Many relationship for Feedback and Response
             modelBuilder.Entity<FeedBack>()
@@ -88,6 +88,17 @@ namespace BusinessObject
                 .HasForeignKey(r => r.FeedBackId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<SubscriptionPackage>()
+                .HasMany(sp => sp.Companies)
+                .WithOne(c => c.SubscriptionPackage)
+                .HasForeignKey(c => c.SubscriptionPackageId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Company>()
+                .HasOne(c => c.SubscriptionPackage) 
+                .WithMany(sp => sp.Companies) 
+                .HasForeignKey(c => c.SubscriptionPackageId);
+
             // Configuring One-to-Many relationship for Company and Feedback
             modelBuilder.Entity<Company>()
                 .HasMany(c => c.FeedBacks)
@@ -95,7 +106,6 @@ namespace BusinessObject
                 .HasForeignKey(f => f.CompanyId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            // Configuring One-to-Many relationship for Event and PromotionFee
             modelBuilder.Entity<Event>()
                 .HasMany(e => e.PromotionFees)
                 .WithOne(p => p.Event)
@@ -109,27 +119,15 @@ namespace BusinessObject
                 .HasForeignKey(p => p.CompanyId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            // Configuring One-to-Many relationship for Booking and CommissionFee
-            modelBuilder.Entity<Booking>()
-                .HasMany(b => b.CommissionFees)
-                .WithOne(cf => cf.Booking)
-                .HasForeignKey(cf => cf.BookingId)
+            modelBuilder.Entity<Promotion>()
+                .HasMany(p => p.PromotionFees)
+                .WithOne(pf => pf.Promotion)
+                .HasForeignKey(pf => pf.PromotionId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            // Configuring One-to-Many relationship for Company and CommissionFee
-            modelBuilder.Entity<Company>()
-                .HasMany(c => c.CommissionFees)
-                .WithOne(cf => cf.Company)
-                .HasForeignKey(cf => cf.CompanyId)
-                .OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Booking>()
-        .Property(b => b.Price) // Giả sử Price là thuộc tính kiểu decimal trong Booking
-        .HasColumnType("decimal(18, 2)"); // Sử dụng decimal(18,2) cho giá
-
-            // Specify the column type and precision for CommissionFee
-            modelBuilder.Entity<CommissionFee>()
-                .Property(cf => cf.Price) // Giả sử Price là thuộc tính kiểu decimal trong CommissionFee
-                .HasColumnType("decimal(18, 2)"); // Sử dụng decimal(18,2) cho giá
+                .Property(b => b.Price)
+                .HasPrecision(18, 2);
         }
     }
 }

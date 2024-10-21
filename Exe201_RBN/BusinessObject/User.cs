@@ -28,8 +28,5 @@ namespace BusinessObject
         public ICollection<Message> Messages { get; set; }
         public ICollection<Booking> Bookings { get; set; }
         public ICollection<FeedBack> FeedBacks { get; set; }
-
-
-
     }
 }

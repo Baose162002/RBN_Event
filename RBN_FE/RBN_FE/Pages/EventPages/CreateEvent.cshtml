@@ -52,16 +52,11 @@
 
         <!-- Dòng khác với các trường dữ liệu khác -->
         <div class="flex flex-wrap -mx-2">
-            <div class="w-full sm:w-1/2 px-2 mb-4">
-                <label asp-for="Input.MinCapacity" class="block text-gray-700 font-medium mb-2">Số lượng người tối thiểu</label>
-                <input asp-for="Input.MinCapacity" class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" />
-                <span asp-validation-for="Input.MinCapacity" class="text-danger"></span>
-            </div>
 
             <div class="w-full sm:w-1/2 px-2 mb-4">
-                <label asp-for="Input.MaxCapacity" class="block text-gray-700 font-medium mb-2">Số lượng người tối đa</label>
-                <input asp-for="Input.MaxCapacity" class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" />
-                <span asp-validation-for="Input.MaxCapacity" class="text-danger"></span>
+                <label asp-for="Input.Quantity" class="block text-gray-700 font-medium mb-2">Số lượng người tối đa</label>
+                    <input asp-for="Input.Quantity" class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" />
+                    <span asp-validation-for="Input.Quantity" class="text-danger"></span>
             </div>
         </div>
 

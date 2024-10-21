@@ -20,6 +20,17 @@ namespace Repositories.Repositories
                 .Where(x=>x.FeedBack.Id == id).ToListAsync();
             return response;
         }
+        public async Task<List<Response>> GetResponsesByCompanyIdAsync(int companyId)
+        {
+            using var _context = new ApplicationDBContext();
+            var responses = await _context.Responses.OrderByDescending(x => x.ResponseDate)
+                .Include(b => b.FeedBack)
+                .Include(e => e.Company)
+                .Where(b => b.Company.Id == companyId)
+                .ToListAsync();
+
+            return responses;
+        }
         public async Task<List<Response>> GetAllResponse()
         {
             var _context = new ApplicationDBContext();

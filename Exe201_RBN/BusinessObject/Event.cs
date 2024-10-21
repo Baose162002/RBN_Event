@@ -19,8 +19,7 @@ namespace BusinessObject
         public string Name { get; set; }
         public string EventType { get; set; }
         public double Price { get; set; }
-        public int MinCapacity { get; set; }  
-        public int MaxCapacity { get; set; }
+        public int Quantity { get; set; }  
         public string Description { get; set; }
         public int Status { get; set; }
         public int CompanyId { get; set; }
@@ -30,6 +29,10 @@ namespace BusinessObject
         public DateTime? UpdateAt { get; set; }
         
         public int EventImgId { get; set; }
+
+        public bool IsPromoted { get; set; } 
+        public DateTime? PromotionStartDate { get; set; }
+        public DateTime? PromotionEndDate { get; set; }
 
         // Relationships
         public Company Company { get; set; }

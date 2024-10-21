@@ -27,6 +27,19 @@ namespace Services.Service
             _companyService = companyService ?? throw new ArgumentNullException(nameof(companyService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
+        public async Task<List<ResponseDTO>> GetResponsesByCompanyIdAsync(int companyId)
+        {
+            var company = await _companyService.GetCompanyById(companyId);
+            if (company == null)
+            {
+                throw new Exception("Not found company");
+            }
+            else
+            {
+                var response = await _responseRepository.GetResponseByFeedbackId(company.Id);
+                return _mapper.Map<List<ResponseDTO>>(response);
+            }
+        }
         public async Task<List<ResponseDTO>> GetResponseByFeedbackId(int id)
         {
             var feedback = await _feedbackRepository.GetFeedbackById(id);

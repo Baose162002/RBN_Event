@@ -2,6 +2,7 @@
 using BusinessObject;
 using BusinessObject.Dto.RequestDto;
 using BusinessObject.Dto.ResponseDto;
+using BusinessObject.DTO;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.IdentityModel.Tokens;
 using Repositories.Repositories;
@@ -254,7 +255,7 @@ namespace Services.Service
 
                 return createdUser.Id;
             }
-            catch (Exception ex)
+                catch (Exception ex)
             {
                 await _userRepo.RollbackTransactionAsync();
                 Console.WriteLine(ex.InnerException?.Message);

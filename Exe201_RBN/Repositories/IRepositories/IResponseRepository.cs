@@ -9,6 +9,7 @@ namespace Repositories.IRepositories
 {
     public interface IResponseRepository
     {
+        Task<List<Response>> GetResponsesByCompanyIdAsync(int companyId);
         Task<List<Response>> GetResponseByFeedbackId(int id);
         Task<List<Response>> GetAllResponse();
         Task<Response> GetResponseById(int id);

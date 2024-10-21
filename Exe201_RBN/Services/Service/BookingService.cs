@@ -18,12 +18,17 @@ namespace Services.Service
         private readonly IBookingRepository _bookingRepo;
         private readonly IBaseRepository<User> _userRepo;
         private readonly IBaseRepository<Company> _companyRepo;
+        private readonly IBaseRepository<Event> _eventRepo;
         private readonly IMapper _mapper;
-        public BookingService(IBookingRepository bookingRepo, IBaseRepository<User> userRepo, IBaseRepository<Company> companyRepo, IMapper mapper)
+        public BookingService(IBookingRepository bookingRepo, IBaseRepository<User> userRepo
+            , IBaseRepository<Company> companyRepo
+            , IBaseRepository<Event> eventRepo
+            , IMapper mapper)
         {
             _bookingRepo = bookingRepo;
             _userRepo = userRepo;
             _companyRepo = companyRepo;
+            _eventRepo = eventRepo;
             _mapper = mapper;
         }
         public async Task<List<ViewDetailsBookingDto>> GetBookingsByCompanyIdAsync(int companyId)
@@ -52,27 +57,15 @@ namespace Services.Service
         }
         public async Task CreateBooking(CreateBookingDto createBookingDto)
         {
-            var user = await _userRepo.GetByIdAsync(createBookingDto.UserId);
-            if (user != null)
-            {
-                var booking = new Booking
-                {
-                    Email = user.Email,
-                    FullName = user.Name,
-                    Address = user.Address,
-                    Phone = user.Phone,
-                    UserId = user.Id,
-                    EventId = createBookingDto.EventId,
-                    UserNote = createBookingDto.UserNote,
-                    BookingDay = DateTime.Now,
-                };
-                await _bookingRepo.CreateBooking(booking);
-            }
-            else
-            {
+            var eventSelected = await _eventRepo.GetByIdAsync(createBookingDto.EventId);
+            
+                
                 var booking = _mapper.Map<Booking>(createBookingDto);
+                booking.BookingDay = DateTime.Now; 
+                booking.Price = booking.Quantity * (decimal)eventSelected.Price;
                 await _bookingRepo.CreateBooking(booking);
-            }
+          
+
         }
 
         public async Task UpdateBooking(CreateBookingDto updateBookingDto)
