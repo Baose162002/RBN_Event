@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using BusinessObject;
 using BusinessObject.DTO;
 using System.Globalization;
@@ -55,6 +55,14 @@ namespace Services.Configurations.Mapper
             CreateMap<CreatePromotionDto, Promotion>();
             CreateMap<UpdatePromotionDto, Promotion>();
             CreateMap<Promotion, UpdatePromotionDto>();
+
+            // Thêm ánh xạ cho SubscriptionPackage
+            CreateMap<SubscriptionPackageDTO, SubscriptionPackage>();
+            CreateMap<SubscriptionPackage, SubscriptionPackageDTO>();
+
+            // Thêm ánh xạ mới cho ListSubscriptionPackageDTO
+            CreateMap<SubscriptionPackage, ListSubscriptionPackageDTO>();
+
         }
     }
 }

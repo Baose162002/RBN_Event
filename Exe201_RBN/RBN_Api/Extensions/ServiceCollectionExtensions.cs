@@ -39,6 +39,9 @@ namespace RBN_Api.Extensions
             services.AddScoped<IFeedbackRepository, FeedbackRepository>();
             services.AddScoped<IResponseRepository, ResponseRepository>();
 
+            services.AddScoped<ISubscriptionPackageRepository, SubscriptionPackageRepository>();
+            services.AddScoped<ISubscriptionPackageService, SubscriptionPackageService>();
+
 
             services.AddScoped<IBookingRepository, BookingRepository>();
 

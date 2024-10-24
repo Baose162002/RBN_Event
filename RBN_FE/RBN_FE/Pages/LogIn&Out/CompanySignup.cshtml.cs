@@ -44,21 +44,23 @@ namespace RBN_FE.Pages.LogIn_Out
 
         public async Task<IActionResult> OnPostAsync()
         {
-
             try
             {
-                // Upload Avatar (if provided)
                 string avatarUrl = null;
                 if (AvatarFile != null && AvatarFile.Length > 0)
                 {
                     avatarUrl = await UploadAvatar();
                 }
 
-                // Create Company
                 var companyCreated = await CreateCompany(avatarUrl);
                 if (companyCreated)
                 {
-                    return new JsonResult(new { success = true, message = "Đăng ký công ty thành công! Vui lòng kiểm tra email để nhận tài khoản và mật khẩu" });
+                    return new JsonResult(new
+                    {
+                        success = true,
+                        message = "Đăng ký công ty thành công! Vui lòng chọn gói đăng ký.",
+                        redirectUrl = $"/LogIn_Out/CompanySubscription?companyEmail={CreateCompanyDto.Email}"
+                    });
                 }
                 else
                 {
@@ -70,7 +72,6 @@ namespace RBN_FE.Pages.LogIn_Out
                 return new JsonResult(new { success = false, message = $"Đã xảy ra lỗi: {ex.Message}" });
             }
         }
-
         private async Task<string> UploadAvatar()
         {
             if (AvatarFile == null || AvatarFile.Length == 0)
