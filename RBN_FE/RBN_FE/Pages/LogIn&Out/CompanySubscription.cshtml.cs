@@ -19,11 +19,39 @@ namespace RBN_FE.Pages.LogIn_Out
             _clientFactory = clientFactory;
             _configuration = configuration;
         }
-
+        [BindProperty(SupportsGet = true)]
+        public int CompanyId { get; set; }
         public List<ListSubscriptionPackageDTO> SubscriptionPackages { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public string CompanyEmail { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int SubscriptionPackageId { get; set; }
+        public async Task<IActionResult> OnPostRegisterPackageAsync()
+        {
+            if (SubscriptionPackageId <= 0)
+            {
+                return BadRequest("Gói đăng ký không hợp lệ.");
+            }
+            var companyIdFromSession = HttpContext.Session.GetInt32("CompanyId");
+            if (companyIdFromSession == null)
+            {
+                return RedirectToPage("/LogIn_Out/Login");
+            }
+            CompanyId = companyIdFromSession.Value;
+            var client = _clientFactory.CreateClient();
+            var apiUrl = _configuration["ApiSettings:BaseUrl"] + $"/SubscriptionPackage/register-subsciptionpackage?companyId={CompanyId}&subscriptionPackageId={SubscriptionPackageId}";
+
+            var response = await client.PutAsync(apiUrl, null);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToPage("/LogIn_Out/Login");
+            }
+
+            return RedirectToPage("/Error");
+        }
 
         public async Task<IActionResult> OnGetAsync()
         {
