@@ -8,6 +8,7 @@ using BusinessObject.Dto.ResponseDto;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
@@ -53,6 +54,7 @@ namespace RBN_FE.Pages.LogIn_Out
                 }
 
                 var companyCreated = await CreateCompany(avatarUrl);
+                HttpContext.Session.SetInt32("CompanyId", CreateCompanyDto.Id);
                 if (companyCreated)
                 {
                     return new JsonResult(new

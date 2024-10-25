@@ -2,7 +2,10 @@
 using BusinessObject;
 using BusinessObject.DTO;
 using BusinessObject.DTO.ResponseDto;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Repositories.IRepositories;
+using Repositories.Repositories.IRepositories;
 using Services.IService;
 using System;
 using System.Collections.Generic;
@@ -14,14 +17,34 @@ namespace Services.Service
     public class SubscriptionPackageService : ISubscriptionPackageService
     {
         private readonly ISubscriptionPackageRepository _subscriptionPackageRepository;
+        private readonly IBaseRepository<Company> _companyRepo;
         private readonly IMapper _mapper;
 
-        public SubscriptionPackageService(ISubscriptionPackageRepository subscriptionPackageRepository, IMapper mapper)
+        public SubscriptionPackageService(ISubscriptionPackageRepository subscriptionPackageRepository, IBaseRepository<Company> companyRepo, IMapper mapper)
         {
             _subscriptionPackageRepository = subscriptionPackageRepository;
+            _companyRepo = companyRepo;
             _mapper = mapper;
         }
-
+        public async Task CompanyRegisterSubscriptionPackage(int companyId, int subscriptionId)
+        {
+            var company = await _companyRepo.GetByIdAsync(companyId);
+            if (company == null)
+            {
+                throw new Exception("Not found company");
+            }
+            var subscriptionPackage = await GetSubscriptionPackageById(subscriptionId);
+            if (subscriptionPackage == null)
+            {
+                throw new Exception("Subscription package not found");
+            }
+            company.SubscriptionPackageId = subscriptionPackage.Id;
+            company.SubscriptionStartTime = DateTime.Now;
+            company.SubscriptionEndTime = company.SubscriptionStartTime?.AddDays(subscriptionPackage.DurationInDays);
+            company.IsActive = true;
+            await _companyRepo.UpdateAsync(company);
+            await _companyRepo.SaveAsync();
+        }
         public async Task<List<ListSubscriptionPackageDTO>> GetAllSubscriptionPackages()
         {
             var packages = await _subscriptionPackageRepository.GetAllSubscriptionPackages();

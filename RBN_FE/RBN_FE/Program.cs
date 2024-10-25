@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using CloudinaryDotNet;
 using RBN_FE;
 using RBN_FE.Pages.Service;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
