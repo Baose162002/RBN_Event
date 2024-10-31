@@ -16,7 +16,7 @@ namespace RBN_FE.Pages.CompanyRole
         public ViewDetailsBookingDto BookingDetails { get; set; }
         public CompanyDTO Company { get; set; }
 
-        private static readonly string APIPort = "http://localhost:5250/api/";
+        private static readonly string APIPort = "https://rbnapi20241031155156.azurewebsites.net/api/";
         [BindProperty(SupportsGet = true)]
         public int PageIndex { get; set; } = 1;
         [BindProperty(SupportsGet = true)]

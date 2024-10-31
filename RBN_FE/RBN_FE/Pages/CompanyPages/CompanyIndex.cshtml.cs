@@ -27,7 +27,7 @@ namespace RBN_FE.Pages.CompanyPages
                     PropertyNameCaseInsensitive = true
                 };
 
-                Companies = await _httpClient.GetFromJsonAsync<List<ListCompanyDTO>>("http://localhost:5250/api/Company", options);
+                Companies = await _httpClient.GetFromJsonAsync<List<ListCompanyDTO>>("https://rbnapi20241031155156.azurewebsites.net/api/Company", options);
 
                 if (Companies == null || Companies.Count == 0)
                 {
