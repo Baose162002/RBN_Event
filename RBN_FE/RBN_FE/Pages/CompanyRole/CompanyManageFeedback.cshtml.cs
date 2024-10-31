@@ -11,7 +11,7 @@ namespace RBN_FE.Pages.CompanyRole
 {
     public class CompanyManageFeedbackModel : PageModel
     {
-        private static readonly string APIPort = "http://localhost:5250/api/";
+        private static readonly string APIPort = "https://rbnapi20241031155156.azurewebsites.net/api/";
 
         public List<FeedbackDTO> FeedBack { get; set; }
         public CompanyDTO Company { get; set; }

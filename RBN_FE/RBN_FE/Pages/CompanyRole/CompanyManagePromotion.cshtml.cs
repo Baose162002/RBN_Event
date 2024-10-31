@@ -11,7 +11,7 @@ namespace RBN_FE.Pages.CompanyRole
     {
 
 
-        private static readonly string APIPort = "http://localhost:5250/api/";
+        private static readonly string APIPort = "https://rbnapi20241031155156.azurewebsites.net/api/";
         public List<PromotionFee> PromotionFee { get; set; }
         public List<ViewDetailsPromotionDto> Promotion { get; set; }
 

@@ -20,7 +20,7 @@ namespace RBN_FE.Pages.CompanyRole
 
         public CompanyDTO Company { get; set; }
         public List<EventDTO> Event { get; set; }
-        private static string APIPort = "http://localhost:5250/api/";
+        private static string APIPort = "https://rbnapi20241031155156.azurewebsites.net/api/";
 
         [BindProperty(SupportsGet = true)]
         public int? EventId { get; set; }

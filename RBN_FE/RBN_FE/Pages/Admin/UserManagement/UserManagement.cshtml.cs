@@ -13,7 +13,7 @@ namespace RBN_FE.Pages.Admin
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
-        private static readonly string APIPort = "http://localhost:5250/api/";
+        private static readonly string APIPort = "https://rbnapi20241031155156.azurewebsites.net/api/";
         [BindProperty(SupportsGet = true)]
         public int? UserId { get; set; }  
         public List<UserResponseDto> Users { get; set; }

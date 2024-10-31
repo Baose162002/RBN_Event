@@ -28,7 +28,7 @@ namespace RBN_FE.Pages.CompanyRole
             _cloudinary = cloudinary;
         }
 
-        private static string APIPort = "http://localhost:5250/api/";
+        private static string APIPort = "https://rbnapi20241031155156.azurewebsites.net/api/";
 
         [BindProperty]
         public CompanyDTO Company { get; set; }
