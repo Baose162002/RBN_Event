@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace RBN_FE.Pages.LogIn_Out
 {
@@ -33,8 +34,10 @@ namespace RBN_FE.Pages.LogIn_Out
         public CreateCompanyDto CreateCompanyDto { get; set; }
 
         [BindProperty]
+        [Required(ErrorMessage = "Avatar is required")]
         [Display(Name = "Company Avatar")]
         public IFormFile AvatarFile { get; set; }
+
 
         public string ErrorMessage { get; set; }
 
@@ -91,7 +94,6 @@ namespace RBN_FE.Pages.LogIn_Out
                 return uploadResult.SecureUrl.ToString();
             }
         }
-
         private async Task<bool> CreateCompany(string avatarUrl)
         {
             var client = _clientFactory.CreateClient();
@@ -101,14 +103,9 @@ namespace RBN_FE.Pages.LogIn_Out
 
             var content = new StringContent(JsonConvert.SerializeObject(CreateCompanyDto), Encoding.UTF8, "application/json");
 
-            Console.WriteLine($"Sending request to {apiUrl}");
-            Console.WriteLine($"Request content: {await content.ReadAsStringAsync()}");
-
             var response = await client.PostAsync(apiUrl, content);
 
-            Console.WriteLine($"Response status: {response.StatusCode}");
             var responseContent = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"Response content: {responseContent}");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -116,18 +113,26 @@ namespace RBN_FE.Pages.LogIn_Out
                 {
                     try
                     {
-                        var errorDetails = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(responseContent);
-                        var errors = errorDetails.SelectMany(kvp => kvp.Value).ToList();
-                        throw new Exception($"Failed to create company. Validation errors: {string.Join(", ", errors)}");
+                        var errorMessage = JObject.Parse(responseContent)["message"]?.ToString();
+
+                        if (!string.IsNullOrEmpty(errorMessage))
+                        {
+                            // Hiển thị thông báo lỗi cụ thể từ API
+                            throw new Exception(errorMessage);
+                        }
+                        else
+                        {
+                            throw new Exception("Xác thực không thành công. Vui lòng kiểm tra lại các trường đầu vào.");
+                        }
                     }
                     catch (JsonException)
                     {
-                        throw new Exception($"Failed to create company. Status: {response.StatusCode}, Error: {responseContent}");
+                        throw new Exception("Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.");
                     }
                 }
                 else
                 {
-                    throw new Exception($"Failed to create company. Status: {response.StatusCode}, Error: {responseContent}");
+                    throw new Exception("Đã xảy ra lỗi. Vui lòng thử lại.");
                 }
             }
 

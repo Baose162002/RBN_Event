@@ -41,9 +41,18 @@ namespace RBN_Api.Controllers
         [HttpPost("create-user")]
         public async Task<IActionResult> CreateUser(CreateUserDto createUserDto)
         {
-            await _userService.CreateUserAsync(createUserDto);
-            return Ok(new {message = "Tạo tài khoản thành công, vui lòng kiểm tra email để lấy mật khẩu!"});
+            try
+            {
+                await _userService.CreateUserAsync(createUserDto);
+                return Ok("Tạo tài khoản thành công, vui lòng kiểm tra email để lấy mật khẩu!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
+
 
         /*        [HttpPost("create-userFE")]
                 public async Task<IActionResult> CreateUserFE(CreateUserDto createUserDto)

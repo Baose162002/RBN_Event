@@ -7,36 +7,37 @@ namespace BusinessObject.Dto.RequestDto
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Name is required")]
+        [Required(ErrorMessage = "Tên công ty là bắt buộc")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Invalid email format")]
+        [Required(ErrorMessage = "Email là bắt buộc")]
+        [EmailAddress(ErrorMessage = "Định dạng email không hợp lệ")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Phone is required")]
-        [Phone(ErrorMessage = "Invalid phone number format")]
+        [Required(ErrorMessage = "Số điện thoại là bắt buộc")]
+        [Phone(ErrorMessage = "Định dạng số điện thoại không hợp lệ")]
         public string Phone { get; set; }
 
-        [Required(ErrorMessage = "Address is required")]
+        [Required(ErrorMessage = "Địa chỉ là bắt buộc")]
         public string Address { get; set; }
 
-        [Required(ErrorMessage = "Company Name is required")]
+        [Required(ErrorMessage = "Tên công ty là bắt buộc")]
         public string CompanyName { get; set; }
 
-        [Required(ErrorMessage = "Company Description is required")]
+        [Required(ErrorMessage = "Mô tả công ty là bắt buộc")]
         public string CompanyDescription { get; set; }
 
-        [Required(ErrorMessage = "Company Address is required")]
+        [Required(ErrorMessage = "Địa chỉ công ty là bắt buộc")]
         public string CompanyAddress { get; set; }
 
-        [Required(ErrorMessage = "Company Phone is required")]
-        [Phone(ErrorMessage = "Invalid company phone number format")]
+        [Required(ErrorMessage = "Số điện thoại công ty là bắt buộc")]
+        [Phone(ErrorMessage = "Định dạng số điện thoại công ty không hợp lệ")]
         public string CompanyPhone { get; set; }
 
+        [Required(ErrorMessage = "Avatar là bắt buộc")]
         public string Avatar { get; set; }
 
-        [Required(ErrorMessage = "Tax Code is required")]
+        [Required(ErrorMessage = "Mã số thuế là bắt buộc")]
         public string TaxCode { get; set; }
     }
 }

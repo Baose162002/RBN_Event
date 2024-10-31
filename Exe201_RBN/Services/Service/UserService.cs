@@ -10,6 +10,7 @@ using Repositories.Repositories.IRepositories;
 using Services.IService;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -215,16 +216,30 @@ namespace Services.Service
         {
             try
             {
-                // Kiểm tra email và số điện thoại tồn tại
-                if (CheckEmailExist(createCompanyDto.Email))
-                {
-                    throw new Exception("Email đã tồn tại.");
-                }
-                if (CheckPhoneExist(createCompanyDto.Phone))
-                {
-                    throw new Exception("Số điện thoại đã tồn tại.");
-                }
+                // Kiểm tra các trường bắt buộc
+                if (string.IsNullOrWhiteSpace(createCompanyDto.Name))
+                    throw new Exception("Tên công ty là bắt buộc.");
 
+                if (string.IsNullOrWhiteSpace(createCompanyDto.Email) || !IsValidEmail(createCompanyDto.Email))
+                    throw new Exception("Email hợp lệ là bắt buộc.");
+
+                if (string.IsNullOrWhiteSpace(createCompanyDto.Phone) || !IsValidPhoneNumber(createCompanyDto.Phone))
+                    throw new Exception("Số điện thoại hợp lệ là bắt buộc.");
+
+                if (string.IsNullOrWhiteSpace(createCompanyDto.CompanyAddress))
+                    throw new Exception("Địa chỉ công ty là bắt buộc.");
+
+                if (string.IsNullOrWhiteSpace(createCompanyDto.TaxCode))
+                    throw new Exception("Mã số thuế là bắt buộc.");
+
+                // Kiểm tra nếu email và số điện thoại đã tồn tại
+                if (CheckEmailExist(createCompanyDto.Email))
+                    throw new Exception("Email đã tồn tại.");
+
+                if (CheckPhoneExist(createCompanyDto.Phone))
+                    throw new Exception("Số điện thoại đã tồn tại.");
+
+                // Tạo người dùng
                 var createdUser = new User
                 {
                     Name = createCompanyDto.Name,
@@ -234,10 +249,11 @@ namespace Services.Service
                     Status = false,
                     RoleId = 4,
                     CreatedAt = DateTime.Now,
-                    Password = GenerateRandomPassword() // Cân nhắc sử dụng một phương thức tạo mật khẩu ngẫu nhiên
+                    Password = GenerateRandomPassword() // Tạo mật khẩu ngẫu nhiên
                 };
                 await _userRepo.CreateAsync(createdUser);
 
+                // Tạo công ty
                 var company = new Company
                 {
                     UserId = createdUser.Id,
@@ -245,24 +261,36 @@ namespace Services.Service
                     Description = createCompanyDto.CompanyDescription,
                     Address = createCompanyDto.CompanyAddress,
                     Phone = createCompanyDto.CompanyPhone,
-                    Avatar = createCompanyDto.Avatar, // Có thể là null
+                    Avatar = createCompanyDto.Avatar, // Avatar có thể null
                     TaxCode = createCompanyDto.TaxCode,
                 };
                 await _companyRepo.CreateAsync(company);
+
                 createdUser.Status = true;
                 await _userRepo.UpdateAsync(createdUser);
                 await _sendMail.SendMailToGeneratedUser(createCompanyDto.Email);
 
                 return createdUser.Id;
             }
-                catch (Exception ex)
+            catch (Exception ex)
             {
-                await _userRepo.RollbackTransactionAsync();
-                Console.WriteLine(ex.InnerException?.Message);
-                throw new Exception("An error occurred while creating the company role.", ex);
+                await _userRepo.RollbackTransactionAsync(); 
+                Console.WriteLine(ex.Message); 
+                throw new Exception("Đã xảy ra lỗi khi tạo vai trò công ty: " + ex.Message);
             }
         }
-        // Implement phương thức này để tạo mật khẩu ngẫu nhiên
+
+        private bool IsValidEmail(string email)
+        {
+            return new EmailAddressAttribute().IsValid(email);
+        }
+
+        private bool IsValidPhoneNumber(string phone)
+        {
+            return phone.Length == 10 && phone.StartsWith("0") && phone.All(char.IsDigit);
+        }
+
+
         private string GenerateRandomPassword()
         {
             // Implement logic to generate a random password

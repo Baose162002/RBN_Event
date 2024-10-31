@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
-using System.Text;
 
 namespace RBN_FE.Pages.LogIn_Out
 {
@@ -52,8 +51,23 @@ namespace RBN_FE.Pages.LogIn_Out
             {
                 var client = _clientFactory.CreateClient();
                 var apiBaseUrl = _configuration["ApiSettings:BaseUrl"];
-                var response = await client.PostAsJsonAsync($"{apiBaseUrl}/User/create-user", Input);
 
+                // Kiểm tra email và số điện thoại tồn tại
+                var checkEmailResponse = await client.GetAsync($"{apiBaseUrl}/User/check-email?email={Input.Email}");
+                var checkPhoneResponse = await client.GetAsync($"{apiBaseUrl}/User/check-phone?phone={Input.Phone}");
+
+                if (checkEmailResponse.IsSuccessStatusCode && bool.Parse(await checkEmailResponse.Content.ReadAsStringAsync()))
+                {
+                    return new JsonResult(new { success = false, message = "Email đã tồn tại." }) { StatusCode = 400 };
+                }
+
+                if (checkPhoneResponse.IsSuccessStatusCode && bool.Parse(await checkPhoneResponse.Content.ReadAsStringAsync()))
+                {
+                    return new JsonResult(new { success = false, message = "Số điện thoại đã tồn tại." }) { StatusCode = 400 };
+                }
+
+                // Tạo người dùng nếu email và số điện thoại chưa tồn tại
+                var response = await client.PostAsJsonAsync($"{apiBaseUrl}/User/create-user", Input);
                 var responseContent = await response.Content.ReadAsStringAsync();
 
                 if (response.IsSuccessStatusCode)
@@ -68,9 +82,11 @@ namespace RBN_FE.Pages.LogIn_Out
             }
             catch (Exception ex)
             {
+                // Trả về lỗi tổng quát cho người dùng
                 return new JsonResult(new { success = false, message = "Đã xảy ra lỗi khi xử lý yêu cầu" }) { StatusCode = 500 };
             }
         }
+
 
         public class ApiResponse
         {
