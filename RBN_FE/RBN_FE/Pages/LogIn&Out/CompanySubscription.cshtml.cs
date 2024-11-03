@@ -28,6 +28,8 @@ namespace RBN_FE.Pages.LogIn_Out
 
         [BindProperty(SupportsGet = true)]
         public int SubscriptionPackageId { get; set; }
+        public string ErrorMessage { get; set; }
+
         public async Task<IActionResult> OnPostRegisterPackageAsync()
         {
             if (SubscriptionPackageId <= 0)
@@ -37,7 +39,7 @@ namespace RBN_FE.Pages.LogIn_Out
             var companyIdFromSession = HttpContext.Session.GetInt32("CompanyId");
             if (companyIdFromSession == null)
             {
-                return RedirectToPage("/LogIn_Out/Login");
+                return RedirectToPage("/LogIn&Out/Login");
             }
             CompanyId = companyIdFromSession.Value;
             var client = _clientFactory.CreateClient();
@@ -47,17 +49,18 @@ namespace RBN_FE.Pages.LogIn_Out
 
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToPage("/LogIn_Out/Login");
+                return RedirectToPage("/LogIn&Out/Login");
             }
 
-            return RedirectToPage("/Error");
+            ErrorMessage = "Đã xảy ra lỗi khi đăng ký gói. Vui lòng thử lại.";
+            return Page();
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
             if (string.IsNullOrEmpty(CompanyEmail))
             {
-                return RedirectToPage("/LogIn_Out/Login");
+                return RedirectToPage("/LogIn&Out/Login");
             }
 
             var client = _clientFactory.CreateClient();

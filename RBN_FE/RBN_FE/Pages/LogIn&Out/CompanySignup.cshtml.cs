@@ -1,10 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Http;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObject.Dto.RequestDto;
 using BusinessObject.Dto.ResponseDto;
+using BusinessObject.DTO.ResponseDto;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Http;
@@ -55,6 +57,8 @@ namespace RBN_FE.Pages.LogIn_Out
 
                 var companyCreated = await CreateCompany(avatarUrl);
                 HttpContext.Session.SetInt32("CompanyId", CreateCompanyDto.Id);
+
+                var companyId = HttpContext.Session.GetInt32("CompanyId");
                 if (companyCreated)
                 {
                     return new JsonResult(new
@@ -108,9 +112,24 @@ namespace RBN_FE.Pages.LogIn_Out
 
             Console.WriteLine($"Response status: {response.StatusCode}");
             var responseContent = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"Response content: {responseContent}");
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
+            {
+
+                // Giải mã phản hồi để lấy CompanyId
+                var companyResponse = JsonConvert.DeserializeObject<CreateCompanyResponseDto>(responseContent);
+                if (companyResponse != null && companyResponse.CompanyId > 0)
+                {
+                    // Gán CompanyId cho CreateCompanyDto.Id
+                    CreateCompanyDto.Id = companyResponse.CompanyId;
+                    return true;
+                }
+                else
+                {
+                    throw new Exception("API không trả về CompanyId.");
+                }
+            }
+            else
             {
                 if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
                 {
@@ -130,8 +149,7 @@ namespace RBN_FE.Pages.LogIn_Out
                     throw new Exception($"Failed to create company. Status: {response.StatusCode}, Error: {responseContent}");
                 }
             }
-
-            return response.IsSuccessStatusCode;
         }
     }
+
 }

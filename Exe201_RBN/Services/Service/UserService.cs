@@ -253,7 +253,7 @@ namespace Services.Service
                 await _userRepo.UpdateAsync(createdUser);
                 await _sendMail.SendMailToGeneratedUser(createCompanyDto.Email);
 
-                return createdUser.Id;
+                return company.Id;
             }
                 catch (Exception ex)
             {

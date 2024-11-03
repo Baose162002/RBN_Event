@@ -2,6 +2,7 @@
 using BusinessObject.Dto.RequestDto;
 using BusinessObject.Dto.ResponseDto;
 using BusinessObject.DTO;
+using BusinessObject.DTO.ResponseDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -68,12 +69,13 @@ namespace RBN_Api.Controllers
                 var userId = await _userService.CreateCompanyRoleFE(createCompanyDto);
                 var createdUser = await _userService.GetUserByIdAsync(userId);
 
-                return Ok(new
+                var result = new CreateCompanyResponseDto
                 {
                     Status = "success",
                     Message = "Company created successfully",
-                    User = createdUser
-                });
+                    CompanyId = userId
+                };
+                return Ok(result);
             }
             catch (Exception ex)
             {

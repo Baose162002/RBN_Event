@@ -5,6 +5,12 @@
 }
 
 <partial name="_Header" />
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger">
+        @Model.ErrorMessage
+    </div>
+}
 
     <section class="py-24 relative">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -36,12 +42,13 @@
                                 <span>@package.Description</span>
                             </li>
                         </ul>
-<form method="post">
-                        <button type="submit" name="SubscriptionPackageId" id="SubscriptionPackageId" value="@package.Id"
-                                class="py-2.5 px-5 bg-indigo-50 shadow-sm rounded-full transition-all duration-500 text-base text-indigo-600 font-semibold text-center w-fit mx-auto group-hover:bg-indigo-600 group-hover:text-white">
-                            Chọn gói này
-                        </button>
-</form>
+                        <form method="post" asp-page-handler="RegisterPackage">
+                            <button type="submit" name="SubscriptionPackageId" id="SubscriptionPackageId" value="@package.Id"
+                                    class="py-2.5 px-5 bg-indigo-50 shadow-sm rounded-full transition-all duration-500 text-base text-indigo-600 font-semibold text-center w-fit mx-auto group-hover:bg-indigo-600 group-hover:text-white">
+                                Chọn gói này
+                            </button>
+                        </form>
+
                     </div>
                 }
 }
