@@ -16,5 +16,6 @@ namespace Repositories.IRepositories
         Task Delete(int id);
         Task Update(Company updatecompany, int id);
         Task<Company> GetCompanyByIdUser(int id);
+        Task<Company> GetCompanyByEmail(string email);
     }
 }

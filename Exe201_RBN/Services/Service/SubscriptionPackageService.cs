@@ -18,30 +18,35 @@ namespace Services.Service
     {
         private readonly ISubscriptionPackageRepository _subscriptionPackageRepository;
         private readonly IBaseRepository<Company> _companyRepo;
+        private readonly ICompanyRepository _companyRepository;
         private readonly IMapper _mapper;
 
-        public SubscriptionPackageService(ISubscriptionPackageRepository subscriptionPackageRepository, IBaseRepository<Company> companyRepo, IMapper mapper)
+        public SubscriptionPackageService(ISubscriptionPackageRepository subscriptionPackageRepository, IBaseRepository<Company> companyRepo, ICompanyRepository companyRepository, IMapper mapper)
         {
             _subscriptionPackageRepository = subscriptionPackageRepository;
             _companyRepo = companyRepo;
+            _companyRepository = companyRepository;
             _mapper = mapper;
         }
-        public async Task CompanyRegisterSubscriptionPackage(int companyId, int subscriptionId)
+        public async Task CompanyRegisterSubscriptionPackage(string email, int subscriptionId)
         {
-            var company = await _companyRepo.GetByIdAsync(companyId);
+            var company = await _companyRepository.GetCompanyByEmail(email);
             if (company == null)
             {
-                throw new Exception("Not found company");
+                throw new Exception("Company not found");
             }
+
             var subscriptionPackage = await GetSubscriptionPackageById(subscriptionId);
             if (subscriptionPackage == null)
             {
                 throw new Exception("Subscription package not found");
             }
+
             company.SubscriptionPackageId = subscriptionPackage.Id;
             company.SubscriptionStartTime = DateTime.Now;
             company.SubscriptionEndTime = company.SubscriptionStartTime?.AddDays(subscriptionPackage.DurationInDays);
             company.IsActive = true;
+
             await _companyRepo.UpdateAsync(company);
             await _companyRepo.SaveAsync();
         }

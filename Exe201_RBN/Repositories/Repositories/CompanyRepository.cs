@@ -14,7 +14,16 @@ namespace Repositories.Repositories
 {
     public class CompanyRepository : ICompanyRepository
     {
-        
+        public async Task<Company> GetCompanyByEmail(string email)
+        {
+            using (var _context = new ApplicationDBContext())
+            {
+                return await _context.Companies
+                    .Include(x => x.User)
+                    .Include(x => x.SubscriptionPackage)
+                    .FirstOrDefaultAsync(x => x.User.Email.ToLower() == email.ToLower());
+            }
+        }
         public async Task<List<Company>> GetAllCompany()
         {
             var _context = new ApplicationDBContext();
