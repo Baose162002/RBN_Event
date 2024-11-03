@@ -54,7 +54,8 @@ namespace RBN_FE.Pages.LogIn_Out
                 }
 
                 var companyCreated = await CreateCompany(avatarUrl);
-                HttpContext.Session.SetInt32("CompanyId", CreateCompanyDto.Id);
+                HttpContext.Session.SetString("CompanyEmail", CreateCompanyDto.Email);
+                TempData["CompanyEmail"] = CreateCompanyDto.Email;
                 if (companyCreated)
                 {
                     return new JsonResult(new

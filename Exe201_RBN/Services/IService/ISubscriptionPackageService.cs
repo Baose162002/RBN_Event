@@ -7,7 +7,7 @@ namespace Services.IService
 {
     public interface ISubscriptionPackageService
     {
-        Task CompanyRegisterSubscriptionPackage(int companyId, int subscriptionId);
+        Task CompanyRegisterSubscriptionPackage(string email, int subscriptionId);
         Task<List<ListSubscriptionPackageDTO>> GetAllSubscriptionPackages();
         Task<ListSubscriptionPackageDTO> GetSubscriptionPackageById(int id);
         Task CreateSubscriptionPackage(SubscriptionPackageDTO package);

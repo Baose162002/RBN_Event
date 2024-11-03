@@ -16,10 +16,10 @@ namespace RBN_Api.Controllers
             _subscriptionPackageService = subscriptionPackageService;
         }
         [HttpPut("register-subsciptionpackage")]
-        public async Task<IActionResult> CompanyRegisterSubscriptionPackage(int companyId, int subscriptionPackageId)
+        public async Task<IActionResult> CompanyRegisterSubscriptionPackage(string email, int subscriptionPackageId)
         {
 
-            await _subscriptionPackageService.CompanyRegisterSubscriptionPackage(companyId, subscriptionPackageId);
+            await _subscriptionPackageService.CompanyRegisterSubscriptionPackage(email, subscriptionPackageId);
             return Ok("Mua gói thành công");
         }
 
