@@ -34,20 +34,23 @@ namespace RBN_FE.Pages.LogIn_Out
             {
                 return BadRequest("Gói đăng ký không hợp lệ.");
             }
-            var companyIdFromSession = HttpContext.Session.GetInt32("CompanyId");
-            if (companyIdFromSession == null)
+            var companyEmailFromSession = HttpContext.Session.GetString("CompanyEmail");
+            if (TempData["CompanyEmail"] != null)
+            {
+                CompanyEmail = (string)TempData["CompanyEmail"];
+            }
+            if (companyEmailFromSession == null)
             {
                 return RedirectToPage("/LogIn_Out/Login");
             }
-            CompanyId = companyIdFromSession.Value;
             var client = _clientFactory.CreateClient();
-            var apiUrl = _configuration["ApiSettings:BaseUrl"] + $"/SubscriptionPackage/register-subsciptionpackage?companyId={CompanyId}&subscriptionPackageId={SubscriptionPackageId}";
+            var apiUrl = _configuration["ApiSettings:BaseUrl"] + $"/SubscriptionPackage/register-subsciptionpackage?email={companyEmailFromSession}&subscriptionPackageId={SubscriptionPackageId}";
 
             var response = await client.PutAsync(apiUrl, null);
 
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToPage("/LogIn_Out/Login");
+                return RedirectToPage("/LogIn&Out/PaymentQR");
             }
 
             return RedirectToPage("/Error");

@@ -1,0 +1,31 @@
+﻿@page 
+@model RBN_FE.Pages.LogIn_Out.PaymentQRModel
+@{
+}
+<partial name="_AdminHeader" />
+
+
+
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; text-align: center; margin-top: 50px;">
+    <h1 class="md:text-2xl text-base text-gray-900 font-semibold text-center">Thanh toán gói đăng ký</h1>
+
+    <div style="margin: 20px 0;">
+        <img src="~/img/MyQR.png" alt="QR Code" style="width: 300px; height: 300px;" />
+    </div>
+
+    <p>Vui lòng chuyển khoản đúng số tiền vào mã QR trên với nội dung:</p>
+    <p style="font-weight: bold;">"Đăng ký tài khoản + tên công ty"</p>
+
+    <p>Vui lòng nhấn <strong>"Đã thanh toán"</strong> nếu đã chuyển tiền thành công. Chúng tôi sẽ nhanh chóng kiểm tra và kích hoạt gói đăng ký của bạn.</p>
+
+    <form method="post">
+        <button type="submit" style="padding: 10px 20px; font-size: 16px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            Đã thanh toán
+        </button>
+    </form>
+</div>
+
+
+
+
+<partial name="_Footer" />

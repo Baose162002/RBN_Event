@@ -40,9 +40,9 @@ namespace RBN_FE.Pages.CompanyPages
         {
             try
             {
-                Company = await _httpClient.GetFromJsonAsync<ListCompanyDTO>($"http://localhost:5250/api/Company/{companyId}"); 
-                Response = await _httpClient.GetFromJsonAsync<List<ResponseDTO>>($"http://localhost:5250/api/Response");
-                var allFeedbacks = await _httpClient.GetFromJsonAsync<List<FeedbackDTO>>($"http://localhost:5250/api/Feedback/get-feedback-by-company/{companyId}");
+                Company = await _httpClient.GetFromJsonAsync<ListCompanyDTO>($"https://rbnapi20241031155156.azurewebsites.net/api/Company/{companyId}"); 
+                Response = await _httpClient.GetFromJsonAsync<List<ResponseDTO>>($"https://rbnapi20241031155156.azurewebsites.net/api/Response");
+                var allFeedbacks = await _httpClient.GetFromJsonAsync<List<FeedbackDTO>>($"https://rbnapi20241031155156.azurewebsites.net/api/Feedback/get-feedback-by-company/{companyId}");
                 
                     // Calculate total pages
                     TotalPages = (int)Math.Ceiling(allFeedbacks.Count / (double)PageSize);
@@ -54,7 +54,7 @@ namespace RBN_FE.Pages.CompanyPages
                         .Take(PageSize)
                         .ToList();
                 // Fetch all responses for the company
-                Response = await _httpClient.GetFromJsonAsync<List<ResponseDTO>>($"http://localhost:5250/api/Response?companyId={companyId}");
+                Response = await _httpClient.GetFromJsonAsync<List<ResponseDTO>>($"https://rbnapi20241031155156.azurewebsites.net/api/Response?companyId={companyId}");
                 if (Response == null)
                 {
                     Response = new List<ResponseDTO>();
@@ -82,7 +82,7 @@ namespace RBN_FE.Pages.CompanyPages
                     foreach (var userId in userIds)
                     {
                         // Gọi API để lấy thông tin người dùng
-                        var user = await _httpClient.GetFromJsonAsync<UserDTO>($"http://localhost:5250/api/User/get-username/{userId}");
+                        var user = await _httpClient.GetFromJsonAsync<UserDTO>($"https://rbnapi20241031155156.azurewebsites.net/api/User/get-username/{userId}");
                         if (user != null)
                         {
                             UserNames.Add(userId, user.Name);
@@ -139,7 +139,7 @@ namespace RBN_FE.Pages.CompanyPages
             };
             try
             {
-                var response = await _httpClient.PostAsJsonAsync("http://localhost:5250/api/Feedback", newFeedback);
+                var response = await _httpClient.PostAsJsonAsync("https://rbnapi20241031155156.azurewebsites.net/api/Feedback", newFeedback);
                 if (response.IsSuccessStatusCode)
                 {
                     return RedirectToPage(new { companyId = companyId });
@@ -195,7 +195,7 @@ namespace RBN_FE.Pages.CompanyPages
                 };
 
                 // Gửi POST request tới API để tạo Response
-                var apiResponse = await _httpClient.PostAsJsonAsync("http://localhost:5250/api/Response", newResponse);
+                var apiResponse = await _httpClient.PostAsJsonAsync("https://rbnapi20241031155156.azurewebsites.net/api/Response", newResponse);
 
                 if (apiResponse.IsSuccessStatusCode)
                 {

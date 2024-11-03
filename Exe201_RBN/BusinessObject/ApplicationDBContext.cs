@@ -37,6 +37,7 @@ namespace BusinessObject
             optionsBuilder.UseSqlServer(configuration.GetConnectionString("Local"));
         }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Configuring One-to-Many relationship for User and Company
