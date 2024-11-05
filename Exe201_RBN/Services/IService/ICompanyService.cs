@@ -17,5 +17,6 @@ namespace Services.IService
         Task Delete(int id);
         Task<ListCompanyDTO> GetCompanyById(int id);
         Task<ListCompanyDTO> GetCompanyByIdUser(int id);
+        Task<List<CompanyWithSubcription>> GetAllCompanyWithSubcription();
     }
 }

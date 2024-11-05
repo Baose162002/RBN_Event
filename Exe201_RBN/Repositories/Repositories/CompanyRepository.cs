@@ -24,6 +24,15 @@ namespace Repositories.Repositories
                     .FirstOrDefaultAsync(x => x.User.Email.ToLower() == email.ToLower());
             }
         }
+        public async Task<List<Company>> GetAllCompanyWithSubcription()
+        {
+            var _context = new ApplicationDBContext();
+            var companies = await _context.Companies
+                .Include(s=>s.SubscriptionPackage)
+                .ToListAsync();
+            return companies;
+
+        }
         public async Task<List<Company>> GetAllCompany()
         {
             var _context = new ApplicationDBContext();

@@ -34,6 +34,10 @@ namespace Services.Configurations.Mapper
             CreateMap<EventImg, EventImgDTO>();
             CreateMap<Company, ListCompanyDTO>();
             CreateMap<ListCompanyDTO, Company>();
+            CreateMap<CompanyWithSubcription, Company>();
+            CreateMap<Company, CompanyWithSubcription>();
+            CreateMap<ViewSubscriptionPackageDTO, SubscriptionPackage>();
+            CreateMap<SubscriptionPackage, ViewSubscriptionPackageDTO>();
             CreateMap<Event, ViewEventDTO>();
             CreateMap<ViewEventDTO, Event>();
 

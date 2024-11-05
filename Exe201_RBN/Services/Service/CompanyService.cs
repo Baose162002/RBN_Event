@@ -34,6 +34,13 @@ namespace Services.Service
 
             return response;
         }
+        public async Task<List<CompanyWithSubcription>> GetAllCompanyWithSubcription()
+        {
+            var companies = await _companyRepository.GetAllCompanyWithSubcription();
+            var response = _mapper.Map<List<CompanyWithSubcription>>(companies);
+
+            return response;
+        }
         public async Task Create(CompanyDTO company)
         {
 			if (company == null || string.IsNullOrEmpty(company.Name)
