@@ -17,5 +17,6 @@ namespace Repositories.IRepositories
         Task Update(Company updatecompany, int id);
         Task<Company> GetCompanyByIdUser(int id);
         Task<Company> GetCompanyByEmail(string email);
+        Task<List<Company>> GetAllCompanyWithSubcription();
     }
 }
