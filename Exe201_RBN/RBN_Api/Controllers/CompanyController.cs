@@ -26,6 +26,17 @@ namespace RBN_Api.Controllers
             }
             return Ok(companies);
         }
+        
+        [HttpGet("subscription")]
+        public async Task<IActionResult> GetAllCompanyWithSubcription()
+        {
+            var companies = await _companyService.GetAllCompanyWithSubcription();
+            if (companies == null || !companies.Any())
+            {
+                return NotFound("No company found");
+            }
+            return Ok(companies);
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateCompany([FromBody]CompanyDTO company)
