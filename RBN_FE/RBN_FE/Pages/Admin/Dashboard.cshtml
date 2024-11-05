@@ -14,11 +14,11 @@
             <main>
                 <div class="pt-6 px-4">
                     <div class="w-full grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-4">
-                        <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8  2xl:col-span-2">
+                        <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 2xl:col-span-2">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex-shrink-0">
-                                    <span class="text-2xl sm:text-3xl leading-none font-bold text-gray-900">3.000.000 VNĐ</span>
-                                    <h3 class="text-base font-normal text-gray-500">Tổng quảng cáo hôm nay</h3>
+                                    <span class="text-2xl sm:text-3xl leading-none font-bold text-gray-900">7.010.000 VNĐ</span>
+                                    <h3 class="text-base font-normal text-gray-500">Tổng doanh thu</h3>
                                 </div>
                                 <div class="flex items-center justify-end flex-1 text-green-500 text-base font-bold">
                                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -26,7 +26,9 @@
                                     </svg>
                                 </div>
                             </div>
-                            <div id="main-chart"></div>
+                            <div class="h-[400px] w-full">
+                                <canvas id="main-chart"></canvas>
+                            </div>
                         </div>
                         <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
                             <div class="mb-4 flex items-center justify-between">
@@ -170,4 +172,117 @@
     <partial name ="_AdminNav"/>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script src="https://demo.themesberg.com/windster/app.bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Calculate new total revenue
+            const totalRevenue = (2 * 750000) + (4 * 550000) + (15 * 300000);
+            // Update total revenue display
+            document.querySelector('.text-2xl.sm\\:text-3xl.leading-none.font-bold.text-gray-900').textContent = totalRevenue.toLocaleString('vi-VN') + ' VNĐ';
+
+            var ctx = document.getElementById('main-chart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [
+                        '10/21/2024 8:10:16 PM',
+                        '10/21/2024 12:00:00 AM',
+                        '10/22/2024 8:24:07 PM',
+                        '10/24/2024 2:38:16 PM',
+                        '10/24/2024 12:15:19 PM',
+                        '10/24/2024 4:15:22 PM',
+                        '10/24/2024 8:11:12 PM',
+                        '10/24/2024 8:10:16 PM',
+                        '10/24/2024 8:21:16 PM',
+                        '10/29/2024 8:11:16 AM',
+                        '10/31/2024 8:26:16 AM',
+                        '11/2/2024 8:17:52 PM',
+                        '11/2/2024 7:19:49 PM',
+                        '11/3/2024 8:40:20 PM',
+                        '11/3/2024 8:47:01 PM',
+                        '11/3/2024 7:48:37 PM',
+                        '11/3/2024 9:54:15 PM',
+                        '11/4/2024 4:56:36 PM',
+                        '11/4/2024 6:58:47 PM',
+                        '11/5/2024 5:00:28 PM',
+                        '11/5/2024 6:55:54 PM'
+                    ],
+                    datasets: [{
+                        label: 'Doanh thu theo ngày (VNĐ)',
+                        data: [
+                            300000, 300000, 550000,
+                            550000, 300000, 300000, 300000, 300000, 300000,
+                            750000, 300000,
+                            300000, 300000,
+                            550000, 300000, 300000,
+                            300000, 750000, 300000,
+                            550000, 300000
+                        ],
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgb(75, 192, 192)',
+                        tension: 0.1,
+                        fill: false,
+                        pointRadius: 5,
+                        pointHoverRadius: 8,
+                        pointBackgroundColor: 'rgb(75, 192, 192)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    aspectRatio: 2,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Giá trị (VNĐ)'
+                            },
+                            ticks: {
+                                callback: function (value) {
+                                    return value.toLocaleString('vi-VN') + ' VNĐ';
+                                }
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Ngày'
+                            },
+                            ticks: {
+                                callback: function (value) {
+                                    // Only show the date part for cleaner display
+                                    return this.getLabelForValue(value).split(' ')[0];
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            enabled: true,
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    label += context.parsed.y.toLocaleString('vi-VN') + ' VNĐ';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 </div>
